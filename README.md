@@ -13,6 +13,8 @@ This repository is a working notebook, not a signal service. Each theory covers 
 
 Each theory below follows the same layout: a banner, a numbered section, a folder path, then `Claim`, `Mechanism`, `Test`, and `Verdict`. The evidence section is labelled `Result` or `Observation` depending on how it was gathered. Optional `Next` and `Field note` sections follow where they help. To skim, read `Claim` and `Verdict`.
 
+**Verdicts:** 🟢 works in practice · 🟠 context only · 🔴 no edge.
+
 ---
 
 ## Index
@@ -53,25 +55,6 @@ Each theory below follows the same layout: a banner, a numbered section, a folde
     *Can indicator scores measure crowding rather than timing?*
 18. **[Weather mood](#18)**<br>
     *Does weather or seasonality change market activity through mood?*
-
----
-
-## How to read this repository
-
-- `theories/<number>-<name>/scripts/` — the code for that theory.
-- `theories/<number>-<name>/data/sample/` — small fixtures committed so the code can run offline.
-- `theories/<number>-<name>/results/` — generated metrics and charts.
-- `scripts/render_result_charts.py` — regenerates the cross-theory charts from committed JSON.
-- `scripts/make_banners.py` — regenerates the README header and theory banners from the index.
-- `scripts/make_illustrations.py` — regenerates the small inline diagrams under `assets/illustrations/`.
-
-Small sample data is committed. Raw data, caches, and large market snapshots are gitignored under `data/raw/`. Nothing here is financial advice.
-
-**Result images.** Selected charts are committed under each theory's `results/` folder and embedded below. They are generated from committed data by `python3 scripts/render_result_charts.py` or by the theory's own renderer.
-
-**Verdict dots.** 🟢 works in practice · 🟠 context only · 🔴 no edge.
-
-**Legacy scripts** are published in `scripts/legacy/` as source material. They read API keys from environment variables and are not guaranteed to run without their original data.
 
 ---
 
