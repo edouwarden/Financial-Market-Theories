@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-11-04T21:46:49.509786+00:00",
+  "source": {
+    "discovery": "data/raw/merged_new_data.json",
+    "winners": "data/sample/merged_success_data_filtered.json"
+  },
+  "dedupe": {
+    "key": "baseToken.address",
+    "rule": "keep the pool with the highest liquidity.usd",
+    "discovery_rows": 8420,
+    "unique_discovery_tokens": 3783,
+    "winner_rows": 2118,
+    "unique_winner_tokens": 2118,
+    "matched_rows": 4780
+  },
+  "data_overview": {
+    "discovery_rows": 8420,
+    "unique_discovery_tokens": 3783,
+    "winner_rows": 2118,
+    "unique_winner_tokens": 2118,
+    "matched_rows": 4780,
+    "row_level_success_rate": 56.77,
+    "token_level_success_rate": 55.99
+  },
+  "filter": {
+    "field": "txns_5m",
+    "definition": "buys + sells in the first 5 minutes",
+    "threshold": 0.25,
+    "primary_pool": {
+      "filtered_tokens": 3772,
+      "wins": 2116,
+      "winrate": 56.1,
+      "coverage": 99.71,
+      "baseline": 55.99,
+      "lift_pp": 0.11
+    },
+    "first_row_sensitivity": {
+      "filtered_tokens": 3777,
+      "wins": 2118,
+      "winrate": 56.08,
+      "coverage": 99.84,
+      "baseline": 55.99,
+      "lift_pp": 0.09
+    },
+    "temporal_holdout": {
+      "early_70pct": {
+        "filtered_tokens": 2638,
+        "wins": 1472,
+        "winrate": 55.8,
+        "coverage": 99.62,
+        "baseline": 55.66,
+        "lift_pp": 0.14
+      },
+      "late_30pct": {
+        "filtered_tokens": 1134,
+        "wins": 644,
+        "winrate": 56.79,
+        "coverage": 99.91,
+        "baseline": 56.74,
+        "lift_pp": 0.05
+      },
+      "split": "70% earliest / 30% latest by pairCreatedAt"
+    }
+  },
+  "summary": {
+    "total_tokens_analyzed": 3783,
+    "success_tokens_found": 2118,
+    "baseline_success_rate": 55.99,
+    "best_filter_winrate": 56.1,
+    "improvement": 0.11
+  },
+  "interpretation": {
+    "verdict": "negative",
+    "why": "The row-level +0.44 pp lift was a duplicate-pool artifact. After collapsing to one row per token, the filter selects almost the entire universe and the lift is about +0.1 pp, which is economically indistinguishable from zero after costs.",
+    "caveats": [
+      "The 1.5x success label is retrospective and does not model a fixed holding horizon.",
+      "The threshold was originally selected in-sample; the temporal split evaluates that fixed rule, not a full out-of-sample search.",
+      "Fees, slippage, liquidity constraints, and multiple-testing correction are not modeled."
+    ]
+  }
+}

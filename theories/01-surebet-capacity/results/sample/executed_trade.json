@@ -1,0 +1,27 @@
+{
+  "status": "user-reported live trade",
+  "note": "Single executed trade, not reconstructed from a committed order-book snapshot. The venue names are omitted.",
+  "legs": [
+    {
+      "outcome": "YES",
+      "stakeUSD": 28.69,
+      "impliedPrice": 0.27
+    },
+    {
+      "outcome": "NO",
+      "stakeUSD": 56.31,
+      "impliedPrice": 0.53
+    }
+  ],
+  "totalCostUSD": 85.0,
+  "payoutUSD": 106.25,
+  "profitUSD": 21.25,
+  "roiPercent": 25.0,
+  "costPerShare": 0.8,
+  "profitPerShare": 0.2,
+  "caveats": [
+    "One observation; it does not establish a repeatable edge.",
+    "Fees, settlement delay, capital lockup, and resolution-rule risk are not included.",
+    "The committed capacity replay is a separate, smaller example."
+  ]
+}

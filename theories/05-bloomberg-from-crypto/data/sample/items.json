@@ -1,0 +1,114 @@
+[
+  [
+    "aurora",
+    {
+      "label": "Keyword",
+      "description": "Demo token used in the safe news-cluster sample.",
+      "twitter": "https://x.com/example_aurora",
+      "website": "https://example.com/aurora",
+      "timestamps": [1763060400000, 1763060460000, 1763060520000, 1763060580000, 1763060640000, 1763060700000],
+      "lastAlert": 0,
+      "fastAlert": false,
+      "importantAlert": false,
+      "tokenAlert": false
+    }
+  ],
+  [
+    "launchpad",
+    {
+      "label": "Keyword",
+      "description": "Demo token used in the safe news-cluster sample.",
+      "twitter": null,
+      "website": null,
+      "timestamps": [1763060400000, 1763060580000, 1763060700000],
+      "lastAlert": 0,
+      "fastAlert": false,
+      "importantAlert": false,
+      "tokenAlert": false
+    }
+  ],
+  [
+    "nova",
+    {
+      "label": "Keyword",
+      "description": "Demo perpetuals launch on Base.",
+      "twitter": "https://x.com/example_nova",
+      "website": "https://example.com/nova",
+      "timestamps": [1763060500000, 1763060560000, 1763060620000, 1763060680000],
+      "lastAlert": 0,
+      "fastAlert": false,
+      "importantAlert": false,
+      "tokenAlert": false
+    }
+  ],
+  [
+    "perpetuals",
+    {
+      "label": "Keyword",
+      "description": null,
+      "twitter": null,
+      "website": null,
+      "timestamps": [1763060500000, 1763060620000],
+      "lastAlert": 0,
+      "fastAlert": false,
+      "importantAlert": false,
+      "tokenAlert": false
+    }
+  ],
+  [
+    "orbit",
+    {
+      "label": "Keyword",
+      "description": "Demo wallet launch.",
+      "twitter": null,
+      "website": "https://example.com/orbit",
+      "timestamps": [1763060550000, 1763060610000, 1763060670000],
+      "lastAlert": 0,
+      "fastAlert": false,
+      "importantAlert": false,
+      "tokenAlert": false
+    }
+  ],
+  [
+    "wallet",
+    {
+      "label": "Keyword",
+      "description": null,
+      "twitter": null,
+      "website": null,
+      "timestamps": [1763060550000, 1763060670000],
+      "lastAlert": 0,
+      "fastAlert": false,
+      "importantAlert": false,
+      "tokenAlert": false
+    }
+  ],
+  [
+    "https://example.com/aurora",
+    {
+      "label": "Website",
+      "description": null,
+      "twitter": null,
+      "website": null,
+      "timestamps": [1763060400000, 1763060700000],
+      "lastAlert": 0,
+      "fastAlert": false,
+      "importantAlert": false,
+      "tokenAlert": false
+    }
+  ],
+  [
+    "https://x.com/example_nova",
+    {
+      "label": "Twitter",
+      "description": null,
+      "twitter": null,
+      "website": null,
+      "timestamps": [1763060500000, 1763060680000],
+      "lastAlert": 0,
+      "fastAlert": false,
+      "importantAlert": false,
+      "tokenAlert": false
+    }
+  ]
+]

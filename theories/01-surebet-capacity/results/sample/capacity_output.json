@@ -1,0 +1,184 @@
+{
+  "generatedAt": "2026-11-04T20:21:12.878Z",
+  "source": "data/sample/orderbook_pair.json",
+  "assumptions": {
+    "books": "incremental ask levels",
+    "feeBps": 0,
+    "minOrderSize": 1,
+    "excluded": [
+      "settlement risk",
+      "capital lockup",
+      "withdrawal costs"
+    ]
+  },
+  "results": [
+    {
+      "strategy": "YES on futuur + NO on polymarket",
+      "marketA": {
+        "name": "futuur",
+        "outcome": "YES",
+        "price": 0.12,
+        "marginalPrice": 0.12,
+        "quantityAtPrice": 8,
+        "costUSD": 0.96,
+        "timeToEnd": null,
+        "quantityRange": {
+          "min": 1,
+          "minCostUSD": 0.12,
+          "max": 8,
+          "maxCostUSD": 0.96
+        },
+        "url": "https://futuur.com/"
+      },
+      "marketB": {
+        "name": "polymarket",
+        "outcome": "NO",
+        "price": 0.81,
+        "marginalPrice": 0.81,
+        "quantityAtPrice": 8,
+        "costUSD": 6.48,
+        "timeToEnd": null,
+        "quantityRange": {
+          "min": 1,
+          "minCostUSD": 0.81,
+          "max": 8,
+          "maxCostUSD": 6.48
+        },
+        "url": "https://polymarket.com/"
+      },
+      "profitAnalysis": {
+        "grossCostPerShare": 0.93,
+        "feeBps": 0,
+        "feePerShare": 0,
+        "costPerShare": 0.93,
+        "profitPerShare": 0.07,
+        "profitPercentage": 7.53,
+        "roi": 7.53,
+        "grossRoi": 7.53,
+        "minQuantity": 1,
+        "minTotalCostUSD": 0.93,
+        "minTotalProfitUSD": 0.07,
+        "minPayoutUSD": 1,
+        "maxQuantity": 8,
+        "maxTotalCostUSD": 7.44,
+        "maxTotalProfitUSD": 0.56,
+        "maxPayoutUSD": 8,
+        "breakEvenProbability": 0.93,
+        "edgeOverMarket": "7%"
+      },
+      "profitable": true
+    },
+    {
+      "strategy": "YES on futuur + NO on polymarket",
+      "marketA": {
+        "name": "futuur",
+        "outcome": "YES",
+        "price": 0.13,
+        "marginalPrice": 0.1327,
+        "quantityAtPrice": 38,
+        "costUSD": 4.94,
+        "timeToEnd": null,
+        "quantityRange": {
+          "min": 9,
+          "minCostUSD": 1.09,
+          "max": 38,
+          "maxCostUSD": 4.94
+        },
+        "url": "https://futuur.com/"
+      },
+      "marketB": {
+        "name": "polymarket",
+        "outcome": "NO",
+        "price": 0.81,
+        "marginalPrice": 0.81,
+        "quantityAtPrice": 38,
+        "costUSD": 30.78,
+        "timeToEnd": null,
+        "quantityRange": {
+          "min": 9,
+          "minCostUSD": 7.29,
+          "max": 38,
+          "maxCostUSD": 30.78
+        },
+        "url": "https://polymarket.com/"
+      },
+      "profitAnalysis": {
+        "grossCostPerShare": 0.94,
+        "feeBps": 0,
+        "feePerShare": 0,
+        "costPerShare": 0.94,
+        "profitPerShare": 0.06,
+        "profitPercentage": 6.38,
+        "roi": 6.38,
+        "grossRoi": 6.38,
+        "minQuantity": 9,
+        "minTotalCostUSD": 8.38,
+        "minTotalProfitUSD": 0.62,
+        "minPayoutUSD": 9,
+        "maxQuantity": 38,
+        "maxTotalCostUSD": 35.72,
+        "maxTotalProfitUSD": 2.28,
+        "maxPayoutUSD": 38,
+        "breakEvenProbability": 0.94,
+        "edgeOverMarket": "6%"
+      },
+      "profitable": true
+    },
+    {
+      "strategy": "YES on futuur + NO on polymarket",
+      "marketA": {
+        "name": "futuur",
+        "outcome": "YES",
+        "price": 0.14,
+        "marginalPrice": 0.1515,
+        "quantityAtPrice": 71,
+        "costUSD": 9.94,
+        "timeToEnd": null,
+        "quantityRange": {
+          "min": 39,
+          "minCostUSD": 5.09,
+          "max": 71,
+          "maxCostUSD": 9.94
+        },
+        "url": "https://futuur.com/"
+      },
+      "marketB": {
+        "name": "polymarket",
+        "outcome": "NO",
+        "price": 0.81,
+        "marginalPrice": 0.81,
+        "quantityAtPrice": 71,
+        "costUSD": 57.51,
+        "timeToEnd": null,
+        "quantityRange": {
+          "min": 39,
+          "minCostUSD": 31.59,
+          "max": 71,
+          "maxCostUSD": 57.51
+        },
+        "url": "https://polymarket.com/"
+      },
+      "profitAnalysis": {
+        "grossCostPerShare": 0.95,
+        "feeBps": 0,
+        "feePerShare": 0,
+        "costPerShare": 0.95,
+        "profitPerShare": 0.05,
+        "profitPercentage": 5.26,
+        "roi": 5.26,
+        "grossRoi": 5.26,
+        "minQuantity": 39,
+        "minTotalCostUSD": 36.68,
+        "minTotalProfitUSD": 2.32,
+        "minPayoutUSD": 39,
+        "maxQuantity": 71,
+        "maxTotalCostUSD": 67.45,
+        "maxTotalProfitUSD": 3.55,
+        "maxPayoutUSD": 71,
+        "breakEvenProbability": 0.95,
+        "edgeOverMarket": "5%"
+      },
+      "profitable": true
+    }
+  ]
+}

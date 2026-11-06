@@ -1,0 +1,1012 @@
+{
+  "summary": {
+    "totalFutuurMarkets": 745,
+    "totalPolymarketMarkets": 2004,
+    "totalComparisons": 1492980,
+    "similarPairs": 668767,
+    "timestamp": "2025-09-26T17:15:32.631Z"
+  },
+  "note": "Sample of the Futuur/Polymarket title-similarity scan; full output is gitignored under data/raw/.",
+  "results": [
+    {
+      "futuurMarket": {
+        "id": 222374,
+        "title": "Will Bitcoin reach $130k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607145",
+        "question": "Will Bitcoin reach $116,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222374,
+        "title": "Will Bitcoin reach $130k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607144",
+        "question": "Will Bitcoin reach $118,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222374,
+        "title": "Will Bitcoin reach $130k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607143",
+        "question": "Will Bitcoin reach $120,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222374,
+        "title": "Will Bitcoin reach $130k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607142",
+        "question": "Will Bitcoin reach $122,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222374,
+        "title": "Will Bitcoin reach $130k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607141",
+        "question": "Will Bitcoin reach $124,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222374,
+        "title": "Will Bitcoin reach $130k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607140",
+        "question": "Will Bitcoin reach $126,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222374,
+        "title": "Will Bitcoin reach $130k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607139",
+        "question": "Will Bitcoin reach $128,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222373,
+        "title": "Will Bitcoin reach $120k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607145",
+        "question": "Will Bitcoin reach $116,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222373,
+        "title": "Will Bitcoin reach $120k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607144",
+        "question": "Will Bitcoin reach $118,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222373,
+        "title": "Will Bitcoin reach $120k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607143",
+        "question": "Will Bitcoin reach $120,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222373,
+        "title": "Will Bitcoin reach $120k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607142",
+        "question": "Will Bitcoin reach $122,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222373,
+        "title": "Will Bitcoin reach $120k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607141",
+        "question": "Will Bitcoin reach $124,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222373,
+        "title": "Will Bitcoin reach $120k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607140",
+        "question": "Will Bitcoin reach $126,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222373,
+        "title": "Will Bitcoin reach $120k in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607139",
+        "question": "Will Bitcoin reach $128,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.61
+    },
+    {
+      "futuurMarket": {
+        "id": 222378,
+        "title": "Will Ether reach $5,500 in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607164",
+        "question": "Will Ethereum reach $4,500 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8666666666666667,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.6066666666666667
+    },
+    {
+      "futuurMarket": {
+        "id": 222377,
+        "title": "Will Ether reach $5,000 in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607156",
+        "question": "Will Ethereum reach $5,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8666666666666667,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.6066666666666667
+    },
+    {
+      "futuurMarket": {
+        "id": 221693,
+        "title": "Will Putin meet with Zelenskyy in 2025?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "578158",
+        "question": "Will Putin meet with Zelenskyy by September 30?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8142857142857143,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.57
+    },
+    {
+      "futuurMarket": {
+        "id": 224237,
+        "title": "Will the US PCE annual inflation be greater than 2.7% in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "606681",
+        "question": "Will the price of XRP be greater than $3.40 on September 28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 224237,
+        "title": "Will the US PCE annual inflation be greater than 2.7% in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "605588",
+        "question": "Will the price of XRP be greater than $3.40 on September 27?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 224237,
+        "title": "Will the US PCE annual inflation be greater than 2.7% in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "604341",
+        "question": "Will the price of XRP be greater than $3.50 on September 26?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613790",
+        "question": "Bitcoin Up or Down - September 28, 11AM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613690",
+        "question": "Bitcoin Up or Down - September 28, 10AM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613678",
+        "question": "Bitcoin Up or Down - September 28, 9AM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613666",
+        "question": "Bitcoin Up or Down - September 28, 8AM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613654",
+        "question": "Bitcoin Up or Down - September 28, 7AM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613549",
+        "question": "Bitcoin Up or Down - September 28, 6AM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613467",
+        "question": "Bitcoin Up or Down - September 28, 5AM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613440",
+        "question": "Bitcoin Up or Down - September 28, 4AM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613374",
+        "question": "Bitcoin Up or Down - September 28, 3AM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613274",
+        "question": "Bitcoin Up or Down - September 28, 2AM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613262",
+        "question": "Bitcoin Up or Down - September 28, 1AM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613199",
+        "question": "Bitcoin Up or Down - September 28, 12AM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613187",
+        "question": "Bitcoin Up or Down - September 27, 11PM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613087",
+        "question": "Bitcoin Up or Down - September 27, 10PM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613075",
+        "question": "Bitcoin Up or Down - September 27, 9PM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613060",
+        "question": "Bitcoin Up or Down - September 27, 8PM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222741,
+        "title": "Will Bitcoin's price go up or down in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613040",
+        "question": "Bitcoin Up or Down - September 27, 7PM ET",
+        "probabilities": {
+          "Up": null,
+          "Down": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.8,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5599999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222377,
+        "title": "Will Ether reach $5,000 in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607145",
+        "question": "Will Bitcoin reach $116,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5399999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222377,
+        "title": "Will Ether reach $5,000 in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607144",
+        "question": "Will Bitcoin reach $118,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5399999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222377,
+        "title": "Will Ether reach $5,000 in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607143",
+        "question": "Will Bitcoin reach $120,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5399999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222377,
+        "title": "Will Ether reach $5,000 in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607142",
+        "question": "Will Bitcoin reach $122,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5399999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222377,
+        "title": "Will Ether reach $5,000 in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607141",
+        "question": "Will Bitcoin reach $124,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5399999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222377,
+        "title": "Will Ether reach $5,000 in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607140",
+        "question": "Will Bitcoin reach $126,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5399999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 222377,
+        "title": "Will Ether reach $5,000 in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "607139",
+        "question": "Will Bitcoin reach $128,000 September 22-28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7714285714285714,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5399999999999999
+    },
+    {
+      "futuurMarket": {
+        "id": 221326,
+        "title": "Will Trump pardon Diddy in 2025?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "554013",
+        "question": "Will Trump pardon Do Kwon in 2025?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7666666666666666,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5366666666666666
+    },
+    {
+      "futuurMarket": {
+        "id": 224237,
+        "title": "Will the US PCE annual inflation be greater than 2.7% in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613770",
+        "question": "Will the price of XRP be greater than $2.91 on September 26 at 4PM ET?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7545454545454545,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5281818181818181
+    },
+    {
+      "futuurMarket": {
+        "id": 224237,
+        "title": "Will the US PCE annual inflation be greater than 2.7% in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613634",
+        "question": "Will the price of XRP be greater than $2.88 on September 26 at 12PM ET?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7545454545454545,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5281818181818181
+    },
+    {
+      "futuurMarket": {
+        "id": 224237,
+        "title": "Will the US PCE annual inflation be greater than 2.7% in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "613354",
+        "question": "Will the price of XRP be greater than $2.88 on September 26 at 8AM ET?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7545454545454545,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5281818181818181
+    },
+    {
+      "futuurMarket": {
+        "id": 224237,
+        "title": "Will the US PCE annual inflation be greater than 2.7% in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "606670",
+        "question": "Will the price of Solana be greater than $280 on September 28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7545454545454545,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5281818181818181
+    },
+    {
+      "futuurMarket": {
+        "id": 224237,
+        "title": "Will the US PCE annual inflation be greater than 2.7% in September?",
+        "probabilities": {},
+        "status": "open"
+      },
+      "polymarketMarket": {
+        "id": "606653",
+        "question": "Will the price of Ethereum be greater than $4,900 on September 28?",
+        "probabilities": {
+          "Yes": null,
+          "No": null
+        },
+        "active": true
+      },
+      "textSimilarity": 0.7545454545454545,
+      "probabilitySimilarity": 0,
+      "combinedSimilarity": 0.5281818181818181
+    }
+  ]
+}

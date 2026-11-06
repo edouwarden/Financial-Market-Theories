@@ -1,0 +1,23 @@
+//@version=5
+indicator("Big Trade Detector", overlay=true)
+
+// Get the perpetual futures symbol for this base currency
+perp_symbol = "BINANCE:" + str.tostring(syminfo.basecurrency) + "USDT.P"
+perp_oi_symbol = perp_symbol + "_OI"
+
+// Get volume and open interest from the perp symbol
+perp_vol = request.security(perp_symbol, timeframe.period, volume)
+perp_oi = request.security(perp_oi_symbol, timeframe.period, close)
+
+// Calculate average order size (volume / open interest)
+avg_order_size = perp_oi != 0 ? perp_vol / perp_oi : na
+
+// Moving average and threshold for big average order size
+avg_len = input.int(20, "Avg Order Size MA Length")
+avg_factor = input.float(1.5, "Avg Order Size Spike Factor")
+avg_order_ma = ta.sma(avg_order_size, avg_len)
+big_avg_order = avg_order_size > avg_order_ma * avg_factor
+
+// Plot signals for big average order size
+bgcolor(big_avg_order ? color.new(color.purple, 80) : na)
+plotshape(big_avg_order, style=shape.triangleup, location=location.belowbar, color=color.purple, size=size.small, title="Big Avg Order Size")

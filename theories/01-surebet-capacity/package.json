@@ -1,0 +1,10 @@
+{
+  "name": "surebet-capacity",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "replay": "cd scripts/capacity-cli && bun main.js --replay ../../data/sample/orderbook_pair.json --out ../../results/sample/capacity_output.json",
+    "live": "cd scripts/capacity-cli && bun main.js --live --out ../../results/live_surebet.json",
+    "probe": "bun scripts/futuur-depth-probe.js"
+  }
+}

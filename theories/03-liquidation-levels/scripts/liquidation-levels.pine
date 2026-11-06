@@ -1,0 +1,171 @@
+//@version=5
+indicator("OI Increase Pivot Levels", overlay=true)
+
+// Inputs
+ltfPivotLen = input.int(3, "LTF Pivot Length")
+htfPivotLen = input.int(9, "HTF Pivot Length")
+htfRes = input.timeframe("240", "Higher TF Resolution")  // 4H
+ltfRes = input.timeframe("60", "Lower TF Resolution")   // 1H
+barsBackThreshold = input.int(50, "Bars Back Threshold")
+d_mult = input.float(1.0, "Delta Multiplier")
+increaseFactor = input.float(10.0, "Transparency Factor")  // Adjust to scale transparency
+smaLength = input.int(300, "SMA Length for Threshold")
+denom = input.string("Base Currency", "Denomination", options=["Base Currency", "Quote Currency"])
+
+up_color = input.color(color.red, 'Up color')
+down_color = input.color(color.green, 'Down color')
+
+// Fetch Open Interest data with multiple values
+base = str.tostring(syminfo.basecurrency)
+mex = base == "BTC" ? "XBT" : base
+[oid1, oic1, oio1, oih1, oil1] = request.security("BINANCE:" + base + "USDT.P_OI", timeframe.period, [close - close[1], close, open, high, low], ignore_invalid_symbol=true)
+[oid2, oic2, oio2, oih2, oil2] = request.security("BINANCE:" + base + "USD.P_OI", timeframe.period, [close - close[1], close, open, high, low], ignore_invalid_symbol=true)
+[oid3, oic3, oio3, oih3, oil3] = request.security("BINANCE:" + base + "BUSD.P_OI", timeframe.period, [close - close[1], close, open, high, low], ignore_invalid_symbol=true)
+[oid4, oic4, oio4, oih4, oil4] = request.security("BITMEX:" + mex + "USD.P_OI", timeframe.period, [close - close[1], close, open, high, low], ignore_invalid_symbol=true)
+[oid5, oic5, oio5, oih5, oil5] = request.security("BITMEX:" + mex + "USDT.P_OI", timeframe.period, [close - close[1], close, open, high, low], ignore_invalid_symbol=true)
+[oid6, oic6, oio6, oih6, oil6] = request.security("KRAKEN:" + base + "USD.P_OI", timeframe.period, [close - close[1], close, open, high, low], ignore_invalid_symbol=true)
+
+// Calculate total OI and deltaOI
+OI_total = nz(oic1, 0) + nz(oic2, 0) / close + nz(oic3, 0) + nz(oic4, 0) / close + nz(oic5, 0) / close + nz(oic6, 0) / close
+deltaOI = nz(oid1, 0) + nz(oid2, 0) / close + nz(oid3, 0) + nz(oid4, 0) / close + nz(oid5, 0) / close + nz(oid6, 0) / close
+
+// --- Price & OI directional helpers ---
+priceUP   = close > open
+priceDOWN = close < open
+oiUP      = deltaOI > 0
+oiDOWN    = deltaOI < 0
+
+// --- Position (de)creation conditions ---
+newlongs   = oiUP   and priceUP    // longs opened while price rising
+rektlongs  = oiDOWN and priceDOWN  // longs liquidated (rekt) while price falling
+newshorts  = oiUP   and priceDOWN  // shorts opened while price falling
+rektshorts = oiDOWN and priceUP    // shorts liquidated (rekt) while price rising
+
+// Helper function converting delta according to denomination
+f_val(float _delta) => denom == "Base Currency" ? _delta : _delta * close
+
+// --- Cumulate flows ---
+longs_entering  = ta.cum(newlongs   ? f_val(deltaOI) : 0)
+longs_exiting   = ta.cum(rektlongs  ? f_val(deltaOI) : 0)
+shorts_entering = ta.cum(newshorts  ? f_val(deltaOI) : 0)
+shorts_exiting  = ta.cum(rektshorts ? f_val(deltaOI) : 0)
+
+// Thresholds
+p_delta_thresh = ta.sma(deltaOI > 0 ? deltaOI : 0, smaLength) * d_mult
+n_delta_thresh = ta.sma(deltaOI < 0 ? deltaOI : 0, smaLength) * d_mult
+
+// Conditions for large OI increase/decrease
+large_oi_up = deltaOI > p_delta_thresh and not na(p_delta_thresh)
+large_oi_dw = deltaOI < n_delta_thresh and not na(n_delta_thresh)
+
+// HTF Pivots
+htf_high_pivot = request.security(syminfo.tickerid, htfRes, ta.pivothigh(high, htfPivotLen, htfPivotLen))
+htf_low_pivot = request.security(syminfo.tickerid, htfRes, ta.pivotlow(low, htfPivotLen, htfPivotLen))
+
+var int last_htf_high_detection = na
+var float last_htf_high_val = na
+if not na(htf_high_pivot)
+    last_htf_high_detection := bar_index
+    last_htf_high_val := htf_high_pivot
+
+var int last_htf_low_detection = na
+var float last_htf_low_val = na
+if not na(htf_low_pivot)
+    last_htf_low_detection := bar_index
+    last_htf_low_val := htf_low_pivot
+
+last_htf_detection = math.max(nz(last_htf_high_detection, -1), nz(last_htf_low_detection, -1))
+bars_since_htf_detection = bar_index - last_htf_detection
+bars_since_htf_pivot = bars_since_htf_detection + htfPivotLen
+
+htf_is_high = nz(last_htf_high_detection, -1) >= nz(last_htf_low_detection, -1)
+htf_pivot_val = htf_is_high ? last_htf_high_val : last_htf_low_val
+
+// LTF Pivots
+ltf_high_pivot = request.security(syminfo.tickerid, ltfRes, ta.pivothigh(high, ltfPivotLen, ltfPivotLen))
+ltf_low_pivot = request.security(syminfo.tickerid, ltfRes, ta.pivotlow(low, ltfPivotLen, ltfPivotLen))
+
+var int last_ltf_high_detection = na
+var float last_ltf_high_val = na
+if not na(ltf_high_pivot)
+    last_ltf_high_detection := bar_index
+    last_ltf_high_val := ltf_high_pivot
+
+var int last_ltf_low_detection = na
+var float last_ltf_low_val = na
+if not na(ltf_low_pivot)
+    last_ltf_low_detection := bar_index
+    last_ltf_low_val := ltf_low_pivot
+
+last_ltf_detection = math.max(nz(last_ltf_high_detection, -1), nz(last_ltf_low_detection, -1))
+ltf_is_high = nz(last_ltf_high_detection, -1) >= nz(last_ltf_low_detection, -1)
+ltf_pivot_val = ltf_is_high ? last_ltf_high_val : last_ltf_low_val
+
+// Arrays for lines
+var array<line> active_lines = array.new<line>()
+var array<bool> active_is_high = array.new<bool>()
+var array<float> active_levels = array.new<float>()
+var array<int> active_original_x2 = array.new<int>()
+var array<int> active_transp = array.new<int>()
+
+// Calculate flow-based transparency adjustment
+float flow_transp_adjustment = 0.0
+if large_oi_up
+    if newlongs
+        flow_transp_adjustment := math.abs(longs_entering[1] - longs_entering) / math.max(math.abs(p_delta_thresh), 0.00001) * increaseFactor
+    else if newshorts
+        flow_transp_adjustment := math.abs(shorts_entering[1] - shorts_entering) / math.max(math.abs(p_delta_thresh), 0.00001) * increaseFactor
+
+// Check for OI increase and draw line if applicable
+if large_oi_up
+    bool use_ltf = bars_since_htf_pivot > barsBackThreshold
+    float pivot_val = use_ltf ? ltf_pivot_val : htf_pivot_val
+    bool is_high_pivot = use_ltf ? ltf_is_high : htf_is_high
+    
+    if not na(pivot_val)
+        float increase_size = deltaOI / (p_delta_thresh > 0 ? p_delta_thresh : 1)
+        // Adjust transparency based on both OI increase and flow metrics
+        int base_transp = math.max(0, math.min(100, 100 - math.round(increase_size * increaseFactor)))
+        int flow_adjusted_transp = math.max(0, math.min(100, base_transp - math.round(flow_transp_adjustment)))
+        color line_col = is_high_pivot ? color.new(up_color, flow_adjusted_transp) : color.new(down_color, flow_adjusted_transp)
+        
+        int creation_x2 = bar_index + 1
+        line new_line = line.new(bar_index, pivot_val, creation_x2, pivot_val, extend=extend.right, color=line_col)
+        array.push(active_lines, new_line)
+        array.push(active_is_high, is_high_pivot)
+        array.push(active_levels, pivot_val)
+        array.push(active_original_x2, creation_x2)
+        array.push(active_transp, flow_adjusted_transp)
+
+// Calculate flow-based transparency adjustment for decreases
+float flow_decrease_adjustment = 0.0
+if large_oi_dw
+    if rektlongs
+        flow_decrease_adjustment := math.abs(longs_exiting[1] - longs_exiting) / math.max(math.abs(n_delta_thresh), 0.00001) * increaseFactor
+    else if rektshorts
+        flow_decrease_adjustment := math.abs(shorts_exiting[1] - shorts_exiting) / math.max(math.abs(n_delta_thresh), 0.00001) * increaseFactor
+
+// Check for OI decrease and make last line more transparent if applicable
+if large_oi_dw and array.size(active_lines) > 0
+    line last_line = array.last(active_lines)
+    bool is_h = array.last(active_is_high)
+    int curr_transp = array.last(active_transp)
+    float abs_n_thresh = math.abs(n_delta_thresh)
+    float decrease_size = math.abs(deltaOI) / (abs_n_thresh > 0 ? abs_n_thresh : 1)
+    int add_transp = math.round(decrease_size * increaseFactor + flow_decrease_adjustment)
+    int new_transp = math.min(100, curr_transp + add_transp)
+    color new_col = is_h ? color.new(up_color, new_transp) : color.new(down_color, new_transp)
+    line.set_color(last_line, new_col)
+    array.set(active_transp, array.size(active_transp) - 1, new_transp)
+
+// Check for crosses on existing lines
+if array.size(active_lines) > 0
+    for i = 0 to array.size(active_lines) - 1
+        line ll = array.get(active_lines, i)
+        bool is_h = array.get(active_is_high, i)
+        float lev = array.get(active_levels, i)
+        int orig_x2 = array.get(active_original_x2, i)
+        bool crossed = is_h ? close > lev : close < lev
+        if crossed and line.get_x2(ll) == orig_x2
+            line.set_extend(ll, extend.none)
+            line.set_x2(ll, bar_index)

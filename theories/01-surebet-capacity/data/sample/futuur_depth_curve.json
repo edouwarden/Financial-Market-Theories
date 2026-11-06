@@ -1,0 +1,14 @@
+{
+  "yes": {
+    "1": "Price per share .04",
+    "5": "Price per share .05",
+    "10": "Price per share .06",
+    "50": "Price per share .11"
+  },
+  "no": {
+    "1": "Price per share .97",
+    "5": "Price per share .97",
+    "10": "Price per share .97",
+    "50": "Price per share .97"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "bloomberg-from-crypto",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "report": "bun scripts/cluster-report.js",
+    "collect": "bun scripts/bloomberg-from-crypto.js"
+  }
+}

@@ -1,0 +1,56 @@
+//@version=5
+indicator("ℌ𝔢𝔞𝔯𝔱𝔥 𝔠𝔬𝔯𝔬𝔲𝔯", overlay=true, max_bars_back=500)
+
+// Base currency handling
+string mex = syminfo.basecurrency == "BTC" ? "XBT" : str.tostring(syminfo.basecurrency)
+
+// Input parameters
+var len = input.int(1, "ROC Length")
+var use_binance = input.bool(true, "Use Binance USDT")
+var use_binance2 = input.bool(true, "Use Binance USD")
+var use_binance3 = input.bool(true, "Use Binance BUSD")
+var use_bitmex = input.bool(true, "Use BitMEX USD")
+var use_bitmex2 = input.bool(true, "Use BitMEX USDT")
+var use_kraken = input.bool(true, "Use Kraken")
+var strength_length = input.int(20, "Strength Look-back Length")
+
+// Request OI data from different sources
+oi1 = request.security("BINANCE:" + str.tostring(syminfo.basecurrency) + "USDT.P_OI", timeframe.period, close, ignore_invalid_symbol=true)
+oi2 = request.security("BINANCE:" + str.tostring(syminfo.basecurrency) + "USD.P_OI", timeframe.period, close, ignore_invalid_symbol=true)
+oi3 = request.security("BINANCE:" + str.tostring(syminfo.basecurrency) + "BUSD.P_OI", timeframe.period, close, ignore_invalid_symbol=true)
+oi4 = request.security("BITMEX:" + mex + "USD.P_OI",          timeframe.period, close, ignore_invalid_symbol=true)
+oi5 = request.security("BITMEX:" + mex + "USDT.P_OI",          timeframe.period, close, ignore_invalid_symbol=true)
+oi6 = request.security("KRAKEN:" + str.tostring(syminfo.basecurrency) + "USD.P_OI", timeframe.period, close, ignore_invalid_symbol=true)
+
+// Calculate total OI
+OI_total = (use_binance  ? nz(oi1,0)      : 0) +
+     (use_binance2 ? nz(oi2,0) / close   : 0) +
+     (use_binance3 ? nz(oi3,0)       : 0) +
+     (use_bitmex  ? nz(oi4,0) / close   : 0) +
+     (use_bitmex2  ? nz(oi5,0) / close   : 0) +
+     (use_kraken  ? nz(oi6,0) / close   : 0)
+
+// Calculate OI momentum
+oi_mom = ta.roc(OI_total, len)
+
+// Calculate strength and normalize
+oi_strength = math.abs(oi_mom)
+max_strength = ta.highest(oi_strength, strength_length)
+min_strength = ta.lowest(oi_strength, strength_length)
+
+// Normalize strength to 0-1 range (0 = gray, 1 = full color)
+normalized_strength = math.min(max_strength == min_strength ? 0.5 : (oi_strength - min_strength) / (max_strength - min_strength), 1.0)
+
+
+// Define base colors: green, gray, red
+color_green = color.new(color.green, 0)
+color_gray = color.new(color.gray, 0)
+color_red = color.new(color.red, 0)
+
+// Blend colors based on momentum direction and strength
+bodyColor = oi_mom < 0 ? color.from_gradient(normalized_strength, 0, 1, color_gray, color_green) :oi_mom > 0 ?color.from_gradient(normalized_strength, 0, 1, color_gray, color_red) :color_gray
+
+wickColor = color.gray
+
+// Plot the custom candles
+plotcandle(open, high, low, close, "OI Momentum Candles", bodyColor, wickColor, bordercolor = bodyColor, force_overlay = true)

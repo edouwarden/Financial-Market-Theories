@@ -1,0 +1,249 @@
+//@version=5
+indicator(title="Open Interest Heatmap", shorttitle="OI Heatmap", overlay=true, max_boxes_count=500)
+
+// ============================================================================
+// PARAMÈTRES DE CONFIGURATION
+// ============================================================================
+
+// Paramètres de l'Open Interest
+g1 = 'Open Interest Settings'
+oi_enable = input.bool(true, "Activer l'Open Interest", group=g1)
+opacity_min = input.int(20, "Opacité minimale (%)", minval=0, maxval=100, group=g1)
+opacity_max = input.int(90, "Opacité maximale (%)", minval=0, maxval=100, group=g1)
+lookback_period = input.int(50, "Période de référence pour normalisation", minval=10, maxval=200, group=g1)
+
+// Paramètres supplémentaires pour l’activation et les filtres OI
+positive_enable   = input.bool(true,  "Activer OI positif",  group=g1)
+negative_enable   = input.bool(true,  "Activer OI négatif",  group=g1)
+positive_min      = input.float(0.0,  "Seuil min OI positif",  step=0.1, group=g1)
+negative_min      = input.float(0.0,  "Seuil min OI négatif",  step=0.1, group=g1)
+positive_cap      = input.float(0.0,  "Cap max OI positif (0 = auto)",  step=0.1, group=g1)
+negative_cap      = input.float(0.0,  "Cap max OI négatif absolu (0 = auto)",  step=0.1, group=g1)
+
+// Paramètres de la heatmap
+g2 = 'Heatmap Settings'
+heatmap_height = input.int(10, "Nombre de bandes horizontales", minval=3, maxval=30, group=g2)
+heatmap_color_up = input.color(color.new(color.blue, 0), "Couleur OI positif", group=g2)
+heatmap_color_down = input.color(color.new(color.purple, 0), "Couleur OI négatif", group=g2)
+show_oi_values = input.bool(true, "Afficher les valeurs OI", group=g2)
+band_style = input.string("Gradient", "Style des bandes", ["Gradient", "Uniform", "Alternating"], group=g2)
+
+// Paramètres d'affichage supplémentaires
+cleanup_old      = input.bool(false, "Masquer les anciennes zones", group=g2)
+bars_hide        = input.int(100, "Barres avant suppression", minval=1, group=g2)
+contrast_factor  = input.float(1.0, "Facteur de contraste (>1 = plus de contraste)", minval=0.1, step=0.1, group=g2)
+// NEW: paramètres de décroissance temporelle des zones
+decay_enable       = input.bool(false, "Activer la décroissance temporelle", group=g2)
+decay_bars_base    = input.int(50, "Durée de base des zones (en barres)", minval=1, maxval=500, group=g2)
+decay_by_intensity = input.bool(true, "Durée proportionnelle à l'intensité", group=g2)
+cleanup_visited  = input.bool(true, "Supprimer les zones entièrement re-visitées", group=g2)
+visit_threshold  = input.float(0.8, "Seuil de re-visite (%)", minval=0.1, maxval=1.0, step=0.1, group=g2)
+
+// Paramètres des sources de données
+g3 = 'Data Sources'
+binance = input.bool(true, 'Binance USDT.P_OI', inline='src1', group=g3)
+binance2 = input.bool(true, 'Binance USD.P_OI', inline='src1', group=g3)
+binance3 = input.bool(true, 'Binance BUSD.P_OI', inline='src2', group=g3)
+bitmex = input.bool(true, 'BitMEX USD.P_OI', inline='src2', group=g3)
+bitmex2 = input.bool(true, 'BitMEX USDT.P_OI', inline='src3', group=g3)
+kraken = input.bool(true, 'Kraken USD.P_OI', inline='src3', group=g3)
+
+// ============================================================================
+// RÉCUPÉRATION DES DONNÉES D'OPEN INTEREST
+// ============================================================================
+
+// Conversion pour BitMEX
+mex = syminfo.basecurrency == 'BTC' ? 'XBT' : string(syminfo.basecurrency)
+
+// Récupération des données d'Open Interest depuis différentes sources
+[oid1, oi1] = request.security('BINANCE' + ":" + string(syminfo.basecurrency) + 'USDT.P_OI', timeframe.period, [close-close[1], close], ignore_invalid_symbol=true)
+[oid2, oi2] = request.security('BINANCE' + ":" + string(syminfo.basecurrency) + 'USD.P_OI', timeframe.period, [close-close[1], close], ignore_invalid_symbol=true)
+[oid3, oi3] = request.security('BINANCE' + ":" + string(syminfo.basecurrency) + 'BUSD.P_OI', timeframe.period, [close-close[1], close], ignore_invalid_symbol=true)
+[oid4, oi4] = request.security('BITMEX' + ":" + mex + 'USD.P_OI', timeframe.period, [close-close[1], close], ignore_invalid_symbol=true)
+[oid5, oi5] = request.security('BITMEX' + ":" + mex + 'USDT.P_OI', timeframe.period, [close-close[1], close], ignore_invalid_symbol=true)
+[oid6, oi6] = request.security('KRAKEN' + ":" + string(syminfo.basecurrency) + 'USD.P_OI', timeframe.period, [close-close[1], close], ignore_invalid_symbol=true)
+
+// Agrégation des données d'Open Interest
+deltaOI = (binance ? nz(oid1, 0) : 0) + (binance2 ? nz(oid2, 0)/close : 0) + (binance3 ? nz(oid3, 0) : 0) + (bitmex ? nz(oid4, 0)/close : 0) + (bitmex2 ? nz(oid5, 0)/close : 0) + (kraken ? nz(oid6, 0)/close : 0)
+OI = (binance ? nz(oi1, 0) : 0) + (binance2 ? nz(oi2, 0)/close : 0) + (binance3 ? nz(oi3, 0) : 0) + (bitmex ? nz(oi4, 0)/close : 0) + (bitmex2 ? nz(oi5, 0)/close : 0) + (kraken ? nz(oi6, 0)/close : 0)
+
+// ============================================================================
+// CALCUL DE L'OPACITÉ BASÉE SUR L'OPEN INTEREST
+// ============================================================================
+
+// Calcul de la valeur absolue de l'OI pour la normalisation
+oi_abs = math.abs(OI)
+
+// Normalisation de l'OI sur la période de référence
+var float oi_max = 0.0
+var float oi_min = 0.0
+
+if bar_index < lookback_period
+    oi_max := math.max(oi_max, oi_abs)
+    oi_min := math.min(oi_min, oi_abs)
+else
+    // Calcul du min/max sur la période de référence
+    oi_max := ta.highest(oi_abs, lookback_period)
+    oi_min := ta.lowest(oi_abs, lookback_period)
+
+// Éviter la division par zéro
+oi_range_var = oi_max - oi_min
+oi_normalized = oi_range_var > 0 ? (oi_abs - oi_min) / oi_range_var : 0
+
+// Calcul de l'opacité (plus l'OI est élevé, plus c'est opaque)
+opacity_percent = math.round(opacity_min + (opacity_max - opacity_min) * oi_normalized)
+opacity_value = 100 - opacity_percent  // Conversion pour Pine Script (0 = opaque, 100 = transparent)
+
+// ============================================================================
+// COULEURS DE LA HEATMAP
+// ============================================================================
+
+// Détermination de la couleur basée sur le delta OI
+heatmap_color = deltaOI >= 0 ? heatmap_color_up : heatmap_color_down
+
+// Application de l'opacité
+heatmap_color_with_opacity = color.new(heatmap_color, opacity_value)
+
+// ============================================================================
+// REMPLACEMENT DU RENDU : BANDES CONTINUES PAR BOX EXTEND.RIGHT
+// ============================================================================
+// Paramètres pour la nouvelle logique
+box_threshold_mult = input.float(3.0, "Multiplicateur du seuil de déclenchement", step = 0.1, group=g2)
+max_memory        = input.int(90, "Nombre max. de rectangles mémorisés", minval = 10, maxval = 450, group=g2)
+
+// Tableau global qui contiendra les boxes dessinées
+var array<box> oi_boxes = array.new<box>()
+var array<float> oi_visit_ratio = array.new<float>()
+
+// Seuils dynamiques calculés sur la base d'une moyenne mobile longue
+delta_pos_ma = ta.sma(deltaOI > 0 ? deltaOI : 0, 300)
+delta_neg_ma = ta.sma(deltaOI < 0 ? deltaOI : 0, 300)
+
+pos_trigger = delta_pos_ma * box_threshold_mult
+neg_trigger = delta_neg_ma * box_threshold_mult  // valeur négative
+
+// Détermination si on doit dessiner en fonction de la configuration utilisateur
+bool pass_sign_filter = (deltaOI > 0 and positive_enable) or (deltaOI < 0 and negative_enable)
+bool pass_min_filter  = (deltaOI > 0 and deltaOI >= positive_min) or (deltaOI < 0 and math.abs(deltaOI) >= negative_min)
+bool should_draw = pass_sign_filter and pass_min_filter and ((deltaOI >  pos_trigger) or (deltaOI <  neg_trigger))
+
+if should_draw and oi_enable
+    // Normalisation locale + cap utilisateur
+    float local_max = ta.highest(math.abs(deltaOI), 300)
+    float magnitude = math.abs(deltaOI)
+    float cap_user  = deltaOI > 0 ? (positive_cap > 0 ? positive_cap : local_max) : (negative_cap > 0 ? negative_cap : local_max)
+    // Empêcher cap_user à 0
+    cap_user := cap_user == 0 ? local_max : cap_user
+    float norm_raw  = math.min(magnitude, cap_user) / cap_user
+    float norm      = math.pow(norm_raw, contrast_factor)
+    // Transparence inversement proportionnelle à la taille (0 opaque,100 transparent)
+    trans = 100 - math.round(opacity_min + (opacity_max - opacity_min) * norm)
+    // On applique toujours un bleu (positif = plus clair, négatif = plus foncé)
+    baseColor = deltaOI >= 0 ? heatmap_color_up : heatmap_color_down
+    finalColor = color.new(baseColor, trans)
+    // NEW: calcul de la durée de vie de la zone
+    int life_bars = decay_enable ? (decay_by_intensity ? int(math.max(1.0, math.round(decay_bars_base * norm))) : decay_bars_base) : 0
+    int right_idx = decay_enable ? bar_index + life_bars : bar_index
+    extend_mode = decay_enable ? extend.none : extend.right
+
+    new_box = box.new(
+         left   = bar_index,
+         top    = high,
+         right  = right_idx,
+         bottom = low,
+         bgcolor = finalColor,
+         border_color = na,
+         extend = extend_mode)
+    array.push(oi_boxes, new_box)
+
+    // Gestion de la mémoire
+    if array.size(oi_boxes) > max_memory
+        oldest = array.shift(oi_boxes)
+        box.delete(oldest)
+
+// Nettoyage optionnel des anciennes zones
+if cleanup_old and array.size(oi_boxes) > 0
+    for idx = array.size(oi_boxes) - 1 to 0
+        b = array.get(oi_boxes, idx)
+        if bar_index - box.get_left(b) >= bars_hide
+            box.delete(b)
+            array.remove(oi_boxes, idx)
+
+// ============================================================================
+// SUPPRESSION DES ZONES ENTIÈREMENT RE-VISITÉES PAR LE PRIX
+// ============================================================================
+
+// Fonction pour calculer le ratio de visite d'une zone
+calculate_visit_ratio(box_top, box_bottom) =>
+    zone_height = box_top - box_bottom
+    if zone_height > 0
+        // Calculer combien le prix a visité cette zone
+        price_high = high
+        price_low = low
+        
+        // Zone de chevauchement entre le prix et la zone OI
+        overlap_top = math.min(price_high, box_top)
+        overlap_bottom = math.max(price_low, box_bottom)
+        overlap_height = math.max(0, overlap_top - overlap_bottom)
+        
+        // Ratio de visite (0 = pas visité, 1 = entièrement visité)
+        overlap_height / zone_height
+    else
+        0.0
+
+// Mise à jour du ratio de visite pour toutes les zones existantes
+if cleanup_visited and array.size(oi_boxes) > 0
+    // S'assurer que les arrays ont la même taille
+    while array.size(oi_visit_ratio) < array.size(oi_boxes)
+        array.push(oi_visit_ratio, 0.0)
+    
+    // Mettre à jour les ratios de visite
+    for idx = 0 to array.size(oi_boxes) - 1
+        b = array.get(oi_boxes, idx)
+        box_top = box.get_top(b)
+        box_bottom = box.get_bottom(b)
+        
+        current_ratio = calculate_visit_ratio(box_top, box_bottom)
+        existing_ratio = array.get(oi_visit_ratio, idx)
+        
+        // Accumuler le ratio de visite (maximum 1.0)
+        new_ratio = math.min(1.0, existing_ratio + current_ratio)
+        array.set(oi_visit_ratio, idx, new_ratio)
+    
+    // Supprimer les zones entièrement re-visitées
+    for idx = array.size(oi_boxes) - 1 to 0
+        visit_ratio = array.get(oi_visit_ratio, idx)
+        if visit_ratio >= visit_threshold
+            b = array.get(oi_boxes, idx)
+            box.delete(b)
+            array.remove(oi_boxes, idx)
+            array.remove(oi_visit_ratio, idx)
+
+// ============================================================================
+// AFFICHAGE DES VALEURS D'OI
+// ============================================================================
+
+//if show_oi_values and oi_enable and barstate.islast
+//    var label oi_label = na
+//    label.delete(oi_label)
+//    
+//    oi_text = "OI: " + str.tostring(OI, "#.##") + "\nΔOI: " + str.tostring(deltaOI, "#.##") + "\nOpacité: " + str.tostring(opacity_percent) + "%"
+//    
+//    label_color = deltaOI >= 0 ? heatmap_color_up : heatmap_color_down
+//    oi_label := label.new(
+//         x=bar_index, 
+//         y=high + (heatmap_height * syminfo.mintick * 2), 
+//         text=oi_text, 
+//         color=label_color, 
+//         style=label.style_label_down, 
+//         textcolor=color.white, 
+//         size=size.small
+//     )
+
+// ============================================================================
+// PLOT DES DONNÉES POUR DEBUG
+// ============================================================================
+
+// Plot de l'OI normalisé pour visualisation
+//plot(oi_enable ? oi_normalized : na, "OI Normalisé", color=color.blue, linewidth=1)
+//plot(oi_enable ? opacity_percent/100 : na, "Opacité", color=color.gray, linewidth=1)

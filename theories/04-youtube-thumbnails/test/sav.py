@@ -1,0 +1,683 @@
+import requests
+import pandas as pd
+from io import BytesIO
+from PIL import Image, ImageDraw, ImageFont, ImageTk
+from bs4 import BeautifulSoup
+from datetime import datetime, timedelta
+import pytz
+import scrapetube
+import os
+import tkinter as tk
+from tkinter import ttk
+import numpy as np
+from sklearn.cluster import KMeans
+import time
+import threading
+import queue
+import json
+from pathlib import Path
+
+# Create cache directories if they don't exist
+CACHE_DIR = "youtube_cache"
+COMPOSITE_DIR = "composite_images"
+METADATA_DIR = "youtube_metadata"
+if not os.path.exists(CACHE_DIR):
+    os.makedirs(CACHE_DIR)
+if not os.path.exists(COMPOSITE_DIR):
+    os.makedirs(COMPOSITE_DIR)
+if not os.path.exists(METADATA_DIR):
+    os.makedirs(METADATA_DIR)
+    
+# Rate limiting constants
+REQUEST_DELAY = 1.0  # Seconds between requests to YouTube
+MAX_CONCURRENT_REQUESTS = 2  # Maximum number of concurrent requests
+
+def get_cached_image(video_id, thumbnail_url):
+    cache_path = os.path.join(CACHE_DIR, f"{video_id}.png")
+    
+    if os.path.exists(cache_path):
+        # Open cached image
+        img = Image.open(cache_path)
+        # Process the cached image to remove black borders if present
+        img = remove_black_borders(img)
+        return img
+    
+    # Download and process image if not in cache
+    img_data = requests.get(thumbnail_url).content
+    img = Image.open(BytesIO(img_data))
+    
+    # Remove black borders from the downloaded image
+    img = remove_black_borders(img)
+    
+    # Save the processed image to cache
+    img.save(cache_path)
+    return img
+
+def remove_black_borders(img):
+    """Remove black borders from an image by cropping them out"""
+    # Convert image to numpy array
+    img_array = np.array(img)
+    
+    # Check if the image has black borders at the top and bottom
+    # A black border is defined as rows where most pixels are very dark
+    height, width = img_array.shape[:2]
+    
+    # Define threshold for "black" - not pure black to account for compression artifacts
+    black_threshold = 20
+    
+    # Find the first non-black row from the top
+    top_crop = 0
+    for i in range(height):
+        row = img_array[i]
+        # Check if the row is mostly black (average brightness below threshold)
+        if np.mean(row) > black_threshold:
+            top_crop = i
+            break
+    
+    # Find the first non-black row from the bottom
+    bottom_crop = height - 1
+    for i in range(height - 1, -1, -1):
+        row = img_array[i]
+        if np.mean(row) > black_threshold:
+            bottom_crop = i
+            break
+    
+    # Only crop if we found black borders
+    if top_crop > 0 or bottom_crop < height - 1:
+        # Ensure we don't crop too much (sanity check)
+        if bottom_crop - top_crop > height * 0.5:  # Ensure we keep at least 50% of the image
+            return img.crop((0, top_crop, width, bottom_crop + 1))
+    
+    # Return the original image if no borders were found or if cropping would be too aggressive
+    return img
+
+# Function to convert the given date-time string to Unix timestamp in milliseconds
+def convert_to_unix_timestamp(date_string):
+    input_format = "%Y-%m-%dT%H:%M:%S%z"
+    dt = datetime.strptime(date_string, input_format)
+    dt_utc = dt.astimezone(pytz.utc)
+    timestamp_ms = int(dt_utc.timestamp() * 1000)
+    return timestamp_ms
+
+# Function to fetch the publication date of a YouTube video with caching
+def get_video_pubdate(video_id, video_url):
+    # Check if we have cached metadata
+    metadata_path = os.path.join(METADATA_DIR, f"{video_id}.json")
+    if os.path.exists(metadata_path):
+        try:
+            with open(metadata_path, 'r') as f:
+                metadata = json.load(f)
+                if 'publish_date' in metadata:
+                    return metadata['publish_date']
+        except Exception as e:
+            print(f"Error reading cached metadata: {e}")
+    
+    # Delay to respect rate limits
+    time.sleep(REQUEST_DELAY)
+    
+    # Fetch from YouTube
+    try:
+        response = requests.get(video_url, timeout=10)
+        if response.status_code != 200:
+            print(f"Failed to retrieve the video page. Status code: {response.status_code}")
+            return None
+
+        soup = BeautifulSoup(response.text, 'html.parser')
+        meta_tag = soup.find('meta', {'itemprop': 'uploadDate'})
+        if meta_tag:
+            publish_date = meta_tag.get('content')
+            
+            # Cache the result
+            try:
+                with open(metadata_path, 'w') as f:
+                    json.dump({'publish_date': publish_date}, f)
+            except Exception as e:
+                print(f"Error caching metadata: {e}")
+                
+            return publish_date
+        else:
+            print(f"Publication date not found for {video_id}.")
+            return None
+    except Exception as e:
+        print(f"Error fetching video data: {e}")
+        return None
+
+class DailyThumbnailApp:
+    def __init__(self):
+        # Initialize Tkinter root
+        self.root = tk.Tk()
+        self.root.title("YouTube Thumbnails by Day")
+        
+        # Initialize data attributes
+        self.video_details = []
+        self.current_composite_path = None
+        
+        # Default YouTubers to track
+        self.youtubers = [
+    "CoinBureau",       # ± 2,48 M abonnés :contentReference[oaicite:0]{index=0}
+    "AltcoinDaily",     # ± 1,47 M :contentReference[oaicite:1]{index=1}
+    "TheBitBoyX",     # ± 1,4 M :contentReference[oaicite:2]{index=2}
+    "CryptosRUs",        # ± 753 K :contentReference[oaicite:3]{index=3}
+    "99Bitcoins",        # ± 706 K :contentReference[oaicite:4]{index=4}
+    "EllioTradesCrypto",# ± 636 K :contentReference[oaicite:5]{index=5}
+    "VoskCoin",          # ± 633 K :contentReference[oaicite:6]{index=6}
+    "TheMoon",          # ± 607 K :contentReference[oaicite:7]{index=7}
+    "TheCryptoLark",   # ± 545 K :contentReference[oaicite:8]{index=8}
+    "davincij15",        # ± 539 K :contentReference[oaicite:9]{index=9}
+    "IvanonTech",      # ± 527 K :contentReference[oaicite:10]{index=10}
+    "DataDash",          # ± 509 K :contentReference[oaicite:11]{index=11}
+    "Boxmining",         # ± 471 K :contentReference[oaicite:12]{index=12}
+    "MMCrypto",          # ± 386 K :contentReference[oaicite:13]{index=13}
+    "AlessioRastani",   # ± 384 K :contentReference[oaicite:14]{index=14}
+    "aantonop",         # ± 333 K :contentReference[oaicite:15]{index=15}
+    "ChicoCrypto",      # ± 321 K :contentReference[oaicite:16]{index=16}
+    "BTCSessions",      # ± 292 K :contentReference[oaicite:17]{index=17}
+    "CryptoZombie",     # ± 263 K :contentReference[oaicite:18]{index=18}
+    "CryptoLove",       # ± 239 K :contentReference[oaicite:19]{index=19}
+    "TheModernInvestor",# ± 238 K :contentReference[oaicite:20]{index=20}
+    "CryptoTips",       # ± 215 K :contentReference[oaicite:21]{index=21}
+    "chrisdunntv",        # ± 210 K :contentReference[oaicite:22]{index=22}
+    "Hashoshi",          # ± 190 K :contentReference[oaicite:23]{index=23}
+    "CryptoDaily",      # ± 188 K :contentReference[oaicite:24]{index=24}
+    "CryptoKirbyTrading",# ± 152 K :contentReference[oaicite:25]{index=25}
+    "RichardHeart",     # ± 151 K :contentReference[oaicite:26]{index=26}
+    "CryptoCrow",       # ± 147 K :contentReference[oaicite:27]{index=27}
+    "CryptoJoker",      # ± 137 K :contentReference[oaicite:28]{index=28}
+    "CryptoRevolutionChannel",  # ± 133 K :contentReference[oaicite:29]{index=29}
+    "CryptoRevolutiontv",  # ± 133 K :contentReference[oaicite:29]{index=29}
+    "ToneVays",         # ± 123 K :contentReference[oaicite:31]{index=31}
+    "CryptoBobby",      # ± 119 K :contentReference[oaicite:32]{index=32}
+    "Crypt0",            # ± 119 K :contentReference[oaicite:33]{index=33}
+    "LouisThomas",      # ± 96,8 K :contentReference[oaicite:34]{index=34}
+    "NuggetsNews",      # ± 95,8 K :contentReference[oaicite:35]{index=35}
+    "ReadySet",  # ± 92,4 K :contentReference[oaicite:36]{index=36}
+    "CobbXRP",         # ± 84,6 K :contentReference[oaicite:37]{index=37}
+    "Philakone",         # ± 82,1 K :contentReference[oaicite:38]{index=38}
+    "CryptoOracle",     # ± 75,5 K :contentReference[oaicite:39]{index=39}
+    "DappUniversity",   # ± 68,3 K :contentReference[oaicite:40]{index=40}
+    "HackCrypto",       # ± 56,2 K :contentReference[oaicite:41]{index=41}
+    "Moocharoo",         # ± 51,2 K :contentReference[oaicite:42]{index=42}
+    "Cryptonews",       # ± 49,2 K :contentReference[oaicite:43]{index=43}
+    "NodeInvestor",     # ± 48,4 K :contentReference[oaicite:44]{index=44}
+    "ScottMelker",      # ± 48 K :contentReference[oaicite:45]{index=45}
+    "KeithWareing",     # ± 46,8 K :contentReference[oaicite:46]{index=46}
+    "ThatMartiniGuy",  # ± 45,8 K :contentReference[oaicite:47]{index=47}
+    "UndergroundTradingFr",      # ± 38,9 K :contentReference[oaicite:48]{index=48}
+    "MrKristof",        # ± 38,4 K :contentReference[oaicite:49]{index=49}
+    "Coffeezilla",       # ± 4,13 M :contentReference[oaicite:50]{index=50}
+    "CryptoDecoded",     # ± 4,2 M :contentReference[oaicite:51]{index=51}
+    "AltcoinAnalytics",  # ± 3,2 M :contentReference[oaicite:54]{index=54}
+    "DeFiDaily1",         # ± 2,7 M :contentReference[oaicite:57]{index=57}
+    "cherrytgbot",         # ± 2,7 M :contentReference[oaicite:57]{index=57}
+    "CryptoVisionary",   # ± 2,5 M :contentReference[oaicite:58]{index=58}
+    "MetaverseExplorer", # ± 2,4 M :contentReference[oaicite:59]{index=59}
+    "TokenTalks",        # ± 2,3 M :contentReference[oaicite:60]{index=60}
+    "TheCryptoLab",      # ± 2,0 M :contentReference[oaicite:62]{index=62}
+    "BlockchainBuilder", # ± 1,9 M :contentReference[oaicite:63]{index=63}
+    "CryptoInsiderOfficial",    # ± 1,7 M :contentReference[oaicite:65]{index=65}
+    "YieldMaster",       # ± 1,6 M :contentReference[oaicite:66]{index=66}
+    "BlockchainBasics",  # ± 1,5 M :contentReference[oaicite:67]{index=67}
+    "CryptoDataHub",     # ± 1,4 M :contentReference[oaicite:68]{index=68}
+    "CryptoPhilanthropist",# ± 1,3 M :contentReference[oaicite:69]{index=69}
+    "MarketPulseCrypto", # ± 1,2 M :contentReference[oaicite:70]{index=70}
+    "intothecryptoverse",    # ± 870 K :contentReference[oaicite:71]{index=71}
+    "CryptoBanterGroup",     # ± 750 K :contentReference[oaicite:72]{index=72}
+    "CryptoCasey",      # ± 950 K (ou ~420-580 K selon sources) :contentReference[oaicite:73]{index=73}
+    "DiscoverCrypto_",   # ± 1,4 M :contentReference[oaicite:74]{index=74}
+    "kevinoleary",     # ± 1 M :contentReference[oaicite:75]{index=75}
+    "Coffeezilla",       # déjà mentionné mais très significatif
+    "Hasheur",           # YouTuber français, ~682 K abonnés :contentReference[oaicite:76]{index=76}
+	"insydercrypto",
+	"CryptoFutur",
+	"BitcoinMagazine",
+	"lesroisdubitcoin",
+	"CryptoLeTrone",
+	"grandanglebitcoin",
+	"JulienRoman",
+	"Cryptolyze",
+	"MonsieurTK"]
+        
+        # Create control frame
+        control_frame = ttk.Frame(self.root)
+        control_frame.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
+        
+        # Add YouTuber entry and button
+        self.youtuber_var = tk.StringVar()
+        ttk.Label(control_frame, text="Add YouTuber:").pack(side=tk.LEFT, padx=(0, 5))
+        self.youtuber_entry = ttk.Entry(control_frame, textvariable=self.youtuber_var)
+        self.youtuber_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
+        ttk.Button(control_frame, text="Add", command=self.add_youtuber).pack(side=tk.LEFT)
+        ttk.Button(control_frame, text="Generate Image", command=self.refresh_data).pack(side=tk.LEFT, padx=(5, 0))
+        
+        # Create YouTuber list frame
+        list_frame = ttk.Frame(self.root)
+        list_frame.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
+        
+        # Add YouTuber list
+        ttk.Label(list_frame, text="Current YouTubers:").pack(side=tk.TOP, anchor='w')
+        self.youtuber_listbox = tk.Listbox(list_frame, height=4)
+        self.youtuber_listbox.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        
+        # Add scrollbar to listbox
+        scrollbar = ttk.Scrollbar(list_frame, orient="vertical", command=self.youtuber_listbox.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.youtuber_listbox.config(yscrollcommand=scrollbar.set)
+        
+        # Populate listbox
+        for youtuber in self.youtubers:
+            self.youtuber_listbox.insert(tk.END, youtuber)
+        
+        # Add remove button
+        ttk.Button(list_frame, text="Remove", command=self.remove_youtuber).pack(side=tk.BOTTOM, pady=(5, 0))
+        
+        # Create settings frame
+        settings_frame = ttk.Frame(self.root)
+        settings_frame.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
+        
+        # Add input field for number of videos per channel
+        ttk.Label(settings_frame, text="Videos per channel:").pack(side=tk.LEFT, padx=(0, 5))
+        self.limit_var = tk.StringVar(value="10")
+        limit_entry = ttk.Entry(settings_frame, textvariable=self.limit_var, width=5)
+        limit_entry.pack(side=tk.LEFT, padx=(0, 10))
+        
+        # Add days to display input field
+        ttk.Label(settings_frame, text="Days to display:").pack(side=tk.LEFT, padx=(10, 5))
+        self.days_var = tk.StringVar(value="7")
+        days_entry = ttk.Entry(settings_frame, textvariable=self.days_var, width=5)
+        days_entry.pack(side=tk.LEFT)
+        
+        # Create image display frame
+        self.image_frame = ttk.Frame(self.root)
+        self.image_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        # Create canvas for image display
+        self.canvas = tk.Canvas(self.image_frame)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        # Add scrollbars for the canvas
+        self.vscrollbar = ttk.Scrollbar(self.image_frame, orient=tk.VERTICAL, command=self.canvas.yview)
+        self.vscrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.hscrollbar = ttk.Scrollbar(self.root, orient=tk.HORIZONTAL, command=self.canvas.xview)
+        self.hscrollbar.pack(side=tk.BOTTOM, fill=tk.X)
+        
+        # Configure canvas
+        self.canvas.configure(yscrollcommand=self.vscrollbar.set, xscrollcommand=self.hscrollbar.set)
+        self.canvas.bind('<Configure>', self.on_canvas_configure)
+        
+        # Status bar
+        self.status_var = tk.StringVar()
+        self.status_bar = ttk.Label(self.root, textvariable=self.status_var, relief=tk.SUNKEN, anchor=tk.W)
+        self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
+        
+        # Check for existing composite image
+        self.load_latest_composite()
+        
+        # If no existing composite found, generate a new one
+        if not self.current_composite_path:
+            self.refresh_data()
+    
+    def on_canvas_configure(self, event):
+        if hasattr(self, 'image_on_canvas'):
+            self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+            
+            # If we have a current image, resize it to fit the new canvas width
+            if hasattr(self, 'current_composite_path') and self.current_composite_path:
+                self.display_image(self.current_composite_path)
+    
+    def load_latest_composite(self):
+        try:
+            # Find the latest composite image
+            composite_files = [os.path.join(COMPOSITE_DIR, f) for f in os.listdir(COMPOSITE_DIR) 
+                             if f.startswith('daily_') and f.endswith('.png')]
+            
+            if composite_files:
+                # Sort by modification time (newest first)
+                latest_file = max(composite_files, key=os.path.getmtime)
+                self.current_composite_path = latest_file
+                self.display_image(latest_file)
+                self.status_var.set(f"Loaded existing composite image: {os.path.basename(latest_file)}")
+                return True
+            else:
+                self.status_var.set("No existing composite images found. Will generate a new one.")
+                return False
+        except Exception as e:
+            print(f"Error loading latest composite: {e}")
+            self.status_var.set(f"Error loading latest composite: {e}")
+            return False
+    
+    def display_image(self, image_path):
+        try:
+            # Load the image
+            img = Image.open(image_path)
+            
+            # Get canvas dimensions
+            canvas_width = self.canvas.winfo_width()
+            
+            # If canvas has a valid width, resize image to fit
+            if canvas_width > 50:  # Ensure canvas has been properly initialized
+                # Calculate new height to maintain aspect ratio
+                img_ratio = img.height / img.width
+                new_width = canvas_width
+                new_height = int(new_width * img_ratio)
+                
+                # Resize the image to fit canvas width
+                img = img.resize((new_width, new_height), Image.LANCZOS)
+            
+            # Convert to PhotoImage
+            self.photo_image = ImageTk.PhotoImage(img)
+            
+            # Clear previous image
+            self.canvas.delete("all")
+            
+            # Display new image
+            self.image_on_canvas = self.canvas.create_image(0, 0, anchor=tk.NW, image=self.photo_image)
+            
+            # Update scroll region
+            self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+            
+            return True
+        except Exception as e:
+            print(f"Error displaying image: {e}")
+            self.status_var.set(f"Error displaying image: {e}")
+            return False
+    
+    def add_youtuber(self):
+        youtuber = self.youtuber_var.get().strip()
+        if youtuber and youtuber not in self.youtubers:
+            self.youtubers.append(youtuber)
+            self.youtuber_listbox.insert(tk.END, youtuber)
+            self.youtuber_var.set('')  # Clear entry
+            self.status_var.set(f"Added YouTuber: {youtuber}")
+    
+    def remove_youtuber(self):
+        selected = self.youtuber_listbox.curselection()
+        if selected:
+            index = selected[0]
+            youtuber = self.youtuber_listbox.get(index)
+            self.youtubers.remove(youtuber)
+            self.youtuber_listbox.delete(index)
+            self.status_var.set(f"Removed YouTuber: {youtuber}")
+    
+    def refresh_data(self):
+        # Show loading status
+        self.status_var.set("Starting data fetch in background...")
+        self.root.update()
+        
+        # Create a progress queue for communication between threads
+        self.progress_queue = queue.Queue()
+        
+        # Start a background thread for data fetching and image generation
+        threading.Thread(target=self.background_process, daemon=True).start()
+        
+        # Start checking the queue periodically
+        self.root.after(100, self.check_progress_queue)
+    
+    def check_progress_queue(self):
+        """Check for messages from the background thread"""
+        try:
+            while True:  # Process all available messages
+                message = self.progress_queue.get_nowait()
+                
+                # Handle different message types
+                if message['type'] == 'status':
+                    self.status_var.set(message['text'])
+                elif message['type'] == 'complete':
+                    self.status_var.set(message['text'])
+                    if message.get('image_path'):
+                        self.current_composite_path = message['image_path']
+                        self.display_image(message['image_path'])
+                elif message['type'] == 'error':
+                    self.status_var.set(f"Error: {message['text']}")
+                    
+                self.progress_queue.task_done()
+        except queue.Empty:
+            # Queue is empty, check again later
+            pass
+        finally:
+            # Schedule the next check
+            self.root.after(100, self.check_progress_queue)
+    
+    def background_process(self):
+        """Background thread to fetch data and generate image"""
+        try:
+            # Fetch data
+            self.progress_queue.put({'type': 'status', 'text': 'Fetching video data...'})
+            video_details = self.fetch_data_bg()
+            
+            if video_details:
+                # Create image
+                self.progress_queue.put({'type': 'status', 'text': 'Generating image...'})
+                image_path = self.create_daily_composite_image_bg(video_details)
+                
+                if image_path:
+                    self.progress_queue.put({
+                        'type': 'complete', 
+                        'text': f"Created image with {len(video_details)} videos",
+                        'image_path': image_path
+                    })
+                else:
+                    self.progress_queue.put({'type': 'error', 'text': 'Failed to create image'})
+            else:
+                self.progress_queue.put({'type': 'error', 'text': 'No videos found. Please check your YouTuber list.'})
+                
+        except Exception as e:
+            self.progress_queue.put({'type': 'error', 'text': str(e)})
+    
+    def fetch_data_bg(self):
+        """Background version of fetch_data that doesn't update UI directly"""
+        try:
+            # List to hold video details
+            video_details = []
+            
+            # Get videos per channel limit from input field
+            try:
+                videos_per_channel = int(self.limit_var.get())
+            except ValueError:
+                videos_per_channel = 10  # Default if invalid input
+            
+            # Fetch videos from each YouTuber
+            youtuber_index = 0
+            total_youtubers = len(self.youtubers)
+            for channel_username in self.youtubers:
+                try:
+                    self.progress_queue.put({'type': 'status', 'text': f"({youtuber_index}/{total_youtubers})Fetching videos for {channel_username}..."})
+                    videos = scrapetube.get_channel(channel_username=channel_username)
+                    
+                    index = 0
+                    for video in videos:
+                        if index >= videos_per_channel:
+                            break
+                        video_id = video['videoId']
+                        title = video['title']
+                        video_url = f"https://www.youtube.com/watch?v={video_id}"
+                        thumbnail_url = f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg"
+                        
+                        # Update status every few videos
+                        if index % 3 == 0:
+                            self.progress_queue.put({'type': 'status', 'text': f"({youtuber_index}/{total_youtubers}) Fetching {channel_username}: {index}/{videos_per_channel}"})
+                        
+                        published_at = get_video_pubdate(video_id, video_url)
+                        if published_at:
+                            published_at = convert_to_unix_timestamp(published_at)
+                            video_details.append({
+                                'title': title,
+                                'thumbnail_url': thumbnail_url,
+                                'published_at': published_at,
+                                'video_id': video_id,
+                                'channel': channel_username
+                            })
+                        index += 1
+                    
+                    self.progress_queue.put({'type': 'status', 'text': f"Fetched {index} videos for {channel_username}"})
+                except Exception as e:
+                    print(f"Error fetching videos for {channel_username}: {e}")
+                    self.progress_queue.put({'type': 'status', 'text': f"Error fetching videos for {channel_username}: {e}"})
+                youtuber_index += 1
+            # Sort videos by publication date (newest first)
+            video_details = sorted(video_details, key=lambda x: x['published_at'], reverse=True)
+            self.progress_queue.put({'type': 'status', 'text': f"Fetched {len(video_details)} videos in total"})
+            return video_details
+                
+        except Exception as e:
+            print(f"Error in fetch_data_bg: {e}")
+            self.progress_queue.put({'type': 'status', 'text': f"Error fetching data: {e}"})
+            return []
+    
+    def create_daily_composite_image_bg(self, video_details):
+        """Background version of create_daily_composite_image that works with provided video details"""
+        try:
+            if not video_details:
+                self.progress_queue.put({'type': 'status', 'text': "No videos to display"})
+                return None
+            
+            # Get days to display from input field
+            try:
+                days_to_display = int(self.days_var.get())
+            except ValueError:
+                days_to_display = 7  # Default if invalid input
+            
+            # Group videos by day
+            videos_by_day = {}
+            
+            # Get the current date as the reference point
+            latest_timestamp = max(video['published_at'] for video in video_details)
+            latest_date = pd.to_datetime(latest_timestamp, unit='ms').date()
+            
+            # Create day buckets for the last N days
+            for i in range(days_to_display):
+                day = latest_date - timedelta(days=i)
+                videos_by_day[day] = []
+            
+            # Assign videos to day buckets
+            for video in video_details:
+                video_date = pd.to_datetime(video['published_at'], unit='ms').date()
+                if video_date in videos_by_day:
+                    videos_by_day[video_date].append(video)
+            
+            # Sort days in chronological order (oldest first)
+            # We'll draw them from right to left, so the newest will be on the left
+            sorted_days = sorted(videos_by_day.keys())
+            
+            # Calculate the maximum number of thumbnails in a day
+            max_thumbnails = max(len(videos_by_day[day]) for day in sorted_days) if sorted_days else 0
+            
+            if max_thumbnails == 0:
+                self.progress_queue.put({'type': 'status', 'text': "No videos found in the selected date range"})
+                return None
+            
+            # Get a sample thumbnail to determine dimensions
+            sample_video = video_details[0]
+            sample_img = get_cached_image(sample_video['video_id'], sample_video['thumbnail_url'])
+            
+            # Remove any black borders from the sample image first
+            sample_img = remove_black_borders(sample_img)
+            
+            # Calculate standard width based on sample image aspect ratio
+            # Use a fixed width for all thumbnails to ensure they're all the same size
+            standard_width = 320  # Standard YouTube thumbnail width
+            standard_height = int(standard_width * (sample_img.height / sample_img.width))
+            
+            # Use these dimensions for all thumbnails
+            thumbnail_width = standard_width
+            thumbnail_height = standard_height
+            
+            # Calculate canvas dimensions
+            header_height = 60  # Increased height for day header to accommodate larger font
+            canvas_width = len(sorted_days) * thumbnail_width
+            canvas_height = max_thumbnails * thumbnail_height + header_height
+            
+            # Create a blank canvas with pure white background
+            composite = Image.new('RGB', (canvas_width, canvas_height), (255, 255, 255))
+            draw = ImageDraw.Draw(composite)
+            
+            # Try to load a font with larger size for column headers, fall back to default if not available
+            try:
+                font = ImageFont.truetype("arial.ttf", 32)  # Increased font size from 20 to 32
+            except IOError:
+                font = ImageFont.load_default()
+            
+            # Draw day columns (from right to left)
+            total_columns = len(sorted_days)
+            for idx, day in enumerate(sorted_days):
+                # Calculate column position (from right to left)
+                # This puts the oldest day (first in sorted_days) on the far right
+                col_idx = total_columns - 1 - idx
+                col_x = col_idx * thumbnail_width
+                
+                # Draw day header with abbreviated month format
+                day_str = day.strftime("%d %b %Y")  # Format like "15 Apr 2023"
+                draw.rectangle([col_x, 0, col_x + thumbnail_width, header_height], 
+                              fill=(200, 200, 200), outline=None)
+                # Center the text in the header both horizontally and vertically
+                # Use getbbox for modern Pillow versions
+                try:
+                    bbox = font.getbbox(day_str)
+                    text_width = bbox[2] - bbox[0]
+                    text_height = bbox[3] - bbox[1]
+                except AttributeError:
+                    # Fallback for older Pillow versions
+                    try:
+                        text_width, text_height = font.getsize(day_str)
+                    except AttributeError:
+                        # Final fallback - estimate dimensions
+                        text_width = len(day_str) * 12  # Rough estimate
+                        text_height = 32
+                
+                text_x = col_x + (thumbnail_width - text_width) // 2
+                text_y = (header_height - text_height) // 2
+                draw.text((text_x, text_y), day_str, fill=(0, 0, 0), font=font)
+                
+                # Draw thumbnails for this day
+                videos = videos_by_day[day]
+                for row_idx, video in enumerate(videos):
+                    # Calculate thumbnail position
+                    thumb_y = header_height + row_idx * thumbnail_height
+                    
+                    # Get the thumbnail, remove black borders, and ensure it's exactly the right size
+                    img = get_cached_image(video['video_id'], video['thumbnail_url'])
+                    # Note: black borders are already removed in get_cached_image
+                    if img.width != thumbnail_width or img.height != thumbnail_height:
+                        img = img.resize((thumbnail_width, thumbnail_height), Image.LANCZOS)
+                    
+                    # Paste the thumbnail onto the canvas
+                    composite.paste(img, (col_x, thumb_y))
+                    
+                    # Update progress every few thumbnails
+                    if (col_idx * max_thumbnails + row_idx) % 10 == 0:
+                        self.progress_queue.put({'type': 'status', 'text': f"Processing thumbnails: {col_idx * max_thumbnails + row_idx}/{len(sorted_days) * max_thumbnails}"})
+            
+            # Add timestamp and save
+            timestamp = int(time.time())
+            composite_path = os.path.join(COMPOSITE_DIR, f"daily_{timestamp}.png")
+            composite.save(composite_path)
+            
+            # Return the path to the created image
+            return composite_path
+        
+        except Exception as e:
+            print(f"Error creating daily composite image: {e}")
+            self.progress_queue.put({'type': 'status', 'text': f"Error creating daily composite image: {e}"})
+            return None
+    
+    def run(self):
+        try:
+            # Center the window
+            window_width = 1200
+            window_height = 800
+            screen_width = self.root.winfo_screenwidth()
+            screen_height = self.root.winfo_screenheight()
+            center_x = int(screen_width/2 - window_width/2)
+            center_y = int(screen_height/2 - window_height/2)
+            self.root.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
+            
+            # Start the main loop
+            self.root.mainloop()
+        except Exception as e:
+            print(f"Error in main loop: {e}")
+            self.root.destroy()
+
+if __name__ == "__main__":
+    print("Starting YouTube Thumbnails by Day application...")
+    app = DailyThumbnailApp()
+    print("Initialization complete, running application...")
+    app.run()

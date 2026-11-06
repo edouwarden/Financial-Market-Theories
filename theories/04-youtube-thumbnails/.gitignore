@@ -1,0 +1,15 @@
+# Imported YouTube attention app: local caches and raw captures.
+# The code and small samples stay in Git; the multi-GB caches stay local.
+
+test/node_modules/
+test/youtube_cache/
+test/youtube_metadata/
+test/youtube_cache_window/
+test/youtube_metadata_window/
+test/composite_images/
+test/fetch_cache/
+test/__pycache__/
+scripts/__pycache__/
+test/*.wav
+test/*.mp3
+test/scratch/

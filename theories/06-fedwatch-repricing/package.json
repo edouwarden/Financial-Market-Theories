@@ -1,0 +1,11 @@
+{
+  "name": "fedwatch-repricing",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "scrape": "bun scripts/fed-watch.js"
+  },
+  "dependencies": {
+    "jsdom": "^24.0.0"
+  }
+}

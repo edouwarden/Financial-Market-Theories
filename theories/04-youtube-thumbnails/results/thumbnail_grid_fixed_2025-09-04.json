@@ -1,0 +1,140 @@
+{
+  "generated_at": "2026-11-04T21:46:42.115135+00:00",
+  "date_range": [
+    "2025-09-04",
+    "2025-09-04"
+  ],
+  "sizing": "fixed",
+  "min_views": 0,
+  "limit_per_day": 0,
+  "channels_file": "data/channels.txt",
+  "excluded": [
+    "CryptoFutur",
+    "CryptoLeTrone",
+    "Cryptolyze",
+    "Hasheur",
+    "JulienRoman",
+    "MonsieurTK",
+    "UndergroundTradingFr",
+    "grandanglebitcoin",
+    "insydercrypto",
+    "lesroisdubitcoin"
+  ],
+  "output": "results/thumbnail_grid_fixed_2025-09-04.png",
+  "days": {
+    "2025-09-04": [
+      {
+        "channel": "CryptosRUs",
+        "video_id": "ZM8F87qAark",
+        "views": 38126,
+        "published_at": 1756949433000,
+        "title": "Bitcoin & Crypto Investors....Don't Miss This Big News"
+      },
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "1-BdbB3L3k0",
+        "views": 37396,
+        "published_at": 1757028885000,
+        "title": "4 Crypto Coins Will Skyrocket in 27 Days (Don't Miss Out)"
+      },
+      {
+        "channel": "CoinBureau",
+        "video_id": "vW5oe9xxaC4",
+        "views": 31905,
+        "published_at": 1756997116000,
+        "title": "Crypto Profit Strategy: When to Sell BTC, ETH & Altcoins"
+      },
+      {
+        "channel": "CryptoRevolutiontv",
+        "video_id": "eC0FcnWRdN8",
+        "views": 25076,
+        "published_at": 1756947713000,
+        "title": "Trump\u2019s New Crypto WLFI Coin Review \u2013 Worth Buying?"
+      },
+      {
+        "channel": "intothecryptoverse",
+        "video_id": "En3jktDXPM8",
+        "views": 18251,
+        "published_at": 1756955878000,
+        "title": "Silver Eyes All Time Highs"
+      },
+      {
+        "channel": "TheCryptoLark",
+        "video_id": "94wNZkmKgnk",
+        "views": 15314,
+        "published_at": 1757026808000,
+        "title": "The Business Cycle Will Top Here And Crypto With It"
+      },
+      {
+        "channel": "CryptoInsiderOfficial",
+        "video_id": "J8JcbjyTc9g",
+        "views": 14871,
+        "published_at": 1756981930000,
+        "title": "I'm Exiting Crypto!"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "FOuAR0neNtA",
+        "views": 14691,
+        "published_at": 1756970034000,
+        "title": "BAD NEWS FOR BITCOIN - BUT LOOK AT THIS\u2026\u2026."
+      },
+      {
+        "channel": "TheModernInvestor",
+        "video_id": "kKqngKLjzMw",
+        "views": 8830,
+        "published_at": 1756975399000,
+        "title": "SOMETHING WEIRD IS HAPPENING Everyone NEEDS To Be On Alert THIS Crypto Bull Cycle Is VERY Different"
+      },
+      {
+        "channel": "DiscoverCrypto_",
+        "video_id": "Uchs1tKU0RE",
+        "views": 8555,
+        "published_at": 1757026706000,
+        "title": "How Much Cardano Do You Need to Become a Millionaire?"
+      },
+      {
+        "channel": "davincij15",
+        "video_id": "kpX60wV7skA",
+        "views": 7033,
+        "published_at": 1756987292000,
+        "title": "WE HAVE FOUND A BOTTOM FOR BITCOIN!"
+      },
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "LFegcmeDp2U",
+        "views": 2362,
+        "published_at": 1756999554000,
+        "title": "BITCOIN HOLDERS - The Next $300 TRILLION Crypto Opportunity | Portal to Bitcoin"
+      },
+      {
+        "channel": "CryptoTips",
+        "video_id": "ezCx1CP8keo",
+        "views": 2220,
+        "published_at": 1757001669000,
+        "title": "This Bitcoin Dip Could Signal a MASSIVE Rally"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "h0fMDsOCEm8",
+        "views": 1098,
+        "published_at": 1757019647000,
+        "title": "Bitcoin as a Mirror for Personal Growth"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "cGZS-jNOXIY",
+        "views": 66,
+        "published_at": 1757010649000,
+        "title": "We're Not Breaking Bitcoin: The Case for CTV + CSFS"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "IQPGCNgtzJg",
+        "views": 0,
+        "published_at": 1756993350000,
+        "title": "IT'S NOT EASY... [RUNNING THE MOON SHOW LIVE]"
+      }
+    ]
+  }
+}

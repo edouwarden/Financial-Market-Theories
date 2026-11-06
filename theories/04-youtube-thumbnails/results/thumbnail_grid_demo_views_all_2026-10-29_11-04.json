@@ -1,0 +1,707 @@
+{
+  "generated_at": "2026-11-04T23:26:43.599914+00:00",
+  "date_range": [
+    "2026-10-29",
+    "2026-11-04"
+  ],
+  "layout": "columns",
+  "per_row": null,
+  "sizing": "views-all",
+  "min_views": 0,
+  "limit_per_day": 0,
+  "channels_file": "data/channels.txt",
+  "excluded": [
+    "CryptoFutur",
+    "CryptoLeTrone",
+    "Cryptolyze",
+    "Hasheur",
+    "JulienRoman",
+    "MonsieurTK",
+    "UndergroundTradingFr",
+    "grandanglebitcoin",
+    "insydercrypto",
+    "lesroisdubitcoin"
+  ],
+  "output": "results/thumbnail_grid_demo_views_all_2026-10-29_11-04.jpg",
+  "days": {
+    "2026-10-29": [
+      {
+        "channel": "intothecryptoverse",
+        "video_id": "21mBnslOLd0",
+        "views": 124584,
+        "published_at": 1793244725000,
+        "title": "Bitcoin: Post-FOMC"
+      },
+      {
+        "channel": "CryptosRUs",
+        "video_id": "fVlEM1k2IFU",
+        "views": 112563,
+        "published_at": 1793315519000,
+        "title": "Binance HACKED...Billions of Bitcoin and Crypto Lost"
+      },
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "E-Kj8D49jkw",
+        "views": 64662,
+        "published_at": 1793311246000,
+        "title": "$15 Billion TITAN Issues DIRE WARNING for Anyone Holding Bitcoin & Crypto"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "WIE3b9y7jSI",
+        "views": 58382,
+        "published_at": 1793302080000,
+        "title": "Doomberg: US Treasury Sanctions are \"Wildly Bullish\" for Bitcoin & Gold"
+      },
+      {
+        "channel": "CoinBureau",
+        "video_id": "1MpPSlFT2SY",
+        "views": 28025,
+        "published_at": 1793282432000,
+        "title": "Germany REFUSED To Pay Hackers 30 Bitcoin... And Paid A Heavy Price"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "3qo0zDzqYAk",
+        "views": 27152,
+        "published_at": 1793313699000,
+        "title": "BINANCE HACKED FOR $5,6 BILLION !!! [...here's what to do now]"
+      },
+      {
+        "channel": "CryptoCasey",
+        "video_id": "biVypsNjI5M",
+        "views": 19652,
+        "published_at": 1793288903000,
+        "title": "Crypto Wallet Hacks & Leaks EXPLAINED \ud83d\udea8 Ledger, Trezor & Coldcard \ud83d\udd10 (2026 Security Update)"
+      },
+      {
+        "channel": "CryptoRevolutiontv",
+        "video_id": "LUs7BWsSTYI",
+        "views": 15909,
+        "published_at": 1793305070000,
+        "title": "SpaceX Inu ($SI) Review: A Meme Coin With a Trading Engine?"
+      },
+      {
+        "channel": "BTCSessions",
+        "video_id": "Lci53xJgAFw",
+        "views": 15132,
+        "published_at": 1793289634000,
+        "title": "It's Not Just A Fourth Turning, Every Cycle In History Is About To Collide | Quittem & Walker"
+      },
+      {
+        "channel": "TheModernInvestor",
+        "video_id": "_9WjqcqWbk4",
+        "views": 13195,
+        "published_at": 1793271048000,
+        "title": "XRP Overtakes Bitcoin & Ethereum Whales Are Going To Own Everything Soon Crypto Bull Run Comeback"
+      },
+      {
+        "channel": "davincij15",
+        "video_id": "Emhr6613UlU",
+        "views": 8582,
+        "published_at": 1793233580000,
+        "title": "BITCOIN DROPS, HOW I HANDLE IT"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "pxkmrktEnZE",
+        "views": 6675,
+        "published_at": 1793300000000,
+        "title": "Alex Thorn: 50-Week Signal Says Bitcoin's Bottom is In"
+      },
+      {
+        "channel": "TheCryptoLark",
+        "video_id": "QjD_aS4drcE",
+        "views": 6591,
+        "published_at": 1793307609000,
+        "title": "USA $40 Trillion In Debt\u2026  Once In A Generation Monetary Reset Starts Now"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "EIeJTVKzOsw",
+        "views": 3384,
+        "published_at": 1793307621000,
+        "title": "Tyler Evans: Bitcoin ETF Flows Flipped From \u201cHighly Negative\u201d to \u201cStrong Accumulation\u201d"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "GszSdU8KPC8",
+        "views": 3192,
+        "published_at": 1793282428000,
+        "title": "Alexandre Laizet on The French Debt Crisis: \"Europe is in Need of Bitcoin\""
+      },
+      {
+        "channel": "DiscoverCrypto_",
+        "video_id": "SoOHFTTawTk",
+        "views": 3086,
+        "published_at": 1793313005000,
+        "title": "Hyperliquid - Wall Streets Altcoin Pick"
+      }
+    ],
+    "2026-10-30": [
+      {
+        "channel": "CoinBureau",
+        "video_id": "5u2IlJytBT8",
+        "views": 459479,
+        "published_at": 1793365657000,
+        "title": "How Binance Was HACKED For $6 Billion"
+      },
+      {
+        "channel": "intothecryptoverse",
+        "video_id": "bekghgecip8",
+        "views": 199120,
+        "published_at": 1793369559000,
+        "title": "Bitcoin: The Q4 Dump is Here"
+      },
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "iO4pYL1otX8",
+        "views": 121623,
+        "published_at": 1793402494000,
+        "title": "The Binance Hack Situation Got MUCH WORSE (crypto crash)"
+      },
+      {
+        "channel": "AlessioRastani",
+        "video_id": "9arHerkfzwQ",
+        "views": 53615,
+        "published_at": 1793373701000,
+        "title": "Is This Bitcoin Move Going to $1 Million in Next Two Years?"
+      },
+      {
+        "channel": "CryptoZombie",
+        "video_id": "YI6qnBBHD1I",
+        "views": 24812,
+        "published_at": 1793383235000,
+        "title": "\ud83d\udea8 BITCOIN ALERT!!!! LARGEST CRYPTO HACK EVER!!! WHAT NOW\u2026..?!!!"
+      },
+      {
+        "channel": "CryptoTips",
+        "video_id": "_tKNbD4oNSg",
+        "views": 23243,
+        "published_at": 1793373347000,
+        "title": "Everything Is Getting Hacked"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "-bAFlB0bvaU",
+        "views": 21324,
+        "published_at": 1793347994000,
+        "title": "THIS IS THE BOTTOM !!!!!!!"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "TlgK_T1UgFU",
+        "views": 18126,
+        "published_at": 1793388608000,
+        "title": "Mike Flaum: MSTR Performance \"Massively\" to the Upside During Next BTC Bull Run"
+      },
+      {
+        "channel": "DiscoverCrypto_",
+        "video_id": "K6aYrC4rgzY",
+        "views": 17139,
+        "published_at": 1793324986000,
+        "title": "\ud83d\udea8EMERGENCY: LARGEST CRYPTO HACK EVER (BINANCE CRUSHED)"
+      },
+      {
+        "channel": "Boxmining",
+        "video_id": "dKGXFfXGiiQ",
+        "views": 12040,
+        "published_at": 1793330262000,
+        "title": "Binance Hacked for $6 BILLION...."
+      },
+      {
+        "channel": "TheCryptoLark",
+        "video_id": "H9JduyZmwOs",
+        "views": 11702,
+        "published_at": 1793394019000,
+        "title": "Wall Street Is Quietly Moving To Canton"
+      },
+      {
+        "channel": "TheModernInvestor",
+        "video_id": "jGdichjFQ58",
+        "views": 11702,
+        "published_at": 1793355821000,
+        "title": "This Is Going To Change How You Invest In Bitcoin And Crypto Everything Has Shifted In The Market"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "tx_G1ScRVWQ",
+        "views": 10712,
+        "published_at": 1793384108000,
+        "title": "What to Know About the $6.3 Billion Binance Hack"
+      },
+      {
+        "channel": "davincij15",
+        "video_id": "Ju8ziuqZm94",
+        "views": 9399,
+        "published_at": 1793320705000,
+        "title": "AI DID NOT BREAK BITCOIN\u2026 YET"
+      },
+      {
+        "channel": "BTCSessions",
+        "video_id": "_UpITYTCRMw",
+        "views": 9041,
+        "published_at": 1793376014000,
+        "title": "The Next Security Crisis Is Already Here"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "vq26buK3qxg",
+        "views": 3755,
+        "published_at": 1793396226000,
+        "title": "MSTR Q3 2026 Earnings Call: Analyst Q&A"
+      }
+    ],
+    "2026-10-31": [
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "9I1AJ0-Rudw",
+        "views": 78004,
+        "published_at": 1793479232000,
+        "title": "uh oh, crypto holders... history is repeating!!"
+      },
+      {
+        "channel": "CryptoInsiderOfficial",
+        "video_id": "VFpkpLMKE0A",
+        "views": 39781,
+        "published_at": 1793458656000,
+        "title": "The $110 Trillion Giant Just Picked Its Blockchain | Yuval Rooz"
+      },
+      {
+        "channel": "CryptoBanterGroup",
+        "video_id": "4R3EQ-T8yQ0",
+        "views": 27696,
+        "published_at": 1793453111000,
+        "title": "I'm Accumulating Altcoins After The Binance HACK (Here's Why)"
+      },
+      {
+        "channel": "CoinBureau",
+        "video_id": "JnFwsbNc9aE",
+        "views": 26583,
+        "published_at": 1793455211000,
+        "title": "China Has PASSED The US (Here's What It Means For You)"
+      },
+      {
+        "channel": "TheCryptoLark",
+        "video_id": "phiU9axfRYM",
+        "views": 23502,
+        "published_at": 1793448634000,
+        "title": "These Bitcoin Charts Feel Unthinkable"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "7-coDE0Hf4c",
+        "views": 22439,
+        "published_at": 1793471425000,
+        "title": "Adam Back: Pension Funds Are Bitcoin's \"Third Wave\" of Adoption"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "OoDoARoHQb8",
+        "views": 8615,
+        "published_at": 1793452357000,
+        "title": "XRP Pumped 581% From This Same Pattern. XLM Is Next?"
+      },
+      {
+        "channel": "davincij15",
+        "video_id": "qLhHzs735rY",
+        "views": 8565,
+        "published_at": 1793405641000,
+        "title": "BTC HACK FEAR IS REAL!"
+      },
+      {
+        "channel": "TheModernInvestor",
+        "video_id": "f0ILT8eQrRM",
+        "views": 7815,
+        "published_at": 1793443292000,
+        "title": "Bitcoin And XRP Won't Be The Same After This You Might Have Just Missed Your Chance"
+      },
+      {
+        "channel": "TheCryptoLark",
+        "video_id": "2tb3TyOSncY",
+        "views": 7683,
+        "published_at": 1793480419000,
+        "title": "The Ultimate Crypto Portfolio Roast"
+      }
+    ],
+    "2026-11-01": [
+      {
+        "channel": "intothecryptoverse",
+        "video_id": "VWU9sgbvnzw",
+        "views": 183113,
+        "published_at": 1793503105000,
+        "title": "Bitcoin: Dooobious Spookulation"
+      },
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "Cc4qzBPn4s0",
+        "views": 75084,
+        "published_at": 1793559344000,
+        "title": "Like Finding Zcash at $1 (& Next Solana) | Crypto Insider"
+      },
+      {
+        "channel": "kevinoleary",
+        "video_id": "0ce60rG2HnI",
+        "views": 47659,
+        "published_at": 1793545223000,
+        "title": "Visiting One of America's Largest Luxury Watch Stores | CD Peacock"
+      },
+      {
+        "channel": "CoinBureau",
+        "video_id": "cYSykNkq4lM",
+        "views": 40821,
+        "published_at": 1793537104000,
+        "title": "Why AI Insiders Are Cashing Out"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "cJYgEC7Pp0I",
+        "views": 26662,
+        "published_at": 1793550718000,
+        "title": "I\u2019M GOING ALL IN ON THESE 2 ALTCOINS !!!!"
+      },
+      {
+        "channel": "ScottMelker",
+        "video_id": "M6n5NoM7Eb8",
+        "views": 22137,
+        "published_at": 1793541613000,
+        "title": "Bitcoin Is More Than Digital Gold | Jesse Pollak"
+      },
+      {
+        "channel": "CryptoCasey",
+        "video_id": "LHeg7hrryJs",
+        "views": 19995,
+        "published_at": 1793504042000,
+        "title": "Bitcoin\u2019s NEXT LEG UP? \ud83d\ude80 November Setup After a Lackluster Uptober"
+      },
+      {
+        "channel": "CryptoTips",
+        "video_id": "qNqp3YYNwT4",
+        "views": 18978,
+        "published_at": 1793552404000,
+        "title": "Binance Got Hacked. Now the Scammers Are Coming For You"
+      },
+      {
+        "channel": "TheModernInvestor",
+        "video_id": "vhLYhrw9ALk",
+        "views": 15765,
+        "published_at": 1793529642000,
+        "title": "This Bitcoin News Is Going To Shock The Daylights Out Of You The Rich Are Preparing In Silence"
+      },
+      {
+        "channel": "TheCryptoLark",
+        "video_id": "RIgDZHzdcr8",
+        "views": 12038,
+        "published_at": 1793536396000,
+        "title": "3x the Volume, 25x the Price: HYPE vs LIT"
+      },
+      {
+        "channel": "TheCryptoLark",
+        "video_id": "-LvrAEEIIXU",
+        "views": 8219,
+        "published_at": 1793566820000,
+        "title": "Why Wall Street Wants Zcash Now"
+      },
+      {
+        "channel": "BTCSessions",
+        "video_id": "Eojd18J_wuU",
+        "views": 4977,
+        "published_at": 1793548812000,
+        "title": "Binance Just Proved Why Self-Custody Matters"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "rCByOV2seAg",
+        "views": 4813,
+        "published_at": 1793545227000,
+        "title": "Bitwise\u2019s Andr\u00e9 Dragosch: Bitcoin\u2019s \u201cFair Value\u201d of $197,000"
+      }
+    ],
+    "2026-11-02": [
+      {
+        "channel": "intothecryptoverse",
+        "video_id": "BBgxp2SvLuU",
+        "views": 133525,
+        "published_at": 1793653565000,
+        "title": "Stock Market Correction: Q4 2026"
+      },
+      {
+        "channel": "intothecryptoverse",
+        "video_id": "FoneKiojzzg",
+        "views": 111533,
+        "published_at": 1793594264000,
+        "title": "Bitcoin: The Beauty of Mathematics (Part 74)"
+      },
+      {
+        "channel": "AlessioRastani",
+        "video_id": "rMyo21SHtTs",
+        "views": 56167,
+        "published_at": 1793641556000,
+        "title": "What the CRASH in Gold Price Really Means"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "EfEUcidWndw",
+        "views": 25285,
+        "published_at": 1793616388000,
+        "title": "THIS ALTCOIN WILL PUMP - I\u2019M ALL IN !!!!"
+      },
+      {
+        "channel": "CryptosRUs",
+        "video_id": "0kslfuTAhJc",
+        "views": 19770,
+        "published_at": 1793587309000,
+        "title": "Finally a Bullish Week For Bitcoin?"
+      },
+      {
+        "channel": "TheCryptoLark",
+        "video_id": "fOLZUQEmp40",
+        "views": 14461,
+        "published_at": 1793653211000,
+        "title": "Bitcoin Has An AI Problem"
+      },
+      {
+        "channel": "CryptoTips",
+        "video_id": "eo_85JVEpB4",
+        "views": 10518,
+        "published_at": 1793638837000,
+        "title": "There's a Coordinated Attack on Self Custody"
+      },
+      {
+        "channel": "DiscoverCrypto_",
+        "video_id": "fZRpit4ioWo",
+        "views": 9057,
+        "published_at": 1793577600000,
+        "title": "Bitcoin & Crypto - When Everything Could PUMP"
+      },
+      {
+        "channel": "TheModernInvestor",
+        "video_id": "q0dRR2m0J8s",
+        "views": 8910,
+        "published_at": 1793615286000,
+        "title": "The AI Bubble And Carnage On Wall Street Could Bode Extremely Well For Bitcoin & The Crypto Market"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "lYR2vp9wCQQ",
+        "views": 8349,
+        "published_at": 1793651350000,
+        "title": "Andrew Hohns: Why Bitcoin Can Fix America's Debt Spiral"
+      },
+      {
+        "channel": "davincij15",
+        "video_id": "2FE8vhfymr4",
+        "views": 6477,
+        "published_at": 1793662039000,
+        "title": "START COUNTING SATS!"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "I62qZeTjym4",
+        "views": 1927,
+        "published_at": 1793657595000,
+        "title": "$2.3 Billion AUM Clocktower Macro Chief: How to Invest in a \"Higher for Longer\" World"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "7mdg_cazehA",
+        "views": 1451,
+        "published_at": 1793659539000,
+        "title": "Prediction Markets See \"Wild\" Election Arbitrage Opportunity"
+      }
+    ],
+    "2026-11-03": [
+      {
+        "channel": "intothecryptoverse",
+        "video_id": "krNe11F52PI",
+        "views": 105531,
+        "published_at": 1793734032000,
+        "title": "The United States Midterms and Markets"
+      },
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "TW-_iOfg8fA",
+        "views": 82083,
+        "published_at": 1793669349000,
+        "title": "Crypto Is About To Get INSANE\u2026 You\u2019ve Been Warned!"
+      },
+      {
+        "channel": "BTCSessions",
+        "video_id": "QCgW8RlTu5Q",
+        "views": 40653,
+        "published_at": 1793721636000,
+        "title": "No One Alive Has Seen What's About to Happen to the Bond Market | Johnson & Dicker"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "Y5T-Kvux6Iw",
+        "views": 22892,
+        "published_at": 1793697852000,
+        "title": "BITCOIN IS ABOUT TO SHOCK EVERYONE !!!"
+      },
+      {
+        "channel": "CoinBureau",
+        "video_id": "Niaus9v3Cg0",
+        "views": 21591,
+        "published_at": 1793714405000,
+        "title": "OpenAI's Real Revenue Is $20 Billion Lower"
+      },
+      {
+        "channel": "CryptoBanterGroup",
+        "video_id": "s34gW_Eqz_Q",
+        "views": 16205,
+        "published_at": 1793701206000,
+        "title": "Bitcoin Breakout Or Breakdown: The Altcoin Orders I've Set"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "F9k9e7HEixk",
+        "views": 16086,
+        "published_at": 1793749785000,
+        "title": "WARNING: BITCOIN NOW !!!!!!!!!!!!"
+      },
+      {
+        "channel": "TheModernInvestor",
+        "video_id": "qjgYseufDoE",
+        "views": 15867,
+        "published_at": 1793701482000,
+        "title": "This Ripple XRP Price Prediction Will Change Lives Bitcoin Is Going To Shock Everyone In 2030"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "tIOFJg7o7xk",
+        "views": 7078,
+        "published_at": 1793737815000,
+        "title": "Cory Klippsten: Why I'd Sell $100K of Stocks for $65K of Bitcoin"
+      },
+      {
+        "channel": "davincij15",
+        "video_id": "92snY9Vuwuw",
+        "views": 5625,
+        "published_at": 1793748873000,
+        "title": "Bitcoin ONLY Up 300% from 2017!!!\ud83d\ude32"
+      },
+      {
+        "channel": "DiscoverCrypto_",
+        "video_id": "y6003GnHzBQ",
+        "views": 4543,
+        "published_at": 1793664000000,
+        "title": "Aave - The Altcoin That Could Replace Banks"
+      },
+      {
+        "channel": "TheCryptoLark",
+        "video_id": "_CE7yJGFvHs",
+        "views": 4448,
+        "published_at": 1793739626000,
+        "title": "Where Do You Even Keep Crypto Safe Anymore?"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "Pxrak-iMT0g",
+        "views": 3190,
+        "published_at": 1793741402000,
+        "title": "John Ungerland: \u201cWe\u2019re Watching the End of the Dollar Hegemony Era\u201d"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "0EZYPufCp-E",
+        "views": 1392,
+        "published_at": 1793734292000,
+        "title": "Why the Crypto Vote Could be the X Factor for the Mid-Term Elections"
+      }
+    ],
+    "2026-11-04": [
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "SeiK0TLVNYg",
+        "views": 74931,
+        "published_at": 1793754634000,
+        "title": "Binance Founder CZ issues big WARNING (AI & crypto)"
+      },
+      {
+        "channel": "AlessioRastani",
+        "video_id": "uAINN7KjDRs",
+        "views": 26530,
+        "published_at": 1793804846000,
+        "title": "This Could Be the Next BIG Move on Bitcoin"
+      },
+      {
+        "channel": "CryptoBanterGroup",
+        "video_id": "wZgo50uIsqE",
+        "views": 16340,
+        "published_at": 1793787610000,
+        "title": "Midterms Bounce: Only REAL If This Signal Flashes"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "npw-3c5b02E",
+        "views": 10186,
+        "published_at": 1793804505000,
+        "title": "BITCOIN IS EXPLODING !!!!!!"
+      },
+      {
+        "channel": "TheModernInvestor",
+        "video_id": "R36-502ZMs8",
+        "views": 8511,
+        "published_at": 1793788480000,
+        "title": "Bitcoin Is About To Change World Markets XRP Adoption Moves Higher Crypto Taxes Might Be Delayed"
+      },
+      {
+        "channel": "DiscoverCrypto_",
+        "video_id": "YKUzX9q5zQA",
+        "views": 5347,
+        "published_at": 1793750424000,
+        "title": "Chainlink - Top Crypto on Schwab's List"
+      },
+      {
+        "channel": "CryptoTips",
+        "video_id": "r6lR0JYu-so",
+        "views": 4826,
+        "published_at": 1793815231000,
+        "title": "Last Time Wall Street Quit Bitcoin, It Was the Bottom"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "iBQ3wM8JWv8",
+        "views": 3278,
+        "published_at": 1793821837000,
+        "title": "Franklin Templeton\u2019s Head of Crypto: \u201cThe Markets Are Very Happy\u201d After the Midterms"
+      },
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "S7FapDPYPeY",
+        "views": 836,
+        "published_at": 1793829461000,
+        "title": "How I Built a Fully Automated Trading Agent on Coinbase (step by step tutorial)"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "io8ACfpKBtU",
+        "views": 611,
+        "published_at": 1793826036000,
+        "title": "What the Midterms Mean for Bitcoin Policy"
+      },
+      {
+        "channel": "TheCryptoLark",
+        "video_id": "XuoLw8NzYMo",
+        "views": 491,
+        "published_at": 1793832439000,
+        "title": "Sell Bitcoin and Buy SpaceX!"
+      },
+      {
+        "channel": "Boxmining",
+        "video_id": "UsCHd7PV8Mw",
+        "views": 468,
+        "published_at": 1793793639000,
+        "title": "Is Altseason Dead, or Are We Giving Up Too Soon?"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "Pgy87WsPfiI",
+        "views": 165,
+        "published_at": 1793834538000,
+        "title": "BITCOIN DANGER !!!!!!!!!"
+      }
+    ]
+  }
+}

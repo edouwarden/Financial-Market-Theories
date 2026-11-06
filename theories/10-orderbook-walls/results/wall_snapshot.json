@@ -1,0 +1,128 @@
+{
+  "source": "data/sample/orderbook.json",
+  "symbol": "BTCUSDT",
+  "capturedAt": "2025-04-22T21:19:37.144000+00:00",
+  "tickerPrice": 91453.2,
+  "summary": {
+    "bestBid": 91469.5,
+    "bestAsk": 91469.6,
+    "mid": 91469.55,
+    "spread": 0.1,
+    "spreadBps": 0.01,
+    "bidLevels": 1000,
+    "askLevels": 1000,
+    "bidVolume": 457.105,
+    "askVolume": 379.875,
+    "medianLevelVolume": 0.0635
+  },
+  "wallRule": {
+    "minVolumeBtc": 5.0,
+    "medianMultiple": 3.0,
+    "description": "volume >= max(minVolumeBtc, medianMultiple * median level volume)"
+  },
+  "bidWalls": [
+    {
+      "price": 91387.1,
+      "volume": 30.488,
+      "notional": 2786209.9,
+      "multipleOfMedian": 480.13
+    },
+    {
+      "price": 91300.0,
+      "volume": 18.504,
+      "notional": 1689415.2,
+      "multipleOfMedian": 291.4
+    },
+    {
+      "price": 91469.5,
+      "volume": 15.067,
+      "notional": 1378170.96,
+      "multipleOfMedian": 237.28
+    },
+    {
+      "price": 91296.7,
+      "volume": 10.002,
+      "notional": 913149.59,
+      "multipleOfMedian": 157.51
+    },
+    {
+      "price": 91384.5,
+      "volume": 10.0,
+      "notional": 913845.0,
+      "multipleOfMedian": 157.48
+    },
+    {
+      "price": 91313.9,
+      "volume": 10.0,
+      "notional": 913139.0,
+      "multipleOfMedian": 157.48
+    },
+    {
+      "price": 91376.2,
+      "volume": 8.746,
+      "notional": 799176.25,
+      "multipleOfMedian": 137.73
+    },
+    {
+      "price": 91327.0,
+      "volume": 6.898,
+      "notional": 629973.65,
+      "multipleOfMedian": 108.63
+    },
+    {
+      "price": 91387.9,
+      "volume": 6.799,
+      "notional": 621346.33,
+      "multipleOfMedian": 107.07
+    },
+    {
+      "price": 91346.0,
+      "volume": 6.568,
+      "notional": 599960.53,
+      "multipleOfMedian": 103.43
+    }
+  ],
+  "askWalls": [
+    {
+      "price": 91500.0,
+      "volume": 20.591,
+      "notional": 1884076.5,
+      "multipleOfMedian": 324.27
+    },
+    {
+      "price": 91600.0,
+      "volume": 15.079,
+      "notional": 1381236.4,
+      "multipleOfMedian": 237.46
+    },
+    {
+      "price": 91598.4,
+      "volume": 10.007,
+      "notional": 916625.19,
+      "multipleOfMedian": 157.59
+    },
+    {
+      "price": 91566.9,
+      "volume": 8.746,
+      "notional": 800844.11,
+      "multipleOfMedian": 137.73
+    },
+    {
+      "price": 91611.8,
+      "volume": 6.877,
+      "notional": 630014.35,
+      "multipleOfMedian": 108.3
+    },
+    {
+      "price": 91567.5,
+      "volume": 5.648,
+      "notional": 517173.24,
+      "multipleOfMedian": 88.94
+    }
+  ],
+  "caveats": [
+    "One snapshot, not a time series.",
+    "Visible size is not executed size; spoofing and cancellation are not observed.",
+    "The report does not test exchange fee incentives or wall absorption."
+  ]
+}

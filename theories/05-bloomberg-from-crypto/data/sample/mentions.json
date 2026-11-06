@@ -1,0 +1,42 @@
+[
+  {
+    "keywords": ["aurora", "launchpad", "solana"],
+    "twitterLink": "https://x.com/example_aurora",
+    "websiteLink": "https://example.com/aurora",
+    "timestamps": [1763060400000, 1763060460000, 1763060520000, 1763060580000, 1763060640000, 1763060700000],
+    "lastAlert": 0,
+    "fastAlert": false,
+    "importantAlert": false,
+    "groupAlert": false
+  },
+  {
+    "keywords": ["nova", "perpetuals", "base"],
+    "twitterLink": "https://x.com/example_nova",
+    "websiteLink": "https://example.com/nova",
+    "timestamps": [1763060500000, 1763060560000, 1763060620000, 1763060680000],
+    "lastAlert": 0,
+    "fastAlert": false,
+    "importantAlert": false,
+    "groupAlert": false
+  },
+  {
+    "keywords": ["orbit", "wallet", "launch"],
+    "twitterLink": null,
+    "websiteLink": "https://example.com/orbit",
+    "timestamps": [1763060550000, 1763060610000, 1763060670000],
+    "lastAlert": 0,
+    "fastAlert": false,
+    "importantAlert": false,
+    "groupAlert": false
+  },
+  {
+    "keywords": ["ledger", "airdrop"],
+    "twitterLink": null,
+    "websiteLink": null,
+    "timestamps": [1763060720000],
+    "lastAlert": 0,
+    "fastAlert": false,
+    "importantAlert": false,
+    "groupAlert": false
+  }
+]

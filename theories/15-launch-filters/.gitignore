@@ -1,0 +1,2 @@
+# Raw per-day snapshots used by scripts/neural/. Large and local-only.
+data/*.csv

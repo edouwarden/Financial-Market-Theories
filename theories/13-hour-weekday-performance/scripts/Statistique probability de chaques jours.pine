@@ -1,0 +1,61 @@
+//@version=5
+indicator("Moyenne des performances par jour de la semaine", overlay=false)
+
+// Inputs
+start_date = input.time(timestamp("2024-10-10"), title="Date de début")
+end_date = input.time(timestamp("2024-12-10"), title="Date de fin")
+
+// Variables pour stocker les performances par jour
+var float[] monday_perf = array.new_float()
+var float[] tuesday_perf = array.new_float()
+var float[] wednesday_perf = array.new_float()
+var float[] thursday_perf = array.new_float()
+var float[] friday_perf = array.new_float()
+
+// Fonction pour ajouter une performance au tableau approprié
+add_to_array_if_in_range(array<float> arr, float value, int day_of_week) =>
+    if (dayofweek == day_of_week and time >= start_date and time <= end_date)
+        array.push(arr, value)
+
+// Récupération des données en utilisant la fonction security
+daily_open = request.security(syminfo.tickerid, "D", open)
+daily_close = request.security(syminfo.tickerid, "D", close)
+
+// Calcul de la performance quotidienne
+performance = daily_close - daily_open
+
+// Ajouter les performances dans les tableaux correspondants
+add_to_array_if_in_range(monday_perf, performance, dayofweek.monday)
+add_to_array_if_in_range(tuesday_perf, performance, dayofweek.tuesday)
+add_to_array_if_in_range(wednesday_perf, performance, dayofweek.wednesday)
+add_to_array_if_in_range(thursday_perf, performance, dayofweek.thursday)
+add_to_array_if_in_range(friday_perf, performance, dayofweek.friday)
+
+// Fonction pour calculer la moyenne d'un tableau
+calculate_average(array<float> arr) =>
+    array.size(arr) > 0 ? array.sum(arr) / array.size(arr) : na
+
+// Calcul des moyennes
+monday_avg = calculate_average(monday_perf)
+tuesday_avg = calculate_average(tuesday_perf)
+wednesday_avg = calculate_average(wednesday_perf)
+thursday_avg = calculate_average(thursday_perf)
+friday_avg = calculate_average(friday_perf)
+
+// Affichage des résultats sous forme de tableau
+var table perf_table = table.new(position.bottom_left, 2, 6, bgcolor=color.new(color.white, 90))
+if (bar_index == 0)
+    table.cell(perf_table, 0, 0, "Jour", bgcolor=color.gray, text_color=color.white)
+    table.cell(perf_table, 1, 0, "Performance Moyenne", bgcolor=color.gray, text_color=color.white)
+    table.cell(perf_table, 0, 1, "Lundi", bgcolor=color.black,text_color=color.white)
+    table.cell(perf_table, 0, 2, "Mardi", bgcolor=color.black, text_color=color.white)
+    table.cell(perf_table, 0, 3, "Mercredi", bgcolor=color.black, text_color=color.white)
+    table.cell(perf_table, 0, 4, "Jeudi", bgcolor=color.black, text_color=color.white)
+    table.cell(perf_table, 0, 5, "Vendredi", bgcolor=color.black, text_color=color.white)
+
+// Mise à jour des données du tableau
+table.cell(perf_table, 1, 1, str.tostring(monday_avg, "#.##")+ "%", bgcolor=color.black, text_color=color.white)
+table.cell(perf_table, 1, 2, str.tostring(tuesday_avg, "#.##")+ "%", bgcolor=color.black, text_color=color.white)
+table.cell(perf_table, 1, 3, str.tostring(wednesday_avg, "#.##")+ "%", bgcolor=color.black, text_color=color.white)
+table.cell(perf_table, 1, 4, str.tostring(thursday_avg, "#.##")+ "%", bgcolor=color.black, text_color=color.white)
+table.cell(perf_table, 1, 5, str.tostring(friday_avg, "#.##")+ "%", bgcolor=color.black, text_color=color.white)

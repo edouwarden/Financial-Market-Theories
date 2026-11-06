@@ -1,0 +1,8 @@
+{
+  "name": "leaderboard-positioning",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "collect": "bun scripts/toptrader.js"
+  }
+}

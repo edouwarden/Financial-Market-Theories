@@ -1,0 +1,66 @@
+{
+  "generatedAt": "2026-11-06T18:32:19.796Z",
+  "source": "data/sample/mentions.json",
+  "windowMinutes": 20,
+  "mentionCount": 4,
+  "totalTimestamps": 14,
+  "itemCount": 8,
+  "clusterCount": 4,
+  "clusters": [
+    {
+      "records": 1,
+      "timestamps": 6,
+      "keywords": [
+        "aurora",
+        "launchpad",
+        "solana"
+      ],
+      "firstSeen": "2025-11-13T19:00:00.000Z",
+      "lastSeen": "2025-11-13T19:05:00.000Z",
+      "spanMinutes": 5,
+      "twitterLink": "https://x.com/example_aurora",
+      "websiteLink": "https://example.com/aurora"
+    },
+    {
+      "records": 1,
+      "timestamps": 4,
+      "keywords": [
+        "base",
+        "nova",
+        "perpetuals"
+      ],
+      "firstSeen": "2025-11-13T19:01:40.000Z",
+      "lastSeen": "2025-11-13T19:04:40.000Z",
+      "spanMinutes": 3,
+      "twitterLink": "https://x.com/example_nova",
+      "websiteLink": "https://example.com/nova"
+    },
+    {
+      "records": 1,
+      "timestamps": 3,
+      "keywords": [
+        "launch",
+        "orbit",
+        "wallet"
+      ],
+      "firstSeen": "2025-11-13T19:02:30.000Z",
+      "lastSeen": "2025-11-13T19:04:30.000Z",
+      "spanMinutes": 2,
+      "twitterLink": null,
+      "websiteLink": "https://example.com/orbit"
+    },
+    {
+      "records": 1,
+      "timestamps": 1,
+      "keywords": [
+        "airdrop",
+        "ledger"
+      ],
+      "firstSeen": "2025-11-13T19:05:20.000Z",
+      "lastSeen": "2025-11-13T19:05:20.000Z",
+      "spanMinutes": 0,
+      "twitterLink": null,
+      "websiteLink": null
+    }
+  ]
+}

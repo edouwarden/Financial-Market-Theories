@@ -1,0 +1,11 @@
+{
+	"name": "financial-market-theories-attention-index",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"description": "Attention collectors and a data-quality report for theory 17",
+	"scripts": {
+		"summary": "node scripts/attention-summary.js",
+		"google-news": "node scripts/legacy/google-news.js"
+	}
+}

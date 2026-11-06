@@ -1,0 +1,361 @@
+//@version=5
+indicator("ℌ𝔢𝔞𝔩𝔱𝔥 𝔠𝔬𝔩𝔬𝔯", overlay=false, max_bars_back=500)
+
+// Base currency handling
+string mex = syminfo.basecurrency == "BTC" ? "XBT" : str.tostring(syminfo.basecurrency)
+
+// Input parameters
+var len = input.int(1, "ROC Length")
+var use_binance = input.bool(true, "Use Binance USDT")
+var use_binance2 = input.bool(true, "Use Binance USD")
+var use_binance3 = input.bool(true, "Use Binance BUSD")
+var use_bitmex = input.bool(true, "Use BitMEX USD")
+var use_bitmex2 = input.bool(true, "Use BitMEX USDT")
+var use_kraken = input.bool(true, "Use Kraken")
+
+// Request OI data from different sources
+oi1 = request.security("BINANCE:" + str.tostring(syminfo.basecurrency) + "USDT.P_OI", timeframe.period, close, ignore_invalid_symbol=true)
+oi2 = request.security("BINANCE:" + str.tostring(syminfo.basecurrency) + "USD.P_OI", timeframe.period, close, ignore_invalid_symbol=true)
+oi3 = request.security("BINANCE:" + str.tostring(syminfo.basecurrency) + "BUSD.P_OI", timeframe.period, close, ignore_invalid_symbol=true)
+oi4 = request.security("BITMEX:" + mex + "USD.P_OI",          timeframe.period, close, ignore_invalid_symbol=true)
+oi5 = request.security("BITMEX:" + mex + "USDT.P_OI",          timeframe.period, close, ignore_invalid_symbol=true)
+oi6 = request.security("KRAKEN:" + str.tostring(syminfo.basecurrency) + "USD.P_OI", timeframe.period, close, ignore_invalid_symbol=true)
+
+// Calculate total OI
+OI_total = (use_binance  ? nz(oi1,0)      : 0) +
+     (use_binance2 ? nz(oi2,0) / close   : 0) +
+     (use_binance3 ? nz(oi3,0)       : 0) +
+     (use_bitmex  ? nz(oi4,0) / close   : 0) +
+     (use_bitmex2  ? nz(oi5,0) / close   : 0) +
+     (use_kraken  ? nz(oi6,0) / close   : 0)
+
+// Calculate OI momentum
+oi_mom = ta.roc(OI_total, len)
+// Define colors based on OI momentum
+bodyColor = oi_mom < 0 ? color.green : color.red
+wickColor = color.gray
+
+// Plot the custom candles
+plotcandle(open, high, low, close, "OI Momentum Candles", bodyColor, wickColor, bordercolor = bodyColor,force_overlay = true)
+
+//--------------------------------------------------------------------------------------------------------------------------------------
+import jeesauce/JeeSauceScripts/2 as scripts
+
+//===============================
+// INPUTS
+//===============================
+len2   = input.int(14, "Momentum Length", minval=1)
+
+// Wave Trend inputs
+wt_grp = "Wave Trend"
+n1 = input.int(9, "Channel Length", group=wt_grp)
+n2 = input.int(12, "Average Length", group=wt_grp)
+
+// RSI + MFI inputs
+mfi_grp = "RSI + MFI"
+rsiMFIperiod = input.int(60, "RSI+MFI Period", group=mfi_grp)
+rsiMFIMultiplier = input.int(190, "RSI+MFI Area multiplier", group=mfi_grp)
+MFRSIMA = input.string("SMA", "MFRSIMA", options=["RMA", "SMA", "EMA", "WMA", "VWMA"], group=mfi_grp)
+
+
+// Additional display toggles
+show_price_above = input.bool(true, "Price Above other metrics", group="Display")
+show_price_mom           = input.bool(true, "Price Momentum"     , group="Display", inline="price")
+offset_price_mom          = input.float(0, " Offset"         , group="Display", inline="price")
+display_label_price_mom       = input.bool(true, "Label"         , group="Display", inline="price")
+price_col              = input.color(color.new(#06d07e, 83), ""  , group="Display", inline="price")
+
+show_positive_price_mom       = input.bool(true, "Positive Price Momentum"  , group="Display", inline="positive_price")
+offset_positive_price_mom      = input.float(0, " Offset"           , group="Display", inline="positive_price")
+display_label_positive_price_mom  = input.bool(true, "Label"           , group="Display", inline="positive_price")
+positive_price_col         = input.color(color.new(#06d07e, 83), ""    , group="Display", inline="positive_price")
+
+show_oi_mom             = input.bool(true, "OI Momentum" , group="Display", inline="oi")
+offset_oi_mom            = input.float(0, " Offset"        , group="Display", inline="oi")
+display_label_oi_mom        = input.bool(true, "Label" , group="Display", inline="oi")
+oi_col               = input.color(color.new(#673ab7, 34), "", group="Display", inline="oi")
+
+show_longs_mom           = input.bool(true, "Longs Momentum"        , group="Display", inline="longs")
+offset_longs_mom          = input.float(0, " Offset"        , group="Display", inline="longs")
+display_label_longs_mom       = input.bool(true, "Label"  , group="Display", inline="longs")
+longs_col              = input.color(color.new(#5dfa02, 9), "", group="Display", inline="longs")
+
+show_shorts_mom           = input.bool(true, "Shorts Momentum"        , group="Display", inline="shorts")
+offset_shorts_mom          = input.float(0, " Offset"        , group="Display", inline="shorts")
+display_label_shorts_mom      = input.bool(true, "Label" , group="Display", inline="shorts")
+shorts_col             = input.color(color.new(#d81f06, 34), "", group="Display", inline="shorts")
+
+show_flow_mom            = input.bool(true, "Flow Momentum"         , group="Display", inline="flow")
+offset_flow_mom           = input.float(0, " Offset"         , group="Display", inline="flow")
+display_label_flow_mom       = input.bool(true, "Label"  , group="Display", inline="flow" )
+flow_col              = input.color(color.new(#2445ff, 15), "", group="Display", inline="flow")
+
+show_flow_mom_pos            = input.bool(true, "Flow Pos Momentum"         , group="Display", inline="flow")
+offset_flow_mom_pos           = input.float(0, " Offset"         , group="Display", inline="flow")
+display_label_flow_mom_pos       = input.bool(true, "Label"  , group="Display", inline="flow" )
+flow_col_pos              = input.color(color.new(#2445ff, 15), "", group="Display", inline="flow")
+
+show_cvd_mom            = input.bool(true, "CVD Momentum"         , group="Display", inline="cvd")
+offset_cvd_mom           = input.float(0, " Offset"         , group="Display", inline="cvd")
+display_label_cvd_mom        = input.bool(true, "Label"   , group="Display", inline="cvd")
+cvd_col               = input.color(color.new(#a2a3a3, 14), "", group="Display", inline="cvd")
+
+show_cvd_mom_pos            = input.bool(true, "CVD Pos Momentum"         , group="Display", inline="cvd")
+offset_cvd_mom_pos           = input.float(0, " Offset"         , group="Display", inline="cvd")
+display_label_cvd_mom_pos        = input.bool(true, "Label"   , group="Display", inline="cvd")
+cvd_col_pos               = input.color(color.new(#a2a3a3, 14), "", group="Display", inline="cvd")
+
+show_wt1              = input.bool(true, "Lt Blue Wave"         , group="Display", inline="wt1")
+offset_wt1             = input.float(0, " Offset"         , group="Display", inline="wt1")
+display_label_wt1          = input.bool(true, "Label"   , group="Display", inline="wt1")
+wt1_col               = input.color(color.new(#bbdefb, 20), "", group="Display", inline="wt1")
+
+show_wt2              = input.bool(true, "Blue Wave"         , group="Display", inline="wt2")
+offset_wt2             = input.float(0, " Offset"         , group="Display", inline="wt2")
+display_label_wt2          = input.bool(true, "Label"   , group="Display", inline="wt2")
+wt2_col               = input.color(color.new(#131722, 15), "", group="Display", inline="wt2")
+
+show_rsi_mfi            = input.bool(true, "RSI+MFI Area"         , group="Display", inline="rsi_mfi")
+offset_rsi_mfi           = input.float(0, " Offset"         , group="Display", inline="rsi_mfi")
+display_label_rsi_mfi        = input.bool(true, "Label"   , group="Display", inline="rsi_mfi")
+rsi_mfi_pos_color          = input.color(color.new(#079129, 15), "", group="Display", inline="rsi_mfi")
+rsi_mfi_neg_color          = input.color(color.new(#970707, 15), "", group="Display", inline="rsi_mfi")
+
+
+
+//===============================
+// MOMENTUM CALCULATIONS
+//===============================
+price_mom = ta.roc(close,  len2)
+positive_price_mom = price_mom < 0 ? -price_mom : price_mom
+oi_mom2  = ta.roc(OI_total, len2)
+
+//===============================
+// WAVE TREND CALCULATIONS
+//===============================
+// Moving Average function for RSI+MFI
+ma(matype, src, length) =>
+  switch matype
+    "RMA" => ta.rma(src, length)
+    "SMA" => ta.sma(src, length)
+    "EMA" => ta.ema(src, length)
+    "WMA" => ta.wma(src, length)
+    "VWMA" => ta.vwma(src, length)
+    => src
+
+// Wave Trend calculation (Lt Blue Wave & Blue Wave)
+ap = hlc3 
+esa = ta.ema(ap, n1)
+d = ta.ema(math.abs(ap - esa), n1)
+ci = (ap - esa) / (0.015 * d)
+tci = ta.ema(ci, n2)
+
+wt1 = tci/30 // Lt Blue Wave
+wt2 = ta.sma(wt1, 3) // Blue Wave
+
+// RSI + MFI Area calculation
+candleValue = (close - open) / (high - low)
+MVC = ma(MFRSIMA, candleValue, rsiMFIperiod)
+rsi_mfi_area = (MVC * rsiMFIMultiplier)/12
+
+//===============================
+// POSITION FLOW METRICS (Longs / Shorts / Rekt etc.)
+//===============================
+// User-selectable denomination for OI delta calculations
+string denom = input.string("Base Currency", title="Denomination for OI Delta", options=["Base Currency", "Quote Currency"])
+
+// Delta of aggregated OI
+float deltaOI = ta.change(OI_total)
+
+// --- Price & OI directional helpers ---
+priceUP  = close > open
+priceDOWN = close < open
+oiUP   = deltaOI > 0
+oiDOWN  = deltaOI < 0
+
+// --- Position (de)creation conditions ---
+newlongs  = oiUP  and priceUP  // longs opened while price rising
+rektlongs = oiDOWN and priceDOWN // longs liquidated (rekt) while price falling
+newshorts = oiUP  and priceDOWN // shorts opened while price falling
+rektshorts = oiDOWN and priceUP  // shorts liquidated (rekt) while price rising
+
+// Helper function converting delta according to denomination
+f_val(float _delta) => denom == "Base Currency" ? _delta : _delta * close
+
+// --- Cumulate flows ---
+longs_entering = ta.cum(newlongs  ? f_val(deltaOI) : 0)
+longs_exiting  = ta.cum(rektlongs ? f_val(deltaOI) : 0)
+shorts_entering = ta.cum(newshorts ? f_val(deltaOI) : 0)
+shorts_exiting = ta.cum(rektshorts ? f_val(deltaOI) : 0)
+
+// --- Net & Delta metrics ---
+net_longs  = longs_entering - math.abs(longs_exiting)
+net_shorts = shorts_entering - math.abs(shorts_exiting)
+longshort_delta = net_longs - net_shorts   // aka net_delta
+cvd = ta.cum(longshort_delta)        // Cumulative Volume (OI) Delta
+
+// --- Momentum of flows (using net positions like inspiration) ---
+longs_mom = ta.roc(net_longs, len2)  // Net longs can go negative
+shorts_mom = -ta.roc(net_shorts, len2) // Net shorts can go negative 
+flow_mom = ta.roc(longshort_delta, len2)
+flow_mom_pos = flow_mom<0 ? -flow_mom : flow_mom
+
+//===============================
+// CVD SPOT - IMPROVED CALCULATION
+//===============================
+
+// Get volume data from multiple exchanges
+[up0, dn0] = request.security_lower_tf("BINANCE:"  + str.tostring(syminfo.basecurrency) + "USDT", "1", scripts.getupdnvol())
+[up1, dn1] = request.security_lower_tf("BINANCE:"  + str.tostring(syminfo.basecurrency) + "USD" , "1", scripts.getupdnvol())
+[up2, dn2] = request.security_lower_tf("BYBIT:"   + str.tostring(syminfo.basecurrency) + "USDT", "1", scripts.getupdnvol())
+[up3, dn3] = request.security_lower_tf("CRYPTOCOM:" + str.tostring(syminfo.basecurrency) + "USDT", "1", scripts.getupdnvol())
+[up4, dn4] = request.security_lower_tf("COINBASE:" + str.tostring(syminfo.basecurrency) + "USDT", "1", scripts.getupdnvol())
+[up5, dn5] = request.security_lower_tf("OKX:"    + str.tostring(syminfo.basecurrency) + "USDT", "1", scripts.getupdnvol())
+
+// Calculate total volumes and max volumes per exchange (for OHLC-style CVD)
+totalUpVolume0 = scripts.GetTotalUpVolume(up0), totalDnVolume0 = scripts.GetTotalDnVolume(dn0)
+totalUpVolume1 = scripts.GetTotalUpVolume(up1), totalDnVolume1 = scripts.GetTotalDnVolume(dn1)
+totalUpVolume2 = scripts.GetTotalUpVolume(up2), totalDnVolume2 = scripts.GetTotalDnVolume(dn2)
+totalUpVolume3 = scripts.GetTotalUpVolume(up3), totalDnVolume3 = scripts.GetTotalDnVolume(dn3)
+totalUpVolume4 = scripts.GetTotalUpVolume(up4), totalDnVolume4 = scripts.GetTotalDnVolume(dn4)
+totalUpVolume5 = scripts.GetTotalUpVolume(up5), totalDnVolume5 = scripts.GetTotalDnVolume(dn5)
+
+maxUpVolume0 = scripts.GetMaxUpVolume(up0), maxDnVolume0 = scripts.GetMaxDnVolume(dn0)
+maxUpVolume1 = scripts.GetMaxUpVolume(up1), maxDnVolume1 = scripts.GetMaxDnVolume(dn1)
+maxUpVolume2 = scripts.GetMaxUpVolume(up2), maxDnVolume2 = scripts.GetMaxDnVolume(dn2)
+maxUpVolume3 = scripts.GetMaxUpVolume(up3), maxDnVolume3 = scripts.GetMaxDnVolume(dn3)
+maxUpVolume4 = scripts.GetMaxUpVolume(up4), maxDnVolume4 = scripts.GetMaxDnVolume(dn4)
+maxUpVolume5 = scripts.GetMaxUpVolume(up5), maxDnVolume5 = scripts.GetMaxDnVolume(dn5)
+
+// Convert inverse-quoted BitMEX contracts to base currency terms
+totalUpVolume3_adj = totalUpVolume3 / close
+totalDnVolume3_adj = totalDnVolume3 / close
+totalUpVolume4_adj = totalUpVolume4 / close
+totalDnVolume4_adj = totalDnVolume4 / close
+maxUpVolume3_adj = maxUpVolume3 / close
+maxDnVolume3_adj = maxDnVolume3 / close
+maxUpVolume4_adj = maxUpVolume4 / close
+maxDnVolume4_adj = maxDnVolume4 / close
+
+// Calculate deltas per exchange
+delta0 = scripts.GetDelta(totalUpVolume0, totalDnVolume0)
+delta1 = scripts.GetDelta(totalUpVolume1, totalDnVolume1)
+delta2 = scripts.GetDelta(totalUpVolume2, totalDnVolume2)
+delta3 = scripts.GetDelta(totalUpVolume3_adj, totalDnVolume3_adj)
+delta4 = scripts.GetDelta(totalUpVolume4_adj, totalDnVolume4_adj)
+delta5 = scripts.GetDelta(totalUpVolume5, totalDnVolume5)
+
+// Aggregate total volumes and max volumes
+totalUpVolumeAgg = nz(totalUpVolume0) + nz(totalUpVolume1) + nz(totalUpVolume2) + 
+         nz(totalUpVolume3_adj) + nz(totalUpVolume4_adj) + nz(totalUpVolume5)
+totalDnVolumeAgg = nz(totalDnVolume0) + nz(totalDnVolume1) + nz(totalDnVolume2) + 
+         nz(totalDnVolume3_adj) + nz(totalDnVolume4_adj) + nz(totalDnVolume5)
+maxUpVolumeAgg = math.max(nz(maxUpVolume0), math.max(nz(maxUpVolume1), math.max(nz(maxUpVolume2), 
+         math.max(nz(maxUpVolume3_adj), math.max(nz(maxUpVolume4_adj), nz(maxUpVolume5))))))
+maxDnVolumeAgg = math.max(nz(maxDnVolume0), math.max(nz(maxDnVolume1), math.max(nz(maxDnVolume2), 
+         math.max(nz(maxDnVolume3_adj), math.max(nz(maxDnVolume4_adj), nz(maxDnVolume5))))))
+
+// Calculate aggregated delta
+deltaAgg = scripts.GetDelta(totalUpVolumeAgg, totalDnVolumeAgg)
+
+// Maintain CVD state with proper persistence (like inspiration code)
+var float cvd_spot = 0.0
+
+// CVD OHLC calculation (similar to inspiration approach)
+cvd_open = cvd_spot
+cvd_high = cvd_spot + maxUpVolumeAgg
+cvd_low = cvd_spot - maxDnVolumeAgg
+cvd_close = cvd_spot + deltaAgg
+
+// Update CVD state for next bar
+cvd_spot += deltaAgg
+
+cvd_mom = -(ta.roc(cvd_spot, len2)/10)
+
+if cvd_mom > 14
+    cvd_mom := 14
+if cvd_mom < -7
+    cvd_mom := -7
+
+pos_cvd_mom = cvd_mom < 0? -cvd_mom : cvd_mom
+//===============================
+// NORMALISATION POUR OVERLAY
+//===============================
+// Paramètres de la zone d'affichage au-dessus du prix
+zoom_method = input.string("ATR", "Méthode de zone", options=["ATR", "Percentage"], group="Overlay Display")
+zone_start_pct = input.float(0.5, "Zone début (%)", minval=0, maxval=10, step=0.1, group="Overlay Display") / 100
+zone_height_pct = input.float(2.0, "Zone hauteur (%)", minval=0.1, maxval=10, step=0.1, group="Overlay Display") / 100
+atr_multiplier_start = input.float(0.5, "ATR Début (x)", minval=0, maxval=5, step=0.1, group="Overlay Display")
+atr_multiplier_height = input.float(2.0, "ATR Hauteur (x)", minval=0.1, maxval=5, step=0.1, group="Overlay Display")
+atr_length = input.int(14, "ATR Length", minval=1, group="Overlay Display")
+normalize_length = input.int(100, "Période de normalisation", minval=10, group="Overlay Display")
+
+// Calculer la zone d'affichage
+atr_value = ta.atr(atr_length)
+zone_start = zoom_method == "ATR" ? 
+             close + (atr_value * atr_multiplier_start) : 
+             close * (1 + zone_start_pct)
+             
+zone_height = zoom_method == "ATR" ? 
+              atr_value * atr_multiplier_height : 
+              close * zone_height_pct
+
+// Fonction de normalisation entre 0 et 1
+normalize(series float src, int len) =>
+    highest = ta.highest(src, len)
+    lowest = ta.lowest(src, len)
+    ranger = highest - lowest
+    ranger == 0 ? 0.5 : (src - lowest) / ranger
+
+// Normaliser les momentum
+price_mom_norm = normalize(price_mom, normalize_length)
+oi_mom_norm = normalize(oi_mom2, normalize_length)
+
+// Mapper dans la zone au-dessus du prix
+price_mom_mapped = zone_start + (price_mom_norm * zone_height)
+oi_mom_mapped = zone_start + (oi_mom_norm * zone_height)
+
+// Lignes de référence de la zone
+zone_top = zone_start + zone_height
+zone_mid = zone_start + (zone_height / 2)
+
+//===============================
+// PLOTS OVERLAY
+//===============================
+// Afficher la zone de référence
+show_zone_lines = input.bool(true, "Afficher lignes de zone", group="Overlay Display")
+plot(show_zone_lines ? zone_start : na, "Zone Bas", color=color.new(color.gray, 70), linewidth=1, style=plot.style_line)
+plot(show_zone_lines ? zone_mid : na, "Zone Milieu", color=color.new(color.gray, 80), linewidth=1, style=plot.style_line)
+plot(show_zone_lines ? zone_top : na, "Zone Haut", color=color.new(color.gray, 70), linewidth=1, style=plot.style_line)
+
+// Plots principaux des momentum
+plot(show_price_mom ? price_mom_mapped : na, "Price Momentum", 
+     color=price_col, linewidth=2, style=plot.style_line)
+     
+plot(show_oi_mom ? oi_mom_mapped : na, "OI Momentum", 
+     color=oi_col, linewidth=2, style=plot.style_line)
+
+// Remplissage entre milieu et momentum
+fill_momentum = input.bool(true, "Remplir momentum depuis milieu", group="Overlay Display")
+fill_transparency = input.int(85, "Transparence remplissage", minval=0, maxval=100, group="Overlay Display")
+
+// Remplir Price Momentum depuis le milieu
+p_price = plot(fill_momentum and show_price_mom ? price_mom_mapped : na, display=display.none)
+p_mid_price = plot(fill_momentum and show_price_mom ? zone_mid : na, display=display.none)
+fill(p_price, p_mid_price, color=color.new(price_col, fill_transparency), title="Price Mom Fill")
+
+// Remplir OI Momentum depuis le milieu
+p_oi = plot(fill_momentum and show_oi_mom ? oi_mom_mapped : na, display=display.none)
+p_mid_oi = plot(fill_momentum and show_oi_mom ? zone_mid : na, display=display.none)
+fill(p_oi, p_mid_oi, color=color.new(oi_col, fill_transparency), title="OI Mom Fill")
+
+// Labels
+if display_label_price_mom and show_price_mom and barstate.islast
+    label.new(bar_index, price_mom_mapped, 'P', 
+              size=size.tiny, color=price_col, textcolor=color.white, 
+              style=label.style_label_left)
+              
+if display_label_oi_mom and show_oi_mom and barstate.islast
+    label.new(bar_index, oi_mom_mapped, 'OI', 
+              size=size.tiny, color=oi_col, textcolor=color.white, 
+              style=label.style_label_left)

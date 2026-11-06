@@ -1,0 +1,319 @@
+{
+  "generated_at": "2026-11-04T21:46:42.834338+00:00",
+  "date_range": [
+    "2025-09-03",
+    "2025-09-05"
+  ],
+  "sizing": "views-all",
+  "min_views": 0,
+  "limit_per_day": 0,
+  "channels_file": "data/channels.txt",
+  "excluded": [
+    "CryptoFutur",
+    "CryptoLeTrone",
+    "Cryptolyze",
+    "Hasheur",
+    "JulienRoman",
+    "MonsieurTK",
+    "UndergroundTradingFr",
+    "grandanglebitcoin",
+    "insydercrypto",
+    "lesroisdubitcoin"
+  ],
+  "output": "results/thumbnail_grid_views_all_2025-09-03_05.png",
+  "days": {
+    "2025-09-03": [
+      {
+        "channel": "intothecryptoverse",
+        "video_id": "RjOh7ZOqYRo",
+        "views": 75246,
+        "published_at": 1756869508000,
+        "title": "Bitcoin: Battle for the Bull Market"
+      },
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "omM-zIrEwxk",
+        "views": 48271,
+        "published_at": 1756858152000,
+        "title": "The Greatest Ethereum Explanation of ALL TIME! (How 1 ETH hits $62k)"
+      },
+      {
+        "channel": "CryptosRUs",
+        "video_id": "193dIR5LyhU",
+        "views": 39853,
+        "published_at": 1756860413000,
+        "title": "Bitcoin and Crypto Did Something Surprising Today..."
+      },
+      {
+        "channel": "CoinBureau",
+        "video_id": "OJM18p-_yJo",
+        "views": 16201,
+        "published_at": 1756911645000,
+        "title": "China's Economic Crash Could Trigger the Next Crypto Boom"
+      },
+      {
+        "channel": "TheModernInvestor",
+        "video_id": "CK81eJ6SAQc",
+        "views": 11936,
+        "published_at": 1756896501000,
+        "title": "We Have An END DATE For The Crypto Bull Run And You Are NOT Going To Like It This WON'T Make Sense"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "ZLMqd1-qIWc",
+        "views": 11484,
+        "published_at": 1756913828000,
+        "title": "BTC & ETH: DO NOT BE FOOLED !!! "
+      },
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "zyfcwclnBFQ",
+        "views": 9617,
+        "published_at": 1756928483000,
+        "title": "5 Top Crypto Coins With Massive Potential in September BEFORE Fed Meeting"
+      },
+      {
+        "channel": "CryptoZombie",
+        "video_id": "CpWqPCKh3pw",
+        "views": 7947,
+        "published_at": 1756926270000,
+        "title": "\ud83d\udea8 BITCOIN & CRYPTO EMERGENCY!!!\ud83d\udd25 \ud83d\udd25                      (seriously...?)                    \ud83d\udea8"
+      },
+      {
+        "channel": "Boxmining",
+        "video_id": "1DJbQ5fyqns",
+        "views": 6363,
+        "published_at": 1756895205000,
+        "title": "I Interviewed Crypto's SMARTEST Minds | Bitcoin Asia 2025 (Part 2)"
+      },
+      {
+        "channel": "CryptoTips",
+        "video_id": "rrQyBz48HwE",
+        "views": 5336,
+        "published_at": 1756915296000,
+        "title": "Is It Time To SELL ETHEREUM?"
+      },
+      {
+        "channel": "davincij15",
+        "video_id": "eJ6ecrlN1rs",
+        "views": 4330,
+        "published_at": 1756900890000,
+        "title": "BITCOIN will save your life!  Here is how..."
+      },
+      {
+        "channel": "DiscoverCrypto_",
+        "video_id": "ro7dx7Gd1WE",
+        "views": 2992,
+        "published_at": 1756940464000,
+        "title": "Bitcoin Follows Gold EVERY TIME (This Happens NEXT!)"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "WGATlu6Epe8",
+        "views": 1821,
+        "published_at": 1756933238000,
+        "title": "Jeff Walton: Bitcoin Treasuries & The New Credit Paradigm | Bitcoin Asia 2025"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "9rvJtTVkBLg",
+        "views": 623,
+        "published_at": 1756922407000,
+        "title": "Taking the First Step: Self Custody Can Be Easy"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "hHqJdRp3wwU",
+        "views": 495,
+        "published_at": 1756904485000,
+        "title": "What Features Does Bitcoin Need For Global Adoption? w/ Aaron van Wirdum, Eric Wall, Shinobi Trollz"
+      },
+      {
+        "channel": "TheCryptoLark",
+        "video_id": "q943ne35neU",
+        "views": 56,
+        "published_at": 1756940453000,
+        "title": "Will Altcoins 10X From Here?"
+      }
+    ],
+    "2025-09-04": [
+      {
+        "channel": "CryptosRUs",
+        "video_id": "ZM8F87qAark",
+        "views": 38126,
+        "published_at": 1756949433000,
+        "title": "Bitcoin & Crypto Investors....Don't Miss This Big News"
+      },
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "1-BdbB3L3k0",
+        "views": 37396,
+        "published_at": 1757028885000,
+        "title": "4 Crypto Coins Will Skyrocket in 27 Days (Don't Miss Out)"
+      },
+      {
+        "channel": "CoinBureau",
+        "video_id": "vW5oe9xxaC4",
+        "views": 31905,
+        "published_at": 1756997116000,
+        "title": "Crypto Profit Strategy: When to Sell BTC, ETH & Altcoins"
+      },
+      {
+        "channel": "CryptoRevolutiontv",
+        "video_id": "eC0FcnWRdN8",
+        "views": 25076,
+        "published_at": 1756947713000,
+        "title": "Trump\u2019s New Crypto WLFI Coin Review \u2013 Worth Buying?"
+      },
+      {
+        "channel": "intothecryptoverse",
+        "video_id": "En3jktDXPM8",
+        "views": 18251,
+        "published_at": 1756955878000,
+        "title": "Silver Eyes All Time Highs"
+      },
+      {
+        "channel": "TheCryptoLark",
+        "video_id": "94wNZkmKgnk",
+        "views": 15314,
+        "published_at": 1757026808000,
+        "title": "The Business Cycle Will Top Here And Crypto With It"
+      },
+      {
+        "channel": "CryptoInsiderOfficial",
+        "video_id": "J8JcbjyTc9g",
+        "views": 14871,
+        "published_at": 1756981930000,
+        "title": "I'm Exiting Crypto!"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "FOuAR0neNtA",
+        "views": 14691,
+        "published_at": 1756970034000,
+        "title": "BAD NEWS FOR BITCOIN - BUT LOOK AT THIS\u2026\u2026."
+      },
+      {
+        "channel": "TheModernInvestor",
+        "video_id": "kKqngKLjzMw",
+        "views": 8830,
+        "published_at": 1756975399000,
+        "title": "SOMETHING WEIRD IS HAPPENING Everyone NEEDS To Be On Alert THIS Crypto Bull Cycle Is VERY Different"
+      },
+      {
+        "channel": "DiscoverCrypto_",
+        "video_id": "Uchs1tKU0RE",
+        "views": 8555,
+        "published_at": 1757026706000,
+        "title": "How Much Cardano Do You Need to Become a Millionaire?"
+      },
+      {
+        "channel": "davincij15",
+        "video_id": "kpX60wV7skA",
+        "views": 7033,
+        "published_at": 1756987292000,
+        "title": "WE HAVE FOUND A BOTTOM FOR BITCOIN!"
+      },
+      {
+        "channel": "AltcoinDaily",
+        "video_id": "LFegcmeDp2U",
+        "views": 2362,
+        "published_at": 1756999554000,
+        "title": "BITCOIN HOLDERS - The Next $300 TRILLION Crypto Opportunity | Portal to Bitcoin"
+      },
+      {
+        "channel": "CryptoTips",
+        "video_id": "ezCx1CP8keo",
+        "views": 2220,
+        "published_at": 1757001669000,
+        "title": "This Bitcoin Dip Could Signal a MASSIVE Rally"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "h0fMDsOCEm8",
+        "views": 1098,
+        "published_at": 1757019647000,
+        "title": "Bitcoin as a Mirror for Personal Growth"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "cGZS-jNOXIY",
+        "views": 66,
+        "published_at": 1757010649000,
+        "title": "We're Not Breaking Bitcoin: The Case for CTV + CSFS"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "IQPGCNgtzJg",
+        "views": 0,
+        "published_at": 1756993350000,
+        "title": "IT'S NOT EASY... [RUNNING THE MOON SHOW LIVE]"
+      }
+    ],
+    "2025-09-05": [
+      {
+        "channel": "CryptosRUs",
+        "video_id": "oczn8tyT48k",
+        "views": 32588,
+        "published_at": 1757033104000,
+        "title": "This is Why Bitcoin and Crypto Went Down Today (Unbelievable!)"
+      },
+      {
+        "channel": "TheMoon",
+        "video_id": "o8eJZCnU0-4",
+        "views": 14514,
+        "published_at": 1757054505000,
+        "title": "\ud83d\udea8 BTC & ETH: THIS IS SCARY !!!"
+      },
+      {
+        "channel": "CryptoBanterGroup",
+        "video_id": "PqHWKLqKYAE",
+        "views": 13597,
+        "published_at": 1757078706000,
+        "title": "The Secret Power Behind Binance\u2019s New Crypto Treasury!"
+      },
+      {
+        "channel": "TheModernInvestor",
+        "video_id": "MUpotx4JEi4",
+        "views": 6336,
+        "published_at": 1757062879000,
+        "title": "Welcome To The Bull Run We Got Fun And Gains MAJOR Bitcoin Ethereum XRP PENGU Price Predictions"
+      },
+      {
+        "channel": "davincij15",
+        "video_id": "1JkS766Hps8",
+        "views": 2093,
+        "published_at": 1757073603000,
+        "title": "BITCOIN BREAKOUT STARTS TODAY!!!"
+      },
+      {
+        "channel": "CoinBureau",
+        "video_id": "NUXbkFzQCH4",
+        "views": 522,
+        "published_at": 1757080839000,
+        "title": "How to Take Crypto Profits Before the Market Crashes"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "BTMVvoQSm4w",
+        "views": 327,
+        "published_at": 1757077222000,
+        "title": "Eric Wall: The Bitcoin Protocol - Stuck in Time Forever? | Bitcoin Asia 2025"
+      },
+      {
+        "channel": "DappUniversity",
+        "video_id": "761LQbvmNok",
+        "views": 199,
+        "published_at": 1757088012000,
+        "title": "Best AI tools for Coding in 2025"
+      },
+      {
+        "channel": "BitcoinMagazine",
+        "video_id": "OGrRMT40NI0",
+        "views": 73,
+        "published_at": 1757098833000,
+        "title": "Can Bitcoin Succeed Without Another Soft Fork? w/ Janusz"
+      }
+    ]
+  }
+}

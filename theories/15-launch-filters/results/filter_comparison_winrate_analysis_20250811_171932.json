@@ -1,0 +1,377 @@
+{
+  "created_at": "2025-08-11T17:19:32.010870",
+  "objective": "Comparaison des filtres avec diff\u00e9rents objectifs de multiple",
+  "filters_compared": [
+    "Ultra-S\u00e9lectif (16 crit\u00e8res)",
+    "Auto-Optimis\u00e9",
+    "Haute Pr\u00e9cision"
+  ],
+  "results": {
+    "Ultra-S\u00e9lectif (16 crit\u00e8res)": {
+      "1.5": {
+        "target": 1.5,
+        "wins": 152,
+        "winrate": 59.6078431372549,
+        "avg_multiple": 4.549671052631578,
+        "median_multiple": 2.05,
+        "profitability_score": 18.28046523922812,
+        "filtered_count": 255,
+        "coverage": 6.740681998413957
+      },
+      "2.0": {
+        "target": 2.0,
+        "wins": 98,
+        "winrate": 38.43137254901961,
+        "avg_multiple": 6.215306122448979,
+        "median_multiple": 3.0,
+        "profitability_score": 16.100978059740946,
+        "filtered_count": 255,
+        "coverage": 6.740681998413957
+      },
+      "2.5": {
+        "target": 2.5,
+        "wins": 62,
+        "winrate": 24.313725490196077,
+        "avg_multiple": 8.635483870967743,
+        "median_multiple": 5.1,
+        "profitability_score": 14.15278879196405,
+        "filtered_count": 255,
+        "coverage": 6.740681998413957
+      },
+      "3.0": {
+        "target": 3.0,
+        "wins": 62,
+        "winrate": 24.313725490196077,
+        "avg_multiple": 8.635483870967743,
+        "median_multiple": 5.1,
+        "profitability_score": 14.15278879196405,
+        "filtered_count": 255,
+        "coverage": 6.740681998413957
+      },
+      "3.5": {
+        "target": 3.5,
+        "wins": 37,
+        "winrate": 14.50980392156863,
+        "avg_multiple": 12.41891891891892,
+        "median_multiple": 7.2,
+        "profitability_score": 12.146444620671426,
+        "filtered_count": 255,
+        "coverage": 6.740681998413957
+      },
+      "4.0": {
+        "target": 4.0,
+        "wins": 37,
+        "winrate": 14.50980392156863,
+        "avg_multiple": 12.41891891891892,
+        "median_multiple": 7.2,
+        "profitability_score": 12.146444620671426,
+        "filtered_count": 255,
+        "coverage": 6.740681998413957
+      },
+      "4.5": {
+        "target": 4.5,
+        "wins": 37,
+        "winrate": 14.50980392156863,
+        "avg_multiple": 12.41891891891892,
+        "median_multiple": 7.2,
+        "profitability_score": 12.146444620671426,
+        "filtered_count": 255,
+        "coverage": 6.740681998413957
+      },
+      "5.0": {
+        "target": 5.0,
+        "wins": 37,
+        "winrate": 14.50980392156863,
+        "avg_multiple": 12.41891891891892,
+        "median_multiple": 7.2,
+        "profitability_score": 12.146444620671426,
+        "filtered_count": 255,
+        "coverage": 6.740681998413957
+      },
+      "6.0": {
+        "target": 6.0,
+        "wins": 25,
+        "winrate": 9.803921568627452,
+        "avg_multiple": 15.896,
+        "median_multiple": 10.0,
+        "profitability_score": 10.504890298704733,
+        "filtered_count": 255,
+        "coverage": 6.740681998413957
+      },
+      "7.0": {
+        "target": 7.0,
+        "wins": 25,
+        "winrate": 9.803921568627452,
+        "avg_multiple": 15.896,
+        "median_multiple": 10.0,
+        "profitability_score": 10.504890298704733,
+        "filtered_count": 255,
+        "coverage": 6.740681998413957
+      },
+      "8.0": {
+        "target": 8.0,
+        "wins": 15,
+        "winrate": 5.88235294117647,
+        "avg_multiple": 21.733333333333334,
+        "median_multiple": 11.0,
+        "profitability_score": 8.617499339148823,
+        "filtered_count": 255,
+        "coverage": 6.740681998413957
+      },
+      "10.0": {
+        "target": 10.0,
+        "wins": 15,
+        "winrate": 5.88235294117647,
+        "avg_multiple": 21.733333333333334,
+        "median_multiple": 11.0,
+        "profitability_score": 8.617499339148823,
+        "filtered_count": 255,
+        "coverage": 6.740681998413957
+      }
+    },
+    "Auto-Optimis\u00e9": {
+      "1.5": {
+        "target": 1.5,
+        "wins": 2118,
+        "winrate": 56.061408152461624,
+        "avg_multiple": 5.114338999055714,
+        "median_multiple": 2.0,
+        "profitability_score": 286.3380914618029,
+        "filtered_count": 3778,
+        "coverage": 99.86782976473698
+      },
+      "2.0": {
+        "target": 2.0,
+        "wins": 1434,
+        "winrate": 37.95659078877713,
+        "avg_multiple": 6.821617852161785,
+        "median_multiple": 3.0,
+        "profitability_score": 258.58313507798044,
+        "filtered_count": 3778,
+        "coverage": 99.86782976473698
+      },
+      "2.5": {
+        "target": 2.5,
+        "wins": 850,
+        "winrate": 22.498676548438326,
+        "avg_multiple": 10.10258823529412,
+        "median_multiple": 5.0,
+        "profitability_score": 226.99444885011897,
+        "filtered_count": 3778,
+        "coverage": 99.86782976473698
+      },
+      "3.0": {
+        "target": 3.0,
+        "wins": 844,
+        "winrate": 22.339862361037586,
+        "avg_multiple": 10.156042654028436,
+        "median_multiple": 5.0,
+        "profitability_score": 226.5847211208036,
+        "filtered_count": 3778,
+        "coverage": 99.86782976473698
+      },
+      "3.5": {
+        "target": 3.5,
+        "wins": 440,
+        "winrate": 11.646373742721018,
+        "avg_multiple": 16.6725,
+        "median_multiple": 7.2,
+        "profitability_score": 193.9175257731959,
+        "filtered_count": 3778,
+        "coverage": 99.86782976473698
+      },
+      "4.0": {
+        "target": 4.0,
+        "wins": 433,
+        "winrate": 11.461090524086819,
+        "avg_multiple": 16.882909930715932,
+        "median_multiple": 7.2,
+        "profitability_score": 193.2408141686492,
+        "filtered_count": 3778,
+        "coverage": 99.86782976473698
+      },
+      "4.5": {
+        "target": 4.5,
+        "wins": 432,
+        "winrate": 11.434621492853362,
+        "avg_multiple": 16.91273148148148,
+        "median_multiple": 7.2,
+        "profitability_score": 193.13507798043878,
+        "filtered_count": 3778,
+        "coverage": 99.86782976473698
+      },
+      "5.0": {
+        "target": 5.0,
+        "wins": 431,
+        "winrate": 11.408152461619906,
+        "avg_multiple": 16.941299303944316,
+        "median_multiple": 7.2,
+        "profitability_score": 193.01348136399685,
+        "filtered_count": 3778,
+        "coverage": 99.86782976473698
+      },
+      "6.0": {
+        "target": 6.0,
+        "wins": 297,
+        "winrate": 7.861302276336686,
+        "avg_multiple": 22.280134680134683,
+        "median_multiple": 10.0,
+        "profitability_score": 174.91937615648956,
+        "filtered_count": 3778,
+        "coverage": 99.86782976473698
+      },
+      "7.0": {
+        "target": 7.0,
+        "wins": 292,
+        "winrate": 7.728957120169403,
+        "avg_multiple": 22.55582191780822,
+        "median_multiple": 10.0,
+        "profitability_score": 174.10256410256414,
+        "filtered_count": 3778,
+        "coverage": 99.86782976473698
+      },
+      "8.0": {
+        "target": 8.0,
+        "wins": 181,
+        "winrate": 4.790894653255691,
+        "avg_multiple": 32.00276243093923,
+        "median_multiple": 15.0,
+        "profitability_score": 153.11921755220726,
+        "filtered_count": 3778,
+        "coverage": 99.86782976473698
+      },
+      "10.0": {
+        "target": 10.0,
+        "wins": 178,
+        "winrate": 4.71148755955532,
+        "avg_multiple": 32.39887640449438,
+        "median_multiple": 15.0,
+        "profitability_score": 152.44514935236583,
+        "filtered_count": 3778,
+        "coverage": 99.86782976473698
+      }
+    },
+    "Haute Pr\u00e9cision": {
+      "1.5": {
+        "target": 1.5,
+        "wins": 25,
+        "winrate": 60.97560975609756,
+        "avg_multiple": 4.242000000000001,
+        "median_multiple": 3.0,
+        "profitability_score": 2.8033306899286288,
+        "filtered_count": 41,
+        "coverage": 1.0837959291567538
+      },
+      "2.0": {
+        "target": 2.0,
+        "wins": 22,
+        "winrate": 53.65853658536586,
+        "avg_multiple": 4.609090909090909,
+        "median_multiple": 3.05,
+        "profitability_score": 2.680412371134021,
+        "filtered_count": 41,
+        "coverage": 1.0837959291567538
+      },
+      "2.5": {
+        "target": 2.5,
+        "wins": 14,
+        "winrate": 34.146341463414636,
+        "avg_multiple": 6.1000000000000005,
+        "median_multiple": 4.8,
+        "profitability_score": 2.2574676182923605,
+        "filtered_count": 41,
+        "coverage": 1.0837959291567538
+      },
+      "3.0": {
+        "target": 3.0,
+        "wins": 14,
+        "winrate": 34.146341463414636,
+        "avg_multiple": 6.1000000000000005,
+        "median_multiple": 4.8,
+        "profitability_score": 2.2574676182923605,
+        "filtered_count": 41,
+        "coverage": 1.0837959291567538
+      },
+      "3.5": {
+        "target": 3.5,
+        "wins": 8,
+        "winrate": 19.51219512195122,
+        "avg_multiple": 8.350000000000001,
+        "median_multiple": 8.5,
+        "profitability_score": 1.7657943431139311,
+        "filtered_count": 41,
+        "coverage": 1.0837959291567538
+      },
+      "4.0": {
+        "target": 4.0,
+        "wins": 8,
+        "winrate": 19.51219512195122,
+        "avg_multiple": 8.350000000000001,
+        "median_multiple": 8.5,
+        "profitability_score": 1.7657943431139311,
+        "filtered_count": 41,
+        "coverage": 1.0837959291567538
+      },
+      "4.5": {
+        "target": 4.5,
+        "wins": 8,
+        "winrate": 19.51219512195122,
+        "avg_multiple": 8.350000000000001,
+        "median_multiple": 8.5,
+        "profitability_score": 1.7657943431139311,
+        "filtered_count": 41,
+        "coverage": 1.0837959291567538
+      },
+      "5.0": {
+        "target": 5.0,
+        "wins": 7,
+        "winrate": 17.073170731707318,
+        "avg_multiple": 8.885714285714286,
+        "median_multiple": 10.0,
+        "profitability_score": 1.6441977266719536,
+        "filtered_count": 41,
+        "coverage": 1.0837959291567538
+      },
+      "6.0": {
+        "target": 6.0,
+        "wins": 5,
+        "winrate": 12.195121951219512,
+        "avg_multiple": 10.4,
+        "median_multiple": 10.0,
+        "profitability_score": 1.3745704467353952,
+        "filtered_count": 41,
+        "coverage": 1.0837959291567538
+      },
+      "7.0": {
+        "target": 7.0,
+        "wins": 5,
+        "winrate": 12.195121951219512,
+        "avg_multiple": 10.4,
+        "median_multiple": 10.0,
+        "profitability_score": 1.3745704467353952,
+        "filtered_count": 41,
+        "coverage": 1.0837959291567538
+      },
+      "8.0": {
+        "target": 8.0,
+        "wins": 4,
+        "winrate": 9.75609756097561,
+        "avg_multiple": 11.25,
+        "median_multiple": 10.0,
+        "profitability_score": 1.189532117367169,
+        "filtered_count": 41,
+        "coverage": 1.0837959291567538
+      },
+      "10.0": {
+        "target": 10.0,
+        "wins": 4,
+        "winrate": 9.75609756097561,
+        "avg_multiple": 11.25,
+        "median_multiple": 10.0,
+        "profitability_score": 1.189532117367169,
+        "filtered_count": 41,
+        "coverage": 1.0837959291567538
+      }
+    }
+  }
+}

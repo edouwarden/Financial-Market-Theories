@@ -1,0 +1,963 @@
+[
+  {
+    "timestamp": "2025-10-09T13:21:26.592Z",
+    "totalHits": 156
+  },
+  {
+    "timestamp": "2025-10-09T22:09:31.326Z",
+    "totalHits": 147
+  },
+  {
+    "timestamp": "2025-10-10T22:10:44.262Z",
+    "totalHits": 108
+  },
+  {
+    "timestamp": "2025-10-11T22:08:22.995Z",
+    "totalHits": 74
+  },
+  {
+    "timestamp": "2025-10-12T22:07:52.773Z",
+    "totalHits": 39
+  },
+  {
+    "timestamp": "2025-10-13T22:08:24.439Z",
+    "totalHits": 88
+  },
+  {
+    "timestamp": "2025-10-14T22:08:43.255Z",
+    "totalHits": 124
+  },
+  {
+    "timestamp": "2025-10-15T22:05:05.832Z",
+    "totalHits": 102
+  },
+  {
+    "timestamp": "2025-10-16T22:08:04.309Z",
+    "totalHits": 69
+  },
+  {
+    "timestamp": "2025-10-17T22:06:33.290Z",
+    "totalHits": 102
+  },
+  {
+    "timestamp": "2025-10-18T22:08:09.714Z",
+    "totalHits": 71
+  },
+  {
+    "timestamp": "2025-10-19T22:08:49.814Z",
+    "totalHits": 59
+  },
+  {
+    "timestamp": "2025-10-20T22:08:29.844Z",
+    "totalHits": 127
+  },
+  {
+    "timestamp": "2025-10-21T22:08:29.965Z",
+    "totalHits": 17
+  },
+  {
+    "timestamp": "2025-10-22T22:08:30.372Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2025-10-23T22:08:48.856Z",
+    "totalHits": 87
+  },
+  {
+    "timestamp": "2025-10-24T22:09:10.771Z",
+    "totalHits": 98
+  },
+  {
+    "timestamp": "2025-10-25T22:08:46.552Z",
+    "totalHits": 58
+  },
+  {
+    "timestamp": "2025-10-26T22:08:53.841Z",
+    "totalHits": 52
+  },
+  {
+    "timestamp": "2025-10-27T22:07:53.224Z",
+    "totalHits": 110
+  },
+  {
+    "timestamp": "2025-10-28T23:18:48.760Z",
+    "totalHits": 90
+  },
+  {
+    "timestamp": "2025-10-30T00:06:59.182Z",
+    "totalHits": 51
+  },
+  {
+    "timestamp": "2025-10-31T00:08:44.361Z",
+    "totalHits": 74
+  },
+  {
+    "timestamp": "2025-11-01T00:03:07.739Z",
+    "totalHits": 96
+  },
+  {
+    "timestamp": "2025-11-02T00:03:08.898Z",
+    "totalHits": 42
+  },
+  {
+    "timestamp": "2025-11-03T00:03:02.526Z",
+    "totalHits": 24
+  },
+  {
+    "timestamp": "2025-11-04T00:03:03.998Z",
+    "totalHits": 91
+  },
+  {
+    "timestamp": "2025-11-05T00:03:03.205Z",
+    "totalHits": 94
+  },
+  {
+    "timestamp": "2025-11-05T23:05:29.743Z",
+    "totalHits": 103
+  },
+  {
+    "timestamp": "2025-11-06T23:05:42.289Z",
+    "totalHits": 78
+  },
+  {
+    "timestamp": "2025-11-07T23:04:46.343Z",
+    "totalHits": 94
+  },
+  {
+    "timestamp": "2025-11-08T23:04:34.383Z",
+    "totalHits": 43
+  },
+  {
+    "timestamp": "2025-11-09T23:04:59.621Z",
+    "totalHits": 42
+  },
+  {
+    "timestamp": "2025-11-10T23:04:49.682Z",
+    "totalHits": 108
+  },
+  {
+    "timestamp": "2025-11-11T23:05:08.068Z",
+    "totalHits": 79
+  },
+  {
+    "timestamp": "2025-11-12T23:03:47.037Z",
+    "totalHits": 91
+  },
+  {
+    "timestamp": "2025-11-13T23:03:54.099Z",
+    "totalHits": 76
+  },
+  {
+    "timestamp": "2025-11-14T23:03:50.320Z",
+    "totalHits": 111
+  },
+  {
+    "timestamp": "2025-11-15T23:03:50.868Z",
+    "totalHits": 61
+  },
+  {
+    "timestamp": "2025-11-16T23:03:53.145Z",
+    "totalHits": 48
+  },
+  {
+    "timestamp": "2025-11-17T23:03:48.863Z",
+    "totalHits": 167
+  },
+  {
+    "timestamp": "2025-11-18T23:03:51.309Z",
+    "totalHits": 156
+  },
+  {
+    "timestamp": "2025-11-19T23:03:54.161Z",
+    "totalHits": 125
+  },
+  {
+    "timestamp": "2025-11-20T23:03:50.544Z",
+    "totalHits": 12
+  },
+  {
+    "timestamp": "2025-11-21T23:04:04.591Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2025-11-22T23:04:01.496Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2025-11-23T23:03:58.685Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2025-11-24T23:04:02.374Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2025-11-25T23:03:59.656Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2025-11-26T23:03:54.432Z",
+    "totalHits": 95
+  },
+  {
+    "timestamp": "2025-11-27T23:04:01.150Z",
+    "totalHits": 98
+  },
+  {
+    "timestamp": "2025-11-28T23:03:57.660Z",
+    "totalHits": 70
+  },
+  {
+    "timestamp": "2025-11-29T23:03:55.875Z",
+    "totalHits": 37
+  },
+  {
+    "timestamp": "2025-11-30T23:04:00.599Z",
+    "totalHits": 51
+  },
+  {
+    "timestamp": "2025-12-01T23:03:57.300Z",
+    "totalHits": 135
+  },
+  {
+    "timestamp": "2025-12-02T23:03:56.862Z",
+    "totalHits": 106
+  },
+  {
+    "timestamp": "2025-12-03T23:03:57.355Z",
+    "totalHits": 141
+  },
+  {
+    "timestamp": "2025-12-04T23:04:00.260Z",
+    "totalHits": 149
+  },
+  {
+    "timestamp": "2025-12-05T23:03:57.814Z",
+    "totalHits": 177
+  },
+  {
+    "timestamp": "2025-12-06T23:03:59.198Z",
+    "totalHits": 46
+  },
+  {
+    "timestamp": "2025-12-07T23:04:10.897Z",
+    "totalHits": 85
+  },
+  {
+    "timestamp": "2025-12-08T23:03:56.296Z",
+    "totalHits": 48
+  },
+  {
+    "timestamp": "2025-12-09T23:04:07.196Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2025-12-10T23:04:06.193Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2025-12-11T23:04:04.999Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2025-12-12T23:03:56.610Z",
+    "totalHits": 61
+  },
+  {
+    "timestamp": "2025-12-13T23:04:02.821Z",
+    "totalHits": 43
+  },
+  {
+    "timestamp": "2025-12-14T23:04:06.829Z",
+    "totalHits": 32
+  },
+  {
+    "timestamp": "2025-12-15T23:03:45.777Z",
+    "totalHits": 103
+  },
+  {
+    "timestamp": "2025-12-16T23:04:01.540Z",
+    "totalHits": 104
+  },
+  {
+    "timestamp": "2025-12-17T23:03:59.698Z",
+    "totalHits": 114
+  },
+  {
+    "timestamp": "2025-12-18T23:03:56.690Z",
+    "totalHits": 80
+  },
+  {
+    "timestamp": "2025-12-19T23:04:51.526Z",
+    "totalHits": 78
+  },
+  {
+    "timestamp": "2025-12-20T23:03:58.410Z",
+    "totalHits": 39
+  },
+  {
+    "timestamp": "2025-12-21T23:03:59.597Z",
+    "totalHits": 46
+  },
+  {
+    "timestamp": "2025-12-22T23:03:59.536Z",
+    "totalHits": 66
+  },
+  {
+    "timestamp": "2025-12-23T23:03:57.181Z",
+    "totalHits": 95
+  },
+  {
+    "timestamp": "2025-12-24T23:03:53.505Z",
+    "totalHits": 94
+  },
+  {
+    "timestamp": "2025-12-25T23:04:03.499Z",
+    "totalHits": 73
+  },
+  {
+    "timestamp": "2025-12-26T23:03:59.346Z",
+    "totalHits": 67
+  },
+  {
+    "timestamp": "2025-12-27T23:03:59.241Z",
+    "totalHits": 46
+  },
+  {
+    "timestamp": "2025-12-28T23:03:58.326Z",
+    "totalHits": 52
+  },
+  {
+    "timestamp": "2025-12-29T23:03:59.638Z",
+    "totalHits": 92
+  },
+  {
+    "timestamp": "2025-12-30T23:03:58.870Z",
+    "totalHits": 83
+  },
+  {
+    "timestamp": "2025-12-31T23:03:53.987Z",
+    "totalHits": 60
+  },
+  {
+    "timestamp": "2026-01-01T23:03:57.060Z",
+    "totalHits": 39
+  },
+  {
+    "timestamp": "2026-01-02T23:04:04.113Z",
+    "totalHits": 66
+  },
+  {
+    "timestamp": "2026-01-03T23:03:50.198Z",
+    "totalHits": 58
+  },
+  {
+    "timestamp": "2026-01-04T23:03:59.351Z",
+    "totalHits": 38
+  },
+  {
+    "timestamp": "2026-01-05T23:03:53.301Z",
+    "totalHits": 86
+  },
+  {
+    "timestamp": "2026-01-06T23:03:53.270Z",
+    "totalHits": 106
+  },
+  {
+    "timestamp": "2026-01-07T23:03:55.643Z",
+    "totalHits": 57
+  },
+  {
+    "timestamp": "2026-01-08T23:04:00.153Z",
+    "totalHits": 44
+  },
+  {
+    "timestamp": "2026-01-09T23:04:01.611Z",
+    "totalHits": 53
+  },
+  {
+    "timestamp": "2026-01-10T23:03:57.821Z",
+    "totalHits": 22
+  },
+  {
+    "timestamp": "2026-01-11T23:04:03.321Z",
+    "totalHits": 27
+  },
+  {
+    "timestamp": "2026-01-12T23:03:58.681Z",
+    "totalHits": 40
+  },
+  {
+    "timestamp": "2026-01-13T23:04:23.978Z",
+    "totalHits": 33
+  },
+  {
+    "timestamp": "2026-01-14T23:03:53.976Z",
+    "totalHits": 76
+  },
+  {
+    "timestamp": "2026-01-15T23:03:55.225Z",
+    "totalHits": 57
+  },
+  {
+    "timestamp": "2026-01-16T23:04:01.428Z",
+    "totalHits": 48
+  },
+  {
+    "timestamp": "2026-01-17T23:03:57.159Z",
+    "totalHits": 24
+  },
+  {
+    "timestamp": "2026-01-18T23:04:09.497Z",
+    "totalHits": 19
+  },
+  {
+    "timestamp": "2026-01-19T23:03:58.954Z",
+    "totalHits": 34
+  },
+  {
+    "timestamp": "2026-01-20T23:04:04.509Z",
+    "totalHits": 46
+  },
+  {
+    "timestamp": "2026-01-21T23:03:53.006Z",
+    "totalHits": 45
+  },
+  {
+    "timestamp": "2026-01-22T23:03:56.203Z",
+    "totalHits": 50
+  },
+  {
+    "timestamp": "2026-01-23T23:03:50.718Z",
+    "totalHits": 43
+  },
+  {
+    "timestamp": "2026-01-24T23:03:45.654Z",
+    "totalHits": 24
+  },
+  {
+    "timestamp": "2026-01-25T23:03:47.586Z",
+    "totalHits": 31
+  },
+  {
+    "timestamp": "2026-01-26T23:03:43.237Z",
+    "totalHits": 66
+  },
+  {
+    "timestamp": "2026-01-27T23:03:39.930Z",
+    "totalHits": 53
+  },
+  {
+    "timestamp": "2026-01-28T23:03:53.255Z",
+    "totalHits": 31
+  },
+  {
+    "timestamp": "2026-01-29T23:03:46.034Z",
+    "totalHits": 62
+  },
+  {
+    "timestamp": "2026-01-30T23:03:53.026Z",
+    "totalHits": 63
+  },
+  {
+    "timestamp": "2026-01-31T23:03:49.171Z",
+    "totalHits": 33
+  },
+  {
+    "timestamp": "2026-02-01T23:04:02.294Z",
+    "totalHits": 37
+  },
+  {
+    "timestamp": "2026-02-02T23:03:44.154Z",
+    "totalHits": 62
+  },
+  {
+    "timestamp": "2026-02-03T23:03:45.843Z",
+    "totalHits": 66
+  },
+  {
+    "timestamp": "2026-02-04T23:03:44.031Z",
+    "totalHits": 48
+  },
+  {
+    "timestamp": "2026-02-05T23:03:46.713Z",
+    "totalHits": 94
+  },
+  {
+    "timestamp": "2026-02-06T23:03:45.123Z",
+    "totalHits": 114
+  },
+  {
+    "timestamp": "2026-02-07T23:03:47.355Z",
+    "totalHits": 60
+  },
+  {
+    "timestamp": "2026-02-08T23:03:53.268Z",
+    "totalHits": 34
+  },
+  {
+    "timestamp": "2026-02-09T23:03:47.370Z",
+    "totalHits": 64
+  },
+  {
+    "timestamp": "2026-02-10T23:03:44.887Z",
+    "totalHits": 67
+  },
+  {
+    "timestamp": "2026-02-11T23:03:52.950Z",
+    "totalHits": 71
+  },
+  {
+    "timestamp": "2026-02-12T23:03:48.605Z",
+    "totalHits": 38
+  },
+  {
+    "timestamp": "2026-02-13T23:03:54.566Z",
+    "totalHits": 50
+  },
+  {
+    "timestamp": "2026-02-14T23:03:53.322Z",
+    "totalHits": 48
+  },
+  {
+    "timestamp": "2026-02-15T23:04:00.516Z",
+    "totalHits": 29
+  },
+  {
+    "timestamp": "2026-02-16T23:03:47.682Z",
+    "totalHits": 47
+  },
+  {
+    "timestamp": "2026-02-17T23:03:46.599Z",
+    "totalHits": 52
+  },
+  {
+    "timestamp": "2026-02-18T23:03:50.500Z",
+    "totalHits": 60
+  },
+  {
+    "timestamp": "2026-02-19T23:03:49.322Z",
+    "totalHits": 59
+  },
+  {
+    "timestamp": "2026-02-20T23:03:43.545Z",
+    "totalHits": 41
+  },
+  {
+    "timestamp": "2026-02-21T23:03:46.914Z",
+    "totalHits": 43
+  },
+  {
+    "timestamp": "2026-02-22T23:03:47.265Z",
+    "totalHits": 50
+  },
+  {
+    "timestamp": "2026-02-23T23:03:43.302Z",
+    "totalHits": 83
+  },
+  {
+    "timestamp": "2026-02-24T23:03:45.104Z",
+    "totalHits": 69
+  },
+  {
+    "timestamp": "2026-02-25T23:03:44.656Z",
+    "totalHits": 53
+  },
+  {
+    "timestamp": "2026-02-26T23:03:07.553Z",
+    "totalHits": 60
+  },
+  {
+    "timestamp": "2026-04-11T22:03:09.790Z",
+    "totalHits": 46
+  },
+  {
+    "timestamp": "2026-04-12T22:03:26.082Z",
+    "totalHits": 35
+  },
+  {
+    "timestamp": "2026-04-13T22:03:12.002Z",
+    "totalHits": 58
+  },
+  {
+    "timestamp": "2026-04-14T22:03:13.504Z",
+    "totalHits": 69
+  },
+  {
+    "timestamp": "2026-04-15T22:03:12.642Z",
+    "totalHits": 59
+  },
+  {
+    "timestamp": "2026-04-16T22:03:18.726Z",
+    "totalHits": 59
+  },
+  {
+    "timestamp": "2026-04-17T22:03:05.872Z",
+    "totalHits": 63
+  },
+  {
+    "timestamp": "2026-04-18T22:03:09.788Z",
+    "totalHits": 47
+  },
+  {
+    "timestamp": "2026-04-19T22:03:46.173Z",
+    "totalHits": 26
+  },
+  {
+    "timestamp": "2026-04-20T22:03:08.468Z",
+    "totalHits": 64
+  },
+  {
+    "timestamp": "2026-04-21T22:03:08.478Z",
+    "totalHits": 67
+  },
+  {
+    "timestamp": "2026-04-22T22:03:13.726Z",
+    "totalHits": 73
+  },
+  {
+    "timestamp": "2026-04-23T22:03:06.822Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2026-04-24T22:03:08.722Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2026-04-25T22:03:04.992Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2026-04-26T22:03:10.246Z",
+    "totalHits": 28
+  },
+  {
+    "timestamp": "2026-04-27T22:03:06.967Z",
+    "totalHits": 70
+  },
+  {
+    "timestamp": "2026-04-28T22:06:12.498Z"
+  },
+  {
+    "timestamp": "2026-04-29T22:03:12.504Z",
+    "totalHits": 5
+  },
+  {
+    "timestamp": "2026-04-30T22:03:10.388Z",
+    "totalHits": 50
+  },
+  {
+    "timestamp": "2026-05-01T22:03:04.762Z",
+    "totalHits": 8
+  },
+  {
+    "timestamp": "2026-06-02T22:03:06.003Z",
+    "totalHits": 66
+  },
+  {
+    "timestamp": "2026-06-03T22:02:58.904Z",
+    "totalHits": 95
+  },
+  {
+    "timestamp": "2026-06-04T22:03:09.559Z",
+    "totalHits": 58
+  },
+  {
+    "timestamp": "2026-06-05T22:03:08.914Z",
+    "totalHits": 10000
+  },
+  {
+    "timestamp": "2026-06-06T22:03:07.048Z",
+    "totalHits": 10000
+  },
+  {
+    "timestamp": "2026-06-07T22:03:06.378Z",
+    "totalHits": 30
+  },
+  {
+    "timestamp": "2026-06-08T22:03:10.585Z"
+  },
+  {
+    "timestamp": "2026-06-09T22:03:06.490Z",
+    "totalHits": 57
+  },
+  {
+    "timestamp": "2026-06-10T22:03:06.297Z",
+    "totalHits": 103
+  },
+  {
+    "timestamp": "2026-06-11T22:03:10.628Z",
+    "totalHits": 69
+  },
+  {
+    "timestamp": "2026-06-12T22:03:08.165Z",
+    "totalHits": 63
+  },
+  {
+    "timestamp": "2026-06-13T22:05:04.771Z",
+    "totalHits": 59
+  },
+  {
+    "timestamp": "2026-06-14T22:03:14.036Z",
+    "totalHits": 48
+  },
+  {
+    "timestamp": "2026-06-15T22:03:06.094Z",
+    "totalHits": 101
+  },
+  {
+    "timestamp": "2026-06-16T22:09:23.267Z",
+    "totalHits": 78
+  },
+  {
+    "timestamp": "2026-06-17T22:03:22.074Z",
+    "totalHits": 32
+  },
+  {
+    "timestamp": "2026-06-18T22:03:22.603Z",
+    "totalHits": 80
+  },
+  {
+    "timestamp": "2026-06-19T22:03:22.114Z",
+    "totalHits": 67
+  },
+  {
+    "timestamp": "2026-06-20T22:03:15.596Z",
+    "totalHits": 44
+  },
+  {
+    "timestamp": "2026-06-21T22:03:06.223Z",
+    "totalHits": 54
+  },
+  {
+    "timestamp": "2026-06-22T22:03:02.817Z",
+    "totalHits": 89
+  },
+  {
+    "timestamp": "2026-06-23T22:03:03.811Z",
+    "totalHits": 88
+  },
+  {
+    "timestamp": "2026-06-24T22:03:02.645Z",
+    "totalHits": 56
+  },
+  {
+    "timestamp": "2026-06-25T22:03:08.944Z",
+    "totalHits": 103
+  },
+  {
+    "timestamp": "2026-06-26T22:03:06.129Z",
+    "totalHits": 76
+  },
+  {
+    "timestamp": "2026-06-27T22:03:06.873Z",
+    "totalHits": 51
+  },
+  {
+    "timestamp": "2026-06-28T22:03:04.362Z",
+    "totalHits": 79
+  },
+  {
+    "timestamp": "2026-06-29T22:03:05.113Z",
+    "totalHits": 112
+  },
+  {
+    "timestamp": "2026-06-30T22:03:08.803Z",
+    "totalHits": 120
+  },
+  {
+    "timestamp": "2026-07-01T22:05:17.506Z",
+    "totalHits": 103
+  },
+  {
+    "timestamp": "2026-07-02T22:03:10.692Z",
+    "totalHits": 125
+  },
+  {
+    "timestamp": "2026-07-03T22:03:06.870Z",
+    "totalHits": 94
+  },
+  {
+    "timestamp": "2026-07-04T22:03:06.676Z",
+    "totalHits": 77
+  },
+  {
+    "timestamp": "2026-07-05T22:03:06.741Z",
+    "totalHits": 60
+  },
+  {
+    "timestamp": "2026-07-06T22:03:07.684Z",
+    "totalHits": 120
+  },
+  {
+    "timestamp": "2026-07-07T22:03:06.989Z",
+    "totalHits": 116
+  },
+  {
+    "timestamp": "2026-07-08T22:03:08.338Z",
+    "totalHits": 124
+  },
+  {
+    "timestamp": "2026-07-09T22:03:05.373Z",
+    "totalHits": 98
+  },
+  {
+    "timestamp": "2026-07-10T22:03:05.602Z",
+    "totalHits": 74
+  },
+  {
+    "timestamp": "2026-07-11T22:03:07.837Z",
+    "totalHits": 0
+  },
+  {
+    "timestamp": "2026-07-12T22:03:03.491Z",
+    "totalHits": 82
+  },
+  {
+    "timestamp": "2026-07-13T22:03:09.005Z",
+    "totalHits": 148
+  },
+  {
+    "timestamp": "2026-07-14T22:03:03.514Z",
+    "totalHits": 121
+  },
+  {
+    "timestamp": "2026-07-15T22:04:47.199Z",
+    "totalHits": 103
+  },
+  {
+    "timestamp": "2026-07-16T22:03:01.392Z"
+  },
+  {
+    "timestamp": "2026-07-17T22:03:01.572Z",
+    "totalHits": 88
+  },
+  {
+    "timestamp": "2026-07-18T22:03:02.948Z",
+    "totalHits": 48
+  },
+  {
+    "timestamp": "2026-07-19T22:03:06.765Z",
+    "totalHits": 66
+  },
+  {
+    "timestamp": "2026-07-20T22:03:07.825Z",
+    "totalHits": 123
+  },
+  {
+    "timestamp": "2026-07-21T22:03:07.693Z",
+    "totalHits": 83
+  },
+  {
+    "timestamp": "2026-07-22T22:03:04.661Z",
+    "totalHits": 75
+  },
+  {
+    "timestamp": "2026-07-23T22:03:10.583Z",
+    "totalHits": 77
+  },
+  {
+    "timestamp": "2026-07-24T22:03:06.678Z",
+    "totalHits": 61
+  },
+  {
+    "timestamp": "2026-07-25T22:03:09.245Z",
+    "totalHits": 32
+  },
+  {
+    "timestamp": "2026-07-26T22:03:07.441Z",
+    "totalHits": 51
+  },
+  {
+    "timestamp": "2026-07-27T22:03:10.250Z",
+    "totalHits": 95
+  },
+  {
+    "timestamp": "2026-07-28T22:03:13.519Z",
+    "totalHits": 95
+  },
+  {
+    "timestamp": "2026-07-29T22:03:12.584Z",
+    "totalHits": 112
+  },
+  {
+    "timestamp": "2026-07-30T22:03:06.314Z",
+    "totalHits": 122
+  },
+  {
+    "timestamp": "2026-07-31T22:03:08.977Z",
+    "totalHits": 130
+  },
+  {
+    "timestamp": "2026-08-01T22:03:05.586Z",
+    "totalHits": 72
+  },
+  {
+    "timestamp": "2026-08-02T22:03:07.101Z",
+    "totalHits": 69
+  },
+  {
+    "timestamp": "2026-08-03T22:03:12.233Z",
+    "totalHits": 84
+  },
+  {
+    "timestamp": "2026-08-04T22:03:16.024Z",
+    "totalHits": 71
+  },
+  {
+    "timestamp": "2026-08-05T22:03:13.118Z",
+    "totalHits": 122
+  },
+  {
+    "timestamp": "2026-08-06T22:04:05.785Z",
+    "totalHits": 58
+  },
+  {
+    "timestamp": "2026-08-07T22:03:09.920Z",
+    "totalHits": 66
+  },
+  {
+    "timestamp": "2026-08-08T22:03:09.484Z",
+    "totalHits": 47
+  },
+  {
+    "timestamp": "2026-08-09T22:03:07.785Z",
+    "totalHits": 33
+  },
+  {
+    "timestamp": "2026-08-10T22:03:11.704Z",
+    "totalHits": 54
+  },
+  {
+    "timestamp": "2026-08-11T22:03:06.969Z",
+    "totalHits": 136
+  },
+  {
+    "timestamp": "2026-08-12T22:03:08.752Z",
+    "totalHits": 111
+  },
+  {
+    "timestamp": "2026-08-13T22:03:10.817Z",
+    "totalHits": 98
+  },
+  {
+    "timestamp": "2026-08-14T22:03:09.508Z",
+    "totalHits": 118
+  },
+  {
+    "timestamp": "2026-08-15T22:03:18.824Z",
+    "totalHits": 57
+  },
+  {
+    "timestamp": "2026-08-16T22:03:10.613Z",
+    "totalHits": 24
+  },
+  {
+    "timestamp": "2026-08-17T22:03:13.578Z",
+    "totalHits": 139
+  },
+  {
+    "timestamp": "2026-08-18T22:03:11.733Z",
+    "totalHits": 109
+  }
+]

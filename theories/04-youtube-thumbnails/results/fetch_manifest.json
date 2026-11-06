@@ -1,0 +1,224 @@
+{
+  "generated_at": "2026-11-04T23:25:57.533202+00:00",
+  "window": {
+    "start": "2026-08-04",
+    "end": "2026-11-04"
+  },
+  "delay_seconds": 0.6,
+  "channels_file": "data/channels.txt",
+  "aliases_file": "data/channel_aliases.json",
+  "metadata_dir": "test/youtube_metadata_window",
+  "cache_dir": "test/youtube_cache_window",
+  "channels_requested": 26,
+  "entries_inspected": 1279,
+  "videos_in_window": 1070,
+  "members_only_skipped": 84,
+  "elapsed_seconds": 996.5,
+  "channels": [
+    {
+      "channel": "AlessioRastani",
+      "status": "fetched",
+      "videos": 17,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@AlessioRastani/videos"
+    },
+    {
+      "channel": "AltcoinDaily",
+      "status": "fetched",
+      "videos": 97,
+      "members_only_skipped": 1,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@AltcoinDaily/videos"
+    },
+    {
+      "channel": "BitcoinMagazine",
+      "status": "fetched",
+      "videos": 161,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@BitcoinMagazine/videos"
+    },
+    {
+      "channel": "Boxmining",
+      "status": "fetched",
+      "videos": 5,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@Boxmining/videos"
+    },
+    {
+      "channel": "BTCSessions",
+      "status": "fetched",
+      "videos": 79,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@BTCSessions/videos"
+    },
+    {
+      "channel": "cherrytgbot",
+      "status": "fetched",
+      "videos": 0,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@cherrytgbot/videos"
+    },
+    {
+      "channel": "Coffeezilla",
+      "status": "fetched",
+      "videos": 2,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@Coffeezilla/videos"
+    },
+    {
+      "channel": "CoinBureau",
+      "status": "fetched",
+      "videos": 69,
+      "members_only_skipped": 83,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@CoinBureau/videos"
+    },
+    {
+      "channel": "CryptoBanterGroup",
+      "status": "fetched",
+      "videos": 35,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@CryptoBanterGroup/videos"
+    },
+    {
+      "channel": "CryptoCasey",
+      "status": "fetched",
+      "videos": 14,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@CryptoCasey/videos"
+    },
+    {
+      "channel": "CryptoInsiderOfficial",
+      "status": "fetched",
+      "videos": 21,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@CryptoInsiderOfficial/videos"
+    },
+    {
+      "channel": "CryptoRevolutiontv",
+      "status": "fetched",
+      "videos": 11,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@CryptoRevolutiontv/videos"
+    },
+    {
+      "channel": "CryptosRUs",
+      "status": "fetched",
+      "videos": 16,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@CryptosRUs/videos"
+    },
+    {
+      "channel": "CryptoTips",
+      "status": "fetched",
+      "videos": 55,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@CryptoTips/videos"
+    },
+    {
+      "channel": "CryptoZombie",
+      "status": "fetched",
+      "videos": 19,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@CryptoZombie/videos"
+    },
+    {
+      "channel": "DappUniversity",
+      "status": "fetched",
+      "videos": 2,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@DappUniversity/videos"
+    },
+    {
+      "channel": "davincij15",
+      "status": "fetched",
+      "videos": 67,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@davincij15/videos"
+    },
+    {
+      "channel": "DeFiDaily1",
+      "status": "no_listing",
+      "videos": 0
+    },
+    {
+      "channel": "DiscoverCrypto_",
+      "status": "fetched",
+      "videos": 65,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@DiscoverCrypto_/videos"
+    },
+    {
+      "channel": "intothecryptoverse",
+      "status": "fetched",
+      "videos": 58,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/channel/UCRvqjQPSeaWn-uEx-w0XOIg/videos"
+    },
+    {
+      "channel": "IvanonTech",
+      "status": "fetched",
+      "videos": 3,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@IvanonTech/videos"
+    },
+    {
+      "channel": "kevinoleary",
+      "status": "fetched",
+      "videos": 3,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@kevinoleary/videos"
+    },
+    {
+      "channel": "ScottMelker",
+      "status": "fetched",
+      "videos": 18,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@ScottMelker/videos"
+    },
+    {
+      "channel": "TheCryptoLark",
+      "status": "fetched",
+      "videos": 98,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/channel/UCl2oCaw8hdR_kbqyqd2klIA/videos"
+    },
+    {
+      "channel": "TheModernInvestor",
+      "status": "fetched",
+      "videos": 91,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@TheModernInvestor/videos"
+    },
+    {
+      "channel": "TheMoon",
+      "status": "fetched",
+      "videos": 64,
+      "members_only_skipped": 0,
+      "unresolved": 0,
+      "listing_url": "https://www.youtube.com/@TheMoon/videos"
+    }
+  ]
+}
