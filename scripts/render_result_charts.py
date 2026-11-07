@@ -412,12 +412,119 @@ def render_attention() -> Path:
     return out
 
 
+def render_weather() -> Path:
+    source = ROOT / "theories/18-weather-mood/results/weather_effects.json"
+    data = json.loads(source.read_text(encoding="utf-8"))
+    primary = data["primary"]
+    cross = data["cross_market"]
+    placebo = data["placebo"]
+
+    left_rows = [
+        ("SPY · winter", primary["spy_winter_morning_heat"]),
+        ("QQQ · winter", primary["qqq_winter_morning_heat"]),
+        ("IWM · winter", primary["iwm_winter_morning_heat"]),
+        ("SPY · summer", primary["spy_summer_morning_heat"]),
+        ("SPY · all year", primary["spy_all_year_morning_heat"]),
+    ]
+    right_rows = [
+        ("London · winter warm", cross["FTSE"]["winter_morning_heat"]),
+        ("Frankfurt · winter warm", cross["DAX"]["winter_morning_heat"]),
+        ("Tokyo · winter warm", cross["NIKKEI"]["winter_morning_heat"]),
+        ("Denver · winter warm", placebo["denver_morning_heat"]),
+        ("London · winter cold", cross["FTSE"]["winter_morning_cold"]),
+    ]
+
+    width, height = 1320, 640
+    canvas, draw = new_canvas(
+        width,
+        height,
+        "Unseasonable winter warmth is the one weather bucket that moved the market",
+        "SPY open-to-close return, 2000–2026; adjusted difference in basis points with 95% HAC intervals",
+    )
+
+    def panel(rows, box, x_min, x_max, ticks, title, note):
+        left, top, right, bottom = box
+        plot_w = right - left
+        value_x = right + 14
+        draw.text((left, top - 34), title, fill=INK, font=load_font(13, bold=True))
+        draw.text((left, top - 14), note, fill=MUTED, font=load_font(10))
+
+        def x_of(value):
+            return left + (value - x_min) / (x_max - x_min) * plot_w
+
+        for tick in ticks:
+            x = x_of(tick)
+            draw.line([(x, top), (x, bottom)], fill=GRID)
+            draw.text((x, bottom + 10), f"{tick:+d}" if tick else "0", fill=MUTED, font=load_font(10), anchor="ma")
+        zero = x_of(0)
+        draw.line([(zero, top - 4), (zero, bottom)], fill=(135, 135, 135), width=1)
+
+        slot = (bottom - top) / len(rows)
+        for index, (label, result) in enumerate(rows):
+            if not result:
+                continue
+            center = top + slot * (index + 0.5)
+            low = result["ci_low_bps"]
+            high = result["ci_high_bps"]
+            effect = result["effect_bps"]
+            significant = low > 0 or high < 0
+            color = RED if (significant and effect < 0) else GREEN if significant else MUTED
+            draw.text((left - 14, center), label, fill=INK, font=load_font(11), anchor="rm")
+            y0, y1 = center - 12, center + 12
+            x0, x1 = x_of(min(0, effect)), x_of(max(0, effect))
+            draw.rectangle([min(x0, x1), y0, max(x0, x1), y1], fill=color)
+            draw.line([(x_of(low), center), (x_of(high), center)], fill=color, width=2)
+            for cap in (low, high):
+                draw.line([(x_of(cap), y0 + 4), (x_of(cap), y1 - 4)], fill=color, width=2)
+            draw.text((value_x, center), f"{effect:+.1f} bps", fill=color, font=load_font(10), anchor="lm")
+
+    panel(
+        left_rows,
+        (250, 155, 590, 520),
+        -70,
+        20,
+        (-70, -50, -30, -10, 0),
+        "New York: winter warmth, not summer heat",
+        "Warm morning = 10:00–11:00 apparent temperature in the top 5% of its month",
+    )
+    panel(
+        right_rows,
+        (880, 155, 1150, 520),
+        -45,
+        60,
+        (-40, -20, 0, 20, 40, 60),
+        "The same rule in other cities",
+        "Local cash-session weather; Denver is a clock-time placebo",
+    )
+
+    legend_y = 560
+    draw.rectangle([250, legend_y, 262, legend_y + 12], fill=RED)
+    draw.text((270, legend_y + 6), "negative, interval excludes zero", fill=MUTED, font=load_font(10), anchor="lm")
+    draw.rectangle([510, legend_y, 522, legend_y + 12], fill=GREEN)
+    draw.text((530, legend_y + 6), "positive, interval excludes zero", fill=MUTED, font=load_font(10), anchor="lm")
+    draw.rectangle([770, legend_y, 782, legend_y + 12], fill=MUTED)
+    draw.text((790, legend_y + 6), "interval includes zero", fill=MUTED, font=load_font(10), anchor="lm")
+
+    footer(
+        draw,
+        width,
+        height,
+        "Source: results/weather_effects.json. Daily bars; day-of-year fixed effects and HAC(10). The signal is read at 11:00, so the open-to-close estimate is not a tradeable return.",
+    )
+    out = ROOT / "theories/18-weather-mood/results/weather_winter_effect.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}")
+    return out
+
+
 def main() -> int:
     render_capacity()
     render_clusters()
     render_lift()
     render_leverage()
     render_attention()
+    render_weather()
     return 0
 
 

@@ -1,0 +1,1864 @@
+{
+  "generated_at": "2026-11-07T23:42:13Z",
+  "sources": {
+    "weather": "Open-Meteo archive API, hourly reanalysis, apparent temperature",
+    "prices": "Yahoo Finance chart API, daily bars, adjusted close",
+    "vix": "Yahoo Finance ^VIX daily close",
+    "energy": "Yahoo Finance XLE daily bars"
+  },
+  "sessions": {
+    "new_york": {
+      "all": [
+        10,
+        15
+      ],
+      "morning": [
+        10,
+        11
+      ],
+      "afternoon": [
+        14,
+        15
+      ]
+    },
+    "london": {
+      "all": [
+        10,
+        15
+      ],
+      "morning": [
+        10,
+        11
+      ],
+      "afternoon": [
+        14,
+        15
+      ]
+    },
+    "frankfurt": {
+      "all": [
+        10,
+        15
+      ],
+      "morning": [
+        10,
+        11
+      ],
+      "afternoon": [
+        14,
+        15
+      ]
+    },
+    "tokyo": {
+      "all": [
+        10,
+        14
+      ],
+      "morning": [
+        10,
+        11
+      ],
+      "afternoon": [
+        13,
+        14
+      ]
+    },
+    "denver": {
+      "all": [
+        8,
+        13
+      ],
+      "morning": [
+        8,
+        9
+      ],
+      "afternoon": [
+        12,
+        13
+      ]
+    }
+  },
+  "definitions": {
+    "hot_cold": "within-calendar-month z of session mean apparent temperature",
+    "extreme": "z > 1.645 or z < -1.645 (about 5% tails)",
+    "wave": "3 or more consecutive trading days in the same tail",
+    "intraday": "log(close/open)",
+    "close_to_close": "log(adjusted close / prior adjusted close)",
+    "range": "log(high/low)",
+    "volume": "log(volume / prior 20-day median volume)",
+    "controls": "time trend, lagged log VIX, day-of-week dummies, lagged outcome, day-of-year fixed effects",
+    "errors": "Newey-West HAC(10)"
+  },
+  "sample": {
+    "market_start": "2000-01-18",
+    "market_end": "2026-11-06",
+    "spy_days": 6743,
+    "qqq_days": 6743,
+    "iwm_days": 6642,
+    "winter_days": 2728,
+    "summer_days": 2860
+  },
+  "descriptive": {
+    "winter_days": 2728,
+    "warm_mornings": 175,
+    "warm_share": 0.0641,
+    "warm_cloud_frac": 0.726,
+    "other_cloud_frac": 0.609,
+    "warm_precip_mm": 1.29,
+    "other_precip_mm": 0.71,
+    "warm_r_oc_bps": -14.9,
+    "other_r_oc_bps": 1.9
+  },
+  "primary": {
+    "spy_winter_morning_heat": {
+      "beta_sd": -0.2097,
+      "se_sd": 0.0897,
+      "t": -2.34,
+      "p": 0.0194,
+      "n": 2728,
+      "effect_bps": -20.7,
+      "ci_low_bps": -38.0,
+      "ci_high_bps": -3.3,
+      "raw": {
+        "n_hit": 175,
+        "n_miss": 2553,
+        "hit_mean_bps": -14.9,
+        "miss_mean_bps": 1.9,
+        "difference_bps": -16.9,
+        "t": -2.04,
+        "p": 0.0411
+      }
+    },
+    "qqq_winter_morning_heat": {
+      "beta_sd": -0.1901,
+      "se_sd": 0.0858,
+      "t": -2.22,
+      "p": 0.0267,
+      "n": 2728,
+      "effect_bps": -27.4,
+      "ci_low_bps": -51.6,
+      "ci_high_bps": -3.2,
+      "raw": {
+        "n_hit": 175,
+        "n_miss": 2553,
+        "hit_mean_bps": -22.5,
+        "miss_mean_bps": -1.1,
+        "difference_bps": -21.5,
+        "t": -1.9,
+        "p": 0.058
+      }
+    },
+    "iwm_winter_morning_heat": {
+      "beta_sd": -0.143,
+      "se_sd": 0.0842,
+      "t": -1.7,
+      "p": 0.0895,
+      "n": 2675,
+      "effect_bps": -18.6,
+      "ci_low_bps": -40.1,
+      "ci_high_bps": 2.9,
+      "raw": {
+        "n_hit": 171,
+        "n_miss": 2504,
+        "hit_mean_bps": -17.3,
+        "miss_mean_bps": -0.2,
+        "difference_bps": -17.1,
+        "t": -1.7,
+        "p": 0.0897
+      }
+    },
+    "spy_winter_morning_cold": {
+      "beta_sd": -0.1258,
+      "se_sd": 0.0948,
+      "t": -1.33,
+      "p": 0.1845,
+      "n": 2728,
+      "effect_bps": -12.4,
+      "ci_low_bps": -30.7,
+      "ci_high_bps": 5.9,
+      "raw": {
+        "n_hit": 138,
+        "n_miss": 2590,
+        "hit_mean_bps": -11.2,
+        "miss_mean_bps": 1.5,
+        "difference_bps": -12.7,
+        "t": -1.53,
+        "p": 0.1253
+      }
+    },
+    "spy_summer_morning_heat": {
+      "beta_sd": 0.013,
+      "se_sd": 0.0729,
+      "t": 0.18,
+      "p": 0.8583,
+      "n": 2860,
+      "effect_bps": 1.1,
+      "ci_low_bps": -11.3,
+      "ci_high_bps": 13.5,
+      "raw": {
+        "n_hit": 167,
+        "n_miss": 2693,
+        "hit_mean_bps": 2.1,
+        "miss_mean_bps": -1.0,
+        "difference_bps": 3.0,
+        "t": 0.43,
+        "p": 0.6653
+      }
+    },
+    "spy_all_year_morning_heat": {
+      "beta_sd": -0.1013,
+      "se_sd": 0.0528,
+      "t": -1.92,
+      "p": 0.0551,
+      "n": 6743,
+      "effect_bps": -9.8,
+      "ci_low_bps": -19.9,
+      "ci_high_bps": 0.2,
+      "raw": {
+        "n_hit": 431,
+        "n_miss": 6312,
+        "hit_mean_bps": -6.0,
+        "miss_mean_bps": 0.8,
+        "difference_bps": -6.8,
+        "t": -1.42,
+        "p": 0.157
+      }
+    }
+  },
+  "outcomes": {
+    "r_oc": {
+      "morning_heat_extreme": {
+        "beta_sd": -0.1013,
+        "se_sd": 0.0528,
+        "t": -1.92,
+        "p": 0.0551,
+        "n": 6743,
+        "effect_bps": -9.8,
+        "ci_low_bps": -19.9,
+        "ci_high_bps": 0.2
+      },
+      "morning_cold_extreme": {
+        "beta_sd": -0.0114,
+        "se_sd": 0.0705,
+        "t": -0.16,
+        "p": 0.8719,
+        "n": 6743,
+        "effect_bps": -1.1,
+        "ci_low_bps": -14.5,
+        "ci_high_bps": 12.3
+      },
+      "afternoon_heat_extreme": {
+        "beta_sd": -0.1101,
+        "se_sd": 0.0514,
+        "t": -2.14,
+        "p": 0.0322,
+        "n": 6743,
+        "effect_bps": -10.7,
+        "ci_low_bps": -20.5,
+        "ci_high_bps": -0.9
+      },
+      "afternoon_cold_extreme": {
+        "beta_sd": -0.0717,
+        "se_sd": 0.0644,
+        "t": -1.11,
+        "p": 0.2657,
+        "n": 6743,
+        "effect_bps": -7.0,
+        "ci_low_bps": -19.2,
+        "ci_high_bps": 5.3
+      },
+      "all_heat_extreme": {
+        "beta_sd": -0.0901,
+        "se_sd": 0.0527,
+        "t": -1.71,
+        "p": 0.0874,
+        "n": 6743,
+        "effect_bps": -8.8,
+        "ci_low_bps": -18.8,
+        "ci_high_bps": 1.3
+      },
+      "all_cold_extreme": {
+        "beta_sd": -0.0647,
+        "se_sd": 0.06,
+        "t": -1.08,
+        "p": 0.2812,
+        "n": 6743,
+        "effect_bps": -6.3,
+        "ci_low_bps": -17.7,
+        "ci_high_bps": 5.1
+      },
+      "all_heat_wave": {
+        "beta_sd": 0.1336,
+        "se_sd": 0.1055,
+        "t": 1.27,
+        "p": 0.2054,
+        "n": 6743,
+        "effect_bps": 13.0,
+        "ci_low_bps": -7.1,
+        "ci_high_bps": 33.1
+      },
+      "all_cold_wave": {
+        "beta_sd": 0.0454,
+        "se_sd": 0.1882,
+        "t": 0.24,
+        "p": 0.8092,
+        "n": 6743,
+        "effect_bps": 4.4,
+        "ci_low_bps": -31.4,
+        "ci_high_bps": 40.3
+      },
+      "morning_heat_wave": {
+        "beta_sd": 0.1565,
+        "se_sd": 0.1157,
+        "t": 1.35,
+        "p": 0.1761,
+        "n": 6743,
+        "effect_bps": 15.2,
+        "ci_low_bps": -6.8,
+        "ci_high_bps": 37.2
+      },
+      "morning_cold_wave": {
+        "beta_sd": -0.222,
+        "se_sd": 0.2017,
+        "t": -1.1,
+        "p": 0.271,
+        "n": 6743,
+        "effect_bps": -21.6,
+        "ci_low_bps": -60.0,
+        "ci_high_bps": 16.8
+      },
+      "all_hot30": {
+        "beta_sd": -0.0186,
+        "se_sd": 0.0415,
+        "t": -0.45,
+        "p": 0.6542,
+        "n": 6743,
+        "effect_bps": -1.8,
+        "ci_low_bps": -9.7,
+        "ci_high_bps": 6.1
+      },
+      "all_hot35": {
+        "beta_sd": 0.0748,
+        "se_sd": 0.0737,
+        "t": 1.02,
+        "p": 0.3101,
+        "n": 6743,
+        "effect_bps": 7.3,
+        "ci_low_bps": -6.8,
+        "ci_high_bps": 21.3
+      },
+      "all_cold0": {
+        "beta_sd": 0.0253,
+        "se_sd": 0.0446,
+        "t": 0.57,
+        "p": 0.5715,
+        "n": 6743,
+        "effect_bps": 2.5,
+        "ci_low_bps": -6.0,
+        "ci_high_bps": 11.0
+      },
+      "all_coldm5": {
+        "beta_sd": -0.0823,
+        "se_sd": 0.0554,
+        "t": -1.49,
+        "p": 0.1369,
+        "n": 6743,
+        "effect_bps": -8.0,
+        "ci_low_bps": -18.5,
+        "ci_high_bps": 2.5
+      },
+      "clear": {
+        "beta_sd": 0.0294,
+        "se_sd": 0.0295,
+        "t": 1.0,
+        "p": 0.3197,
+        "n": 6743,
+        "effect_bps": 2.9,
+        "ci_low_bps": -2.8,
+        "ci_high_bps": 8.5
+      },
+      "cloudy": {
+        "beta_sd": 0.0142,
+        "se_sd": 0.0261,
+        "t": 0.54,
+        "p": 0.5861,
+        "n": 6743,
+        "effect_bps": 1.4,
+        "ci_low_bps": -3.6,
+        "ci_high_bps": 6.3
+      },
+      "rain": {
+        "beta_sd": 0.0099,
+        "se_sd": 0.0356,
+        "t": 0.28,
+        "p": 0.7804,
+        "n": 6743,
+        "effect_bps": 1.0,
+        "ci_low_bps": -5.8,
+        "ci_high_bps": 7.7
+      },
+      "heavy_rain": {
+        "beta_sd": 0.1761,
+        "se_sd": 0.0965,
+        "t": 1.82,
+        "p": 0.068,
+        "n": 6743,
+        "effect_bps": 17.1,
+        "ci_low_bps": -1.3,
+        "ci_high_bps": 35.5
+      },
+      "storm": {
+        "beta_sd": 0.0201,
+        "se_sd": 0.0396,
+        "t": 0.51,
+        "p": 0.6124,
+        "n": 6743,
+        "effect_bps": 2.0,
+        "ci_low_bps": -5.6,
+        "ci_high_bps": 9.5
+      },
+      "cloud_frac": {
+        "beta_sd": 0.0214,
+        "se_sd": 0.036,
+        "t": 0.6,
+        "p": 0.5513,
+        "n": 6743,
+        "effect_bps": 2.1,
+        "ci_low_bps": -4.8,
+        "ci_high_bps": 8.9
+      },
+      "precip_log": {
+        "beta_sd": 0.0298,
+        "se_sd": 0.0212,
+        "t": 1.41,
+        "p": 0.1592,
+        "n": 6743,
+        "effect_bps": 2.9,
+        "ci_low_bps": -1.1,
+        "ci_high_bps": 6.9
+      }
+    },
+    "r_cc": {
+      "morning_heat_extreme": {
+        "beta_sd": -0.0784,
+        "se_sd": 0.0499,
+        "t": -1.57,
+        "p": 0.1163,
+        "n": 6743,
+        "effect_bps": -9.5,
+        "ci_low_bps": -21.3,
+        "ci_high_bps": 2.4
+      },
+      "morning_cold_extreme": {
+        "beta_sd": -0.014,
+        "se_sd": 0.0661,
+        "t": -0.21,
+        "p": 0.8323,
+        "n": 6743,
+        "effect_bps": -1.7,
+        "ci_low_bps": -17.4,
+        "ci_high_bps": 14.0
+      },
+      "afternoon_heat_extreme": {
+        "beta_sd": -0.0311,
+        "se_sd": 0.0475,
+        "t": -0.66,
+        "p": 0.5122,
+        "n": 6743,
+        "effect_bps": -3.8,
+        "ci_low_bps": -15.0,
+        "ci_high_bps": 7.5
+      },
+      "afternoon_cold_extreme": {
+        "beta_sd": -0.0455,
+        "se_sd": 0.0653,
+        "t": -0.7,
+        "p": 0.4862,
+        "n": 6743,
+        "effect_bps": -5.5,
+        "ci_low_bps": -21.0,
+        "ci_high_bps": 10.0
+      },
+      "all_heat_extreme": {
+        "beta_sd": -0.0309,
+        "se_sd": 0.0481,
+        "t": -0.64,
+        "p": 0.5201,
+        "n": 6743,
+        "effect_bps": -3.7,
+        "ci_low_bps": -15.1,
+        "ci_high_bps": 7.7
+      },
+      "all_cold_extreme": {
+        "beta_sd": -0.0439,
+        "se_sd": 0.0561,
+        "t": -0.78,
+        "p": 0.4343,
+        "n": 6743,
+        "effect_bps": -5.3,
+        "ci_low_bps": -18.6,
+        "ci_high_bps": 8.0
+      },
+      "all_heat_wave": {
+        "beta_sd": 0.084,
+        "se_sd": 0.0948,
+        "t": 0.89,
+        "p": 0.3758,
+        "n": 6743,
+        "effect_bps": 10.2,
+        "ci_low_bps": -12.3,
+        "ci_high_bps": 32.6
+      },
+      "all_cold_wave": {
+        "beta_sd": 0.2936,
+        "se_sd": 0.223,
+        "t": 1.32,
+        "p": 0.188,
+        "n": 6743,
+        "effect_bps": 35.5,
+        "ci_low_bps": -17.4,
+        "ci_high_bps": 88.4
+      },
+      "morning_heat_wave": {
+        "beta_sd": 0.009,
+        "se_sd": 0.1044,
+        "t": 0.09,
+        "p": 0.9313,
+        "n": 6743,
+        "effect_bps": 1.1,
+        "ci_low_bps": -23.7,
+        "ci_high_bps": 25.8
+      },
+      "morning_cold_wave": {
+        "beta_sd": -0.0127,
+        "se_sd": 0.2391,
+        "t": -0.05,
+        "p": 0.9576,
+        "n": 6743,
+        "effect_bps": -1.5,
+        "ci_low_bps": -58.2,
+        "ci_high_bps": 55.2
+      },
+      "all_hot30": {
+        "beta_sd": -0.0286,
+        "se_sd": 0.0397,
+        "t": -0.72,
+        "p": 0.4709,
+        "n": 6743,
+        "effect_bps": -3.5,
+        "ci_low_bps": -12.9,
+        "ci_high_bps": 5.9
+      },
+      "all_hot35": {
+        "beta_sd": 0.0745,
+        "se_sd": 0.0733,
+        "t": 1.02,
+        "p": 0.3095,
+        "n": 6743,
+        "effect_bps": 9.0,
+        "ci_low_bps": -8.4,
+        "ci_high_bps": 26.4
+      },
+      "all_cold0": {
+        "beta_sd": 0.0543,
+        "se_sd": 0.0428,
+        "t": 1.27,
+        "p": 0.2051,
+        "n": 6743,
+        "effect_bps": 6.6,
+        "ci_low_bps": -3.6,
+        "ci_high_bps": 16.7
+      },
+      "all_coldm5": {
+        "beta_sd": -0.035,
+        "se_sd": 0.0502,
+        "t": -0.7,
+        "p": 0.4858,
+        "n": 6743,
+        "effect_bps": -4.2,
+        "ci_low_bps": -16.1,
+        "ci_high_bps": 7.7
+      },
+      "clear": {
+        "beta_sd": 0.0471,
+        "se_sd": 0.0283,
+        "t": 1.67,
+        "p": 0.0958,
+        "n": 6743,
+        "effect_bps": 5.7,
+        "ci_low_bps": -1.0,
+        "ci_high_bps": 12.4
+      },
+      "cloudy": {
+        "beta_sd": -0.0019,
+        "se_sd": 0.0279,
+        "t": -0.07,
+        "p": 0.9454,
+        "n": 6743,
+        "effect_bps": -0.2,
+        "ci_low_bps": -6.9,
+        "ci_high_bps": 6.4
+      },
+      "rain": {
+        "beta_sd": -0.0055,
+        "se_sd": 0.0335,
+        "t": -0.16,
+        "p": 0.8703,
+        "n": 6743,
+        "effect_bps": -0.7,
+        "ci_low_bps": -8.6,
+        "ci_high_bps": 7.3
+      },
+      "heavy_rain": {
+        "beta_sd": 0.0809,
+        "se_sd": 0.1068,
+        "t": 0.76,
+        "p": 0.4489,
+        "n": 6743,
+        "effect_bps": 9.8,
+        "ci_low_bps": -15.5,
+        "ci_high_bps": 35.1
+      },
+      "storm": {
+        "beta_sd": 0.0514,
+        "se_sd": 0.0418,
+        "t": 1.23,
+        "p": 0.2185,
+        "n": 6743,
+        "effect_bps": 6.2,
+        "ci_low_bps": -3.7,
+        "ci_high_bps": 16.1
+      },
+      "cloud_frac": {
+        "beta_sd": -0.0007,
+        "se_sd": 0.0353,
+        "t": -0.02,
+        "p": 0.985,
+        "n": 6743,
+        "effect_bps": -0.1,
+        "ci_low_bps": -8.5,
+        "ci_high_bps": 8.3
+      },
+      "precip_log": {
+        "beta_sd": 0.0187,
+        "se_sd": 0.0213,
+        "t": 0.88,
+        "p": 0.3809,
+        "n": 6743,
+        "effect_bps": 2.3,
+        "ci_low_bps": -2.8,
+        "ci_high_bps": 7.3
+      }
+    },
+    "range": {
+      "morning_heat_extreme": {
+        "beta_sd": 0.0344,
+        "se_sd": 0.0316,
+        "t": 1.09,
+        "p": 0.276,
+        "n": 6743,
+        "effect_bps": 3.5,
+        "ci_low_bps": -2.8,
+        "ci_high_bps": 9.8
+      },
+      "morning_cold_extreme": {
+        "beta_sd": 0.0116,
+        "se_sd": 0.048,
+        "t": 0.24,
+        "p": 0.8097,
+        "n": 6743,
+        "effect_bps": 1.2,
+        "ci_low_bps": -8.4,
+        "ci_high_bps": 10.7
+      },
+      "afternoon_heat_extreme": {
+        "beta_sd": 0.044,
+        "se_sd": 0.0309,
+        "t": 1.42,
+        "p": 0.1547,
+        "n": 6743,
+        "effect_bps": 4.5,
+        "ci_low_bps": -1.7,
+        "ci_high_bps": 10.6
+      },
+      "afternoon_cold_extreme": {
+        "beta_sd": 0.0192,
+        "se_sd": 0.0449,
+        "t": 0.43,
+        "p": 0.6695,
+        "n": 6743,
+        "effect_bps": 1.9,
+        "ci_low_bps": -7.0,
+        "ci_high_bps": 10.9
+      },
+      "all_heat_extreme": {
+        "beta_sd": 0.023,
+        "se_sd": 0.0315,
+        "t": 0.73,
+        "p": 0.4652,
+        "n": 6743,
+        "effect_bps": 2.3,
+        "ci_low_bps": -3.9,
+        "ci_high_bps": 8.6
+      },
+      "all_cold_extreme": {
+        "beta_sd": 0.01,
+        "se_sd": 0.0493,
+        "t": 0.2,
+        "p": 0.8396,
+        "n": 6743,
+        "effect_bps": 1.0,
+        "ci_low_bps": -8.8,
+        "ci_high_bps": 10.8
+      },
+      "all_heat_wave": {
+        "beta_sd": -0.2002,
+        "se_sd": 0.0801,
+        "t": -2.5,
+        "p": 0.0125,
+        "n": 6743,
+        "effect_bps": -20.3,
+        "ci_low_bps": -36.2,
+        "ci_high_bps": -4.4
+      },
+      "all_cold_wave": {
+        "beta_sd": 0.2003,
+        "se_sd": 0.2106,
+        "t": 0.95,
+        "p": 0.3417,
+        "n": 6743,
+        "effect_bps": 20.3,
+        "ci_low_bps": -21.5,
+        "ci_high_bps": 62.1
+      },
+      "morning_heat_wave": {
+        "beta_sd": -0.1337,
+        "se_sd": 0.0806,
+        "t": -1.66,
+        "p": 0.0974,
+        "n": 6743,
+        "effect_bps": -13.6,
+        "ci_low_bps": -29.6,
+        "ci_high_bps": 2.5
+      },
+      "morning_cold_wave": {
+        "beta_sd": -0.0274,
+        "se_sd": 0.1179,
+        "t": -0.23,
+        "p": 0.8164,
+        "n": 6743,
+        "effect_bps": -2.8,
+        "ci_low_bps": -26.2,
+        "ci_high_bps": 20.7
+      },
+      "all_hot30": {
+        "beta_sd": 0.0307,
+        "se_sd": 0.026,
+        "t": 1.18,
+        "p": 0.2377,
+        "n": 6743,
+        "effect_bps": 3.1,
+        "ci_low_bps": -2.1,
+        "ci_high_bps": 8.3
+      },
+      "all_hot35": {
+        "beta_sd": 0.0155,
+        "se_sd": 0.0432,
+        "t": 0.36,
+        "p": 0.7191,
+        "n": 6743,
+        "effect_bps": 1.6,
+        "ci_low_bps": -7.0,
+        "ci_high_bps": 10.2
+      },
+      "all_cold0": {
+        "beta_sd": 0.0162,
+        "se_sd": 0.0317,
+        "t": 0.51,
+        "p": 0.6092,
+        "n": 6743,
+        "effect_bps": 1.6,
+        "ci_low_bps": -4.7,
+        "ci_high_bps": 8.0
+      },
+      "all_coldm5": {
+        "beta_sd": -0.01,
+        "se_sd": 0.0336,
+        "t": -0.3,
+        "p": 0.7663,
+        "n": 6743,
+        "effect_bps": -1.0,
+        "ci_low_bps": -7.7,
+        "ci_high_bps": 5.7
+      },
+      "clear": {
+        "beta_sd": -0.0345,
+        "se_sd": 0.0189,
+        "t": -1.82,
+        "p": 0.0682,
+        "n": 6743,
+        "effect_bps": -3.5,
+        "ci_low_bps": -7.3,
+        "ci_high_bps": 0.3
+      },
+      "cloudy": {
+        "beta_sd": -0.0146,
+        "se_sd": 0.0174,
+        "t": -0.84,
+        "p": 0.4019,
+        "n": 6743,
+        "effect_bps": -1.5,
+        "ci_low_bps": -4.9,
+        "ci_high_bps": 2.0
+      },
+      "rain": {
+        "beta_sd": -0.0079,
+        "se_sd": 0.0215,
+        "t": -0.37,
+        "p": 0.7131,
+        "n": 6743,
+        "effect_bps": -0.8,
+        "ci_low_bps": -5.1,
+        "ci_high_bps": 3.5
+      },
+      "heavy_rain": {
+        "beta_sd": -0.0452,
+        "se_sd": 0.0673,
+        "t": -0.67,
+        "p": 0.5017,
+        "n": 6743,
+        "effect_bps": -4.6,
+        "ci_low_bps": -18.0,
+        "ci_high_bps": 8.8
+      },
+      "storm": {
+        "beta_sd": -0.0206,
+        "se_sd": 0.0284,
+        "t": -0.72,
+        "p": 0.4693,
+        "n": 6743,
+        "effect_bps": -2.1,
+        "ci_low_bps": -7.7,
+        "ci_high_bps": 3.6
+      },
+      "cloud_frac": {
+        "beta_sd": 0.0225,
+        "se_sd": 0.0219,
+        "t": 1.03,
+        "p": 0.304,
+        "n": 6743,
+        "effect_bps": 2.3,
+        "ci_low_bps": -2.1,
+        "ci_high_bps": 6.6
+      },
+      "precip_log": {
+        "beta_sd": -0.0038,
+        "se_sd": 0.0137,
+        "t": -0.28,
+        "p": 0.7822,
+        "n": 6743,
+        "effect_bps": -0.4,
+        "ci_low_bps": -3.1,
+        "ci_high_bps": 2.3
+      }
+    },
+    "abs_r_oc": {
+      "morning_heat_extreme": {
+        "beta_sd": 0.0344,
+        "se_sd": 0.0426,
+        "t": 0.81,
+        "p": 0.4201,
+        "n": 6743,
+        "effect_bps": 2.5,
+        "ci_low_bps": -3.5,
+        "ci_high_bps": 8.5
+      },
+      "morning_cold_extreme": {
+        "beta_sd": -0.0115,
+        "se_sd": 0.0502,
+        "t": -0.23,
+        "p": 0.8192,
+        "n": 6743,
+        "effect_bps": -0.8,
+        "ci_low_bps": -7.9,
+        "ci_high_bps": 6.2
+      },
+      "afternoon_heat_extreme": {
+        "beta_sd": 0.0291,
+        "se_sd": 0.0423,
+        "t": 0.69,
+        "p": 0.4926,
+        "n": 6743,
+        "effect_bps": 2.1,
+        "ci_low_bps": -3.9,
+        "ci_high_bps": 8.0
+      },
+      "afternoon_cold_extreme": {
+        "beta_sd": -0.0124,
+        "se_sd": 0.0456,
+        "t": -0.27,
+        "p": 0.7854,
+        "n": 6743,
+        "effect_bps": -0.9,
+        "ci_low_bps": -7.3,
+        "ci_high_bps": 5.5
+      },
+      "all_heat_extreme": {
+        "beta_sd": 0.0193,
+        "se_sd": 0.043,
+        "t": 0.45,
+        "p": 0.6546,
+        "n": 6743,
+        "effect_bps": 1.4,
+        "ci_low_bps": -4.7,
+        "ci_high_bps": 7.4
+      },
+      "all_cold_extreme": {
+        "beta_sd": -0.0449,
+        "se_sd": 0.0447,
+        "t": -1.0,
+        "p": 0.315,
+        "n": 6743,
+        "effect_bps": -3.2,
+        "ci_low_bps": -9.5,
+        "ci_high_bps": 3.1
+      },
+      "all_heat_wave": {
+        "beta_sd": -0.3347,
+        "se_sd": 0.0937,
+        "t": -3.57,
+        "p": 0.0004,
+        "n": 6743,
+        "effect_bps": -24.0,
+        "ci_low_bps": -37.2,
+        "ci_high_bps": -10.8
+      },
+      "all_cold_wave": {
+        "beta_sd": -0.2632,
+        "se_sd": 0.1753,
+        "t": -1.5,
+        "p": 0.1333,
+        "n": 6743,
+        "effect_bps": -18.9,
+        "ci_low_bps": -43.6,
+        "ci_high_bps": 5.8
+      },
+      "morning_heat_wave": {
+        "beta_sd": -0.2595,
+        "se_sd": 0.1042,
+        "t": -2.49,
+        "p": 0.0127,
+        "n": 6743,
+        "effect_bps": -18.6,
+        "ci_low_bps": -33.3,
+        "ci_high_bps": -4.0
+      },
+      "morning_cold_wave": {
+        "beta_sd": -0.2059,
+        "se_sd": 0.1755,
+        "t": -1.17,
+        "p": 0.2406,
+        "n": 6743,
+        "effect_bps": -14.8,
+        "ci_low_bps": -39.5,
+        "ci_high_bps": 9.9
+      },
+      "all_hot30": {
+        "beta_sd": 0.0283,
+        "se_sd": 0.0319,
+        "t": 0.89,
+        "p": 0.3737,
+        "n": 6743,
+        "effect_bps": 2.0,
+        "ci_low_bps": -2.4,
+        "ci_high_bps": 6.5
+      },
+      "all_hot35": {
+        "beta_sd": 0.0225,
+        "se_sd": 0.0682,
+        "t": 0.33,
+        "p": 0.7417,
+        "n": 6743,
+        "effect_bps": 1.6,
+        "ci_low_bps": -8.0,
+        "ci_high_bps": 11.2
+      },
+      "all_cold0": {
+        "beta_sd": 0.0353,
+        "se_sd": 0.0357,
+        "t": 0.99,
+        "p": 0.323,
+        "n": 6743,
+        "effect_bps": 2.5,
+        "ci_low_bps": -2.5,
+        "ci_high_bps": 7.6
+      },
+      "all_coldm5": {
+        "beta_sd": 0.001,
+        "se_sd": 0.0465,
+        "t": 0.02,
+        "p": 0.9828,
+        "n": 6743,
+        "effect_bps": 0.1,
+        "ci_low_bps": -6.5,
+        "ci_high_bps": 6.6
+      },
+      "clear": {
+        "beta_sd": -0.004,
+        "se_sd": 0.0254,
+        "t": -0.16,
+        "p": 0.8751,
+        "n": 6743,
+        "effect_bps": -0.3,
+        "ci_low_bps": -3.9,
+        "ci_high_bps": 3.3
+      },
+      "cloudy": {
+        "beta_sd": -0.0362,
+        "se_sd": 0.0233,
+        "t": -1.55,
+        "p": 0.12,
+        "n": 6743,
+        "effect_bps": -2.6,
+        "ci_low_bps": -5.9,
+        "ci_high_bps": 0.7
+      },
+      "rain": {
+        "beta_sd": 0.0113,
+        "se_sd": 0.0263,
+        "t": 0.43,
+        "p": 0.6674,
+        "n": 6743,
+        "effect_bps": 0.8,
+        "ci_low_bps": -2.9,
+        "ci_high_bps": 4.5
+      },
+      "heavy_rain": {
+        "beta_sd": 0.0461,
+        "se_sd": 0.0879,
+        "t": 0.52,
+        "p": 0.6,
+        "n": 6743,
+        "effect_bps": 3.3,
+        "ci_low_bps": -9.1,
+        "ci_high_bps": 15.7
+      },
+      "storm": {
+        "beta_sd": -0.0032,
+        "se_sd": 0.0342,
+        "t": -0.09,
+        "p": 0.9265,
+        "n": 6743,
+        "effect_bps": -0.2,
+        "ci_low_bps": -5.0,
+        "ci_high_bps": 4.6
+      },
+      "cloud_frac": {
+        "beta_sd": -0.0192,
+        "se_sd": 0.0298,
+        "t": -0.64,
+        "p": 0.5192,
+        "n": 6743,
+        "effect_bps": -1.4,
+        "ci_low_bps": -5.6,
+        "ci_high_bps": 2.8
+      },
+      "precip_log": {
+        "beta_sd": 0.0035,
+        "se_sd": 0.0174,
+        "t": 0.2,
+        "p": 0.8399,
+        "n": 6743,
+        "effect_bps": 0.3,
+        "ci_low_bps": -2.2,
+        "ci_high_bps": 2.7
+      }
+    },
+    "vol_rel": {
+      "morning_heat_extreme": {
+        "beta_sd": 0.0788,
+        "se_sd": 0.0574,
+        "t": 1.37,
+        "p": 0.1698,
+        "n": 6743,
+        "effect_bps": 267.0,
+        "ci_low_bps": -114.2,
+        "ci_high_bps": 648.2
+      },
+      "morning_cold_extreme": {
+        "beta_sd": -0.0022,
+        "se_sd": 0.0606,
+        "t": -0.04,
+        "p": 0.9705,
+        "n": 6743,
+        "effect_bps": -7.6,
+        "ci_low_bps": -409.9,
+        "ci_high_bps": 394.7
+      },
+      "afternoon_heat_extreme": {
+        "beta_sd": 0.0744,
+        "se_sd": 0.0536,
+        "t": 1.39,
+        "p": 0.1646,
+        "n": 6743,
+        "effect_bps": 252.1,
+        "ci_low_bps": -103.5,
+        "ci_high_bps": 607.7
+      },
+      "afternoon_cold_extreme": {
+        "beta_sd": 0.0078,
+        "se_sd": 0.0608,
+        "t": 0.13,
+        "p": 0.8976,
+        "n": 6743,
+        "effect_bps": 26.5,
+        "ci_low_bps": -377.5,
+        "ci_high_bps": 430.5
+      },
+      "all_heat_extreme": {
+        "beta_sd": 0.0987,
+        "se_sd": 0.0555,
+        "t": 1.78,
+        "p": 0.0752,
+        "n": 6743,
+        "effect_bps": 334.3,
+        "ci_low_bps": -34.0,
+        "ci_high_bps": 702.6
+      },
+      "all_cold_extreme": {
+        "beta_sd": -0.0216,
+        "se_sd": 0.0587,
+        "t": -0.37,
+        "p": 0.7129,
+        "n": 6743,
+        "effect_bps": -73.2,
+        "ci_low_bps": -463.2,
+        "ci_high_bps": 316.7
+      },
+      "all_heat_wave": {
+        "beta_sd": -0.0159,
+        "se_sd": 0.1389,
+        "t": -0.11,
+        "p": 0.9086,
+        "n": 6743,
+        "effect_bps": -54.0,
+        "ci_low_bps": -976.2,
+        "ci_high_bps": 868.2
+      },
+      "all_cold_wave": {
+        "beta_sd": -0.3197,
+        "se_sd": 0.2351,
+        "t": -1.36,
+        "p": 0.1738,
+        "n": 6743,
+        "effect_bps": -1083.1,
+        "ci_low_bps": -2643.9,
+        "ci_high_bps": 477.6
+      },
+      "morning_heat_wave": {
+        "beta_sd": -0.131,
+        "se_sd": 0.1558,
+        "t": -0.84,
+        "p": 0.4005,
+        "n": 6743,
+        "effect_bps": -443.8,
+        "ci_low_bps": -1478.6,
+        "ci_high_bps": 590.9
+      },
+      "morning_cold_wave": {
+        "beta_sd": 0.1761,
+        "se_sd": 0.2632,
+        "t": 0.67,
+        "p": 0.5034,
+        "n": 6743,
+        "effect_bps": 596.7,
+        "ci_low_bps": -1151.1,
+        "ci_high_bps": 2344.5
+      },
+      "all_hot30": {
+        "beta_sd": -0.0159,
+        "se_sd": 0.0496,
+        "t": -0.32,
+        "p": 0.7492,
+        "n": 6743,
+        "effect_bps": -53.7,
+        "ci_low_bps": -383.2,
+        "ci_high_bps": 275.7
+      },
+      "all_hot35": {
+        "beta_sd": -0.0659,
+        "se_sd": 0.0829,
+        "t": -0.8,
+        "p": 0.4265,
+        "n": 6743,
+        "effect_bps": -223.4,
+        "ci_low_bps": -774.0,
+        "ci_high_bps": 327.2
+      },
+      "all_cold0": {
+        "beta_sd": -0.02,
+        "se_sd": 0.0487,
+        "t": -0.41,
+        "p": 0.6814,
+        "n": 6743,
+        "effect_bps": -67.7,
+        "ci_low_bps": -390.9,
+        "ci_high_bps": 255.5
+      },
+      "all_coldm5": {
+        "beta_sd": -0.0325,
+        "se_sd": 0.0598,
+        "t": -0.54,
+        "p": 0.5867,
+        "n": 6743,
+        "effect_bps": -110.2,
+        "ci_low_bps": -507.3,
+        "ci_high_bps": 287.0
+      },
+      "clear": {
+        "beta_sd": -0.0097,
+        "se_sd": 0.0295,
+        "t": -0.33,
+        "p": 0.7424,
+        "n": 6743,
+        "effect_bps": -32.8,
+        "ci_low_bps": -228.4,
+        "ci_high_bps": 162.8
+      },
+      "cloudy": {
+        "beta_sd": -0.0156,
+        "se_sd": 0.0251,
+        "t": -0.62,
+        "p": 0.5352,
+        "n": 6743,
+        "effect_bps": -52.8,
+        "ci_low_bps": -219.8,
+        "ci_high_bps": 114.2
+      },
+      "rain": {
+        "beta_sd": -0.0085,
+        "se_sd": 0.0306,
+        "t": -0.28,
+        "p": 0.7825,
+        "n": 6743,
+        "effect_bps": -28.6,
+        "ci_low_bps": -232.1,
+        "ci_high_bps": 174.8
+      },
+      "heavy_rain": {
+        "beta_sd": -0.1161,
+        "se_sd": 0.0839,
+        "t": -1.38,
+        "p": 0.1664,
+        "n": 6743,
+        "effect_bps": -393.2,
+        "ci_low_bps": -950.1,
+        "ci_high_bps": 163.7
+      },
+      "storm": {
+        "beta_sd": -0.06,
+        "se_sd": 0.0407,
+        "t": -1.47,
+        "p": 0.1406,
+        "n": 6743,
+        "effect_bps": -203.1,
+        "ci_low_bps": -473.3,
+        "ci_high_bps": 67.1
+      },
+      "cloud_frac": {
+        "beta_sd": 0.0181,
+        "se_sd": 0.0334,
+        "t": 0.54,
+        "p": 0.5886,
+        "n": 6743,
+        "effect_bps": 61.2,
+        "ci_low_bps": -160.7,
+        "ci_high_bps": 283.2
+      },
+      "precip_log": {
+        "beta_sd": 0.0009,
+        "se_sd": 0.0184,
+        "t": 0.05,
+        "p": 0.9613,
+        "n": 6743,
+        "effect_bps": 3.0,
+        "ci_low_bps": -119.0,
+        "ci_high_bps": 125.0
+      }
+    }
+  },
+  "thresholds": {
+    "all_hot30": {
+      "abs_r_oc": {
+        "beta_sd": 0.0283,
+        "se_sd": 0.0319,
+        "t": 0.89,
+        "p": 0.3737,
+        "n": 6743,
+        "effect_bps": 2.0,
+        "ci_low_bps": -2.4,
+        "ci_high_bps": 6.5
+      },
+      "vol_rel": {
+        "beta_sd": -0.0159,
+        "se_sd": 0.0496,
+        "t": -0.32,
+        "p": 0.7492,
+        "n": 6743,
+        "effect_bps": -53.7,
+        "ci_low_bps": -383.2,
+        "ci_high_bps": 275.7
+      }
+    },
+    "all_hot35": {
+      "abs_r_oc": {
+        "beta_sd": 0.0225,
+        "se_sd": 0.0682,
+        "t": 0.33,
+        "p": 0.7417,
+        "n": 6743,
+        "effect_bps": 1.6,
+        "ci_low_bps": -8.0,
+        "ci_high_bps": 11.2
+      },
+      "vol_rel": {
+        "beta_sd": -0.0659,
+        "se_sd": 0.0829,
+        "t": -0.8,
+        "p": 0.4265,
+        "n": 6743,
+        "effect_bps": -223.4,
+        "ci_low_bps": -774.0,
+        "ci_high_bps": 327.2
+      }
+    },
+    "all_cold0": {
+      "abs_r_oc": {
+        "beta_sd": 0.0353,
+        "se_sd": 0.0357,
+        "t": 0.99,
+        "p": 0.323,
+        "n": 6743,
+        "effect_bps": 2.5,
+        "ci_low_bps": -2.5,
+        "ci_high_bps": 7.6
+      },
+      "vol_rel": {
+        "beta_sd": -0.02,
+        "se_sd": 0.0487,
+        "t": -0.41,
+        "p": 0.6814,
+        "n": 6743,
+        "effect_bps": -67.7,
+        "ci_low_bps": -390.9,
+        "ci_high_bps": 255.5
+      }
+    },
+    "all_coldm5": {
+      "abs_r_oc": {
+        "beta_sd": 0.001,
+        "se_sd": 0.0465,
+        "t": 0.02,
+        "p": 0.9828,
+        "n": 6743,
+        "effect_bps": 0.1,
+        "ci_low_bps": -6.5,
+        "ci_high_bps": 6.6
+      },
+      "vol_rel": {
+        "beta_sd": -0.0325,
+        "se_sd": 0.0598,
+        "t": -0.54,
+        "p": 0.5867,
+        "n": 6743,
+        "effect_bps": -110.2,
+        "ci_low_bps": -507.3,
+        "ci_high_bps": 287.0
+      }
+    },
+    "all_hot30_wave": {
+      "abs_r_oc": {
+        "beta_sd": 0.0185,
+        "se_sd": 0.0464,
+        "t": 0.4,
+        "p": 0.6903,
+        "n": 6743,
+        "effect_bps": 1.3,
+        "ci_low_bps": -5.2,
+        "ci_high_bps": 7.9
+      },
+      "vol_rel": {
+        "beta_sd": -0.0709,
+        "se_sd": 0.075,
+        "t": -0.94,
+        "p": 0.345,
+        "n": 6743,
+        "effect_bps": -240.1,
+        "ci_low_bps": -738.4,
+        "ci_high_bps": 258.2
+      }
+    },
+    "all_cold0_wave": {
+      "abs_r_oc": {
+        "beta_sd": 0.0069,
+        "se_sd": 0.039,
+        "t": 0.18,
+        "p": 0.8601,
+        "n": 6743,
+        "effect_bps": 0.5,
+        "ci_low_bps": -5.0,
+        "ci_high_bps": 6.0
+      },
+      "vol_rel": {
+        "beta_sd": -0.0282,
+        "se_sd": 0.0658,
+        "t": -0.43,
+        "p": 0.6677,
+        "n": 6743,
+        "effect_bps": -95.7,
+        "ci_low_bps": -532.5,
+        "ci_high_bps": 341.2
+      }
+    }
+  },
+  "continuous": {
+    "spy_winter_morning_temp_z": {
+      "beta_sd": -0.005,
+      "se_sd": 0.02,
+      "t": -0.25,
+      "p": 0.8038,
+      "n": 2728,
+      "effect_bps": -0.5,
+      "ci_low_bps": -4.4,
+      "ci_high_bps": 3.4
+    },
+    "spy_summer_morning_temp_z": {
+      "beta_sd": -0.0216,
+      "se_sd": 0.0213,
+      "t": -1.02,
+      "p": 0.3094,
+      "n": 2860,
+      "effect_bps": -1.9,
+      "ci_low_bps": -5.5,
+      "ci_high_bps": 1.7
+    },
+    "spy_all_morning_temp_z": {
+      "beta_sd": -0.0136,
+      "se_sd": 0.013,
+      "t": -1.04,
+      "p": 0.297,
+      "n": 6743,
+      "effect_bps": -1.3,
+      "ci_low_bps": -3.8,
+      "ci_high_bps": 1.2
+    }
+  },
+  "robustness": {
+    "first_half_2000_2012": {
+      "beta_sd": -0.2217,
+      "se_sd": 0.1065,
+      "t": -2.08,
+      "p": 0.0374,
+      "n": 1329,
+      "effect_bps": -24.6,
+      "ci_low_bps": -47.7,
+      "ci_high_bps": -1.4
+    },
+    "second_half_2013_2026": {
+      "beta_sd": -0.2912,
+      "se_sd": 0.1468,
+      "t": -1.98,
+      "p": 0.0474,
+      "n": 1399,
+      "effect_bps": -24.8,
+      "ci_low_bps": -49.4,
+      "ci_high_bps": -0.3
+    },
+    "winsorized_1_99": {
+      "beta_sd": -0.1856,
+      "se_sd": 0.0871,
+      "t": -2.13,
+      "p": 0.0331,
+      "n": 2728,
+      "effect_bps": -16.6,
+      "ci_low_bps": -32.0,
+      "ci_high_bps": -1.3
+    },
+    "plus_cloud": {
+      "beta_sd": -0.2055,
+      "se_sd": 0.0891,
+      "t": -2.31,
+      "p": 0.0211,
+      "n": 2728,
+      "effect_bps": -20.3,
+      "ci_low_bps": -37.5,
+      "ci_high_bps": -3.0
+    },
+    "plus_precip": {
+      "beta_sd": -0.2085,
+      "se_sd": 0.0884,
+      "t": -2.36,
+      "p": 0.0184,
+      "n": 2728,
+      "effect_bps": -20.5,
+      "ci_low_bps": -37.6,
+      "ci_high_bps": -3.5
+    },
+    "plus_cloud_and_precip": {
+      "beta_sd": -0.2059,
+      "se_sd": 0.0883,
+      "t": -2.33,
+      "p": 0.0197,
+      "n": 2728,
+      "effect_bps": -20.3,
+      "ci_low_bps": -37.3,
+      "ci_high_bps": -3.2
+    },
+    "plus_same_day_volume": {
+      "beta_sd": -0.196,
+      "se_sd": 0.0883,
+      "t": -2.22,
+      "p": 0.0264,
+      "n": 2728,
+      "effect_bps": -19.3,
+      "ci_low_bps": -36.4,
+      "ci_high_bps": -2.3
+    },
+    "plus_same_day_energy": {
+      "beta_sd": -0.129,
+      "se_sd": 0.08,
+      "t": -1.61,
+      "p": 0.1067,
+      "n": 2728,
+      "effect_bps": -12.7,
+      "ci_low_bps": -28.2,
+      "ci_high_bps": 2.7
+    },
+    "leave_one_year_out": {
+      "2000": {
+        "beta_sd": -0.1979,
+        "p": 0.0277
+      },
+      "2001": {
+        "beta_sd": -0.2337,
+        "p": 0.0114
+      },
+      "2002": {
+        "beta_sd": -0.1868,
+        "p": 0.0406
+      },
+      "2003": {
+        "beta_sd": -0.209,
+        "p": 0.0232
+      },
+      "2004": {
+        "beta_sd": -0.2043,
+        "p": 0.0209
+      },
+      "2005": {
+        "beta_sd": -0.1994,
+        "p": 0.0264
+      },
+      "2006": {
+        "beta_sd": -0.2152,
+        "p": 0.0225
+      },
+      "2007": {
+        "beta_sd": -0.2226,
+        "p": 0.0152
+      },
+      "2008": {
+        "beta_sd": -0.2223,
+        "p": 0.0213
+      },
+      "2009": {
+        "beta_sd": -0.214,
+        "p": 0.0255
+      },
+      "2010": {
+        "beta_sd": -0.2024,
+        "p": 0.0244
+      },
+      "2011": {
+        "beta_sd": -0.2098,
+        "p": 0.0231
+      },
+      "2012": {
+        "beta_sd": -0.2305,
+        "p": 0.0136
+      },
+      "2013": {
+        "beta_sd": -0.207,
+        "p": 0.0245
+      },
+      "2014": {
+        "beta_sd": -0.2118,
+        "p": 0.0183
+      },
+      "2015": {
+        "beta_sd": -0.2088,
+        "p": 0.0271
+      },
+      "2016": {
+        "beta_sd": -0.2137,
+        "p": 0.0218
+      },
+      "2017": {
+        "beta_sd": -0.2271,
+        "p": 0.0139
+      },
+      "2018": {
+        "beta_sd": -0.22,
+        "p": 0.0197
+      },
+      "2019": {
+        "beta_sd": -0.2088,
+        "p": 0.021
+      },
+      "2020": {
+        "beta_sd": -0.1466,
+        "p": 0.0724
+      },
+      "2021": {
+        "beta_sd": -0.2259,
+        "p": 0.0116
+      },
+      "2022": {
+        "beta_sd": -0.1625,
+        "p": 0.0554
+      },
+      "2023": {
+        "beta_sd": -0.2167,
+        "p": 0.0196
+      },
+      "2024": {
+        "beta_sd": -0.2343,
+        "p": 0.012
+      },
+      "2025": {
+        "beta_sd": -0.222,
+        "p": 0.0142
+      },
+      "2026": {
+        "beta_sd": -0.2097,
+        "p": 0.0188
+      }
+    }
+  },
+  "energy": {
+    "warm_mornings_to_xle": {
+      "beta_sd": -0.1397,
+      "se_sd": 0.0649,
+      "t": -2.15,
+      "p": 0.0315,
+      "n": 2727,
+      "effect_bps": -20.2,
+      "ci_low_bps": -38.6,
+      "ci_high_bps": -1.8
+    },
+    "lagged_xle_control": {
+      "beta_sd": -0.2102,
+      "se_sd": 0.0895,
+      "t": -2.35,
+      "p": 0.0189,
+      "n": 2727,
+      "effect_bps": -20.7,
+      "ci_low_bps": -38.0,
+      "ci_high_bps": -3.4
+    }
+  },
+  "cross_market": {
+    "QQQ": {
+      "city": "new_york",
+      "winter_morning_heat": {
+        "beta_sd": -0.1901,
+        "se_sd": 0.0858,
+        "t": -2.22,
+        "p": 0.0267,
+        "n": 2728,
+        "effect_bps": -27.4,
+        "ci_low_bps": -51.6,
+        "ci_high_bps": -3.2
+      },
+      "winter_morning_cold": {
+        "beta_sd": -0.0361,
+        "se_sd": 0.0791,
+        "t": -0.46,
+        "p": 0.6478,
+        "n": 2728,
+        "effect_bps": -5.2,
+        "ci_low_bps": -27.5,
+        "ci_high_bps": 17.1
+      },
+      "summer_morning_heat": {
+        "beta_sd": 0.0423,
+        "se_sd": 0.0736,
+        "t": 0.58,
+        "p": 0.5652,
+        "n": 2860,
+        "effect_bps": 5.4,
+        "ci_low_bps": -13.1,
+        "ci_high_bps": 23.9
+      }
+    },
+    "IWM": {
+      "city": "new_york",
+      "winter_morning_heat": {
+        "beta_sd": -0.143,
+        "se_sd": 0.0842,
+        "t": -1.7,
+        "p": 0.0895,
+        "n": 2675,
+        "effect_bps": -18.6,
+        "ci_low_bps": -40.1,
+        "ci_high_bps": 2.9
+      },
+      "winter_morning_cold": {
+        "beta_sd": -0.1405,
+        "se_sd": 0.1004,
+        "t": -1.4,
+        "p": 0.1615,
+        "n": 2675,
+        "effect_bps": -18.3,
+        "ci_low_bps": -43.9,
+        "ci_high_bps": 7.3
+      },
+      "summer_morning_heat": {
+        "beta_sd": -0.0134,
+        "se_sd": 0.0742,
+        "t": -0.18,
+        "p": 0.8571,
+        "n": 2831,
+        "effect_bps": -1.5,
+        "ci_low_bps": -18.4,
+        "ci_high_bps": 15.3
+      }
+    },
+    "FTSE": {
+      "city": "london",
+      "winter_morning_heat": {
+        "beta_sd": -0.0709,
+        "se_sd": 0.0776,
+        "t": -0.91,
+        "p": 0.3607,
+        "n": 2700,
+        "effect_bps": -7.9,
+        "ci_low_bps": -25.0,
+        "ci_high_bps": 9.1
+      },
+      "winter_morning_cold": {
+        "beta_sd": 0.263,
+        "se_sd": 0.0965,
+        "t": 2.73,
+        "p": 0.0064,
+        "n": 2700,
+        "effect_bps": 29.5,
+        "ci_low_bps": 8.3,
+        "ci_high_bps": 50.6
+      },
+      "summer_morning_heat": {
+        "beta_sd": 0.0667,
+        "se_sd": 0.0585,
+        "t": 1.14,
+        "p": 0.2543,
+        "n": 2799,
+        "effect_bps": 7.2,
+        "ci_low_bps": -5.2,
+        "ci_high_bps": 19.6
+      }
+    },
+    "DAX": {
+      "city": "frankfurt",
+      "winter_morning_heat": {
+        "beta_sd": -0.0162,
+        "se_sd": 0.0663,
+        "t": -0.24,
+        "p": 0.8074,
+        "n": 2685,
+        "effect_bps": -2.0,
+        "ci_low_bps": -18.0,
+        "ci_high_bps": 14.0
+      },
+      "winter_morning_cold": {
+        "beta_sd": 0.0116,
+        "se_sd": 0.082,
+        "t": 0.14,
+        "p": 0.8876,
+        "n": 2685,
+        "effect_bps": 1.4,
+        "ci_low_bps": -18.4,
+        "ci_high_bps": 21.2
+      },
+      "summer_morning_heat": {
+        "beta_sd": 0.0926,
+        "se_sd": 0.0642,
+        "t": 1.44,
+        "p": 0.1491,
+        "n": 2836,
+        "effect_bps": 10.8,
+        "ci_low_bps": -3.9,
+        "ci_high_bps": 25.5
+      }
+    },
+    "NIKKEI": {
+      "city": "tokyo",
+      "winter_morning_heat": {
+        "beta_sd": -0.0028,
+        "se_sd": 0.0802,
+        "t": -0.03,
+        "p": 0.9726,
+        "n": 2546,
+        "effect_bps": -0.3,
+        "ci_low_bps": -17.7,
+        "ci_high_bps": 17.1
+      },
+      "winter_morning_cold": {
+        "beta_sd": -0.0993,
+        "se_sd": 0.1178,
+        "t": -0.84,
+        "p": 0.3991,
+        "n": 2546,
+        "effect_bps": -11.0,
+        "ci_low_bps": -36.5,
+        "ci_high_bps": 14.6
+      },
+      "summer_morning_heat": {
+        "beta_sd": 0.0571,
+        "se_sd": 0.079,
+        "t": 0.72,
+        "p": 0.4695,
+        "n": 2701,
+        "effect_bps": 5.8,
+        "ci_low_bps": -10.0,
+        "ci_high_bps": 21.6
+      }
+    }
+  },
+  "placebo": {
+    "denver_morning_heat": {
+      "beta_sd": -0.0233,
+      "se_sd": 0.1424,
+      "t": -0.16,
+      "p": 0.8701,
+      "n": 2728,
+      "effect_bps": -2.3,
+      "ci_low_bps": -29.8,
+      "ci_high_bps": 25.2
+    },
+    "denver_morning_cold": {
+      "beta_sd": 0.018,
+      "se_sd": 0.0639,
+      "t": 0.28,
+      "p": 0.7784,
+      "n": 2728,
+      "effect_bps": 1.8,
+      "ci_low_bps": -10.6,
+      "ci_high_bps": 14.1
+    }
+  },
+  "notes": [
+    "The search covered several sessions, thresholds, outcomes, and markets. The winter effect is the one that survived; treat the p-values as descriptive rather than as a pre-registered test.",
+    "The outcome is open-to-close. The weather signal is measured at 10:00-11:00, so part of the measured move happens before the signal is complete. Daily bars cannot isolate the post-11:00 return.",
+    "A warm winter morning is about 21 bps lower on average, on roughly 5% of winter days. That is too small and too poorly timed to survive realistic costs from daily data."
+  ]
+}

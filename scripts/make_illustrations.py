@@ -878,61 +878,6 @@ def render_crowding_dashboard() -> Path:
     return out
 
 
-def render_weather_mood() -> Path:
-    width, height = 880, 460
-    image, draw = canvas(
-        width,
-        height,
-        "Weather and seasonality against market activity",
-        "Daylight and volatility move on different clocks",
-    )
-    left, top, right, bottom = 90, 132, 820, 380
-    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
-    for step in (0.0, 0.25, 0.5, 0.75, 1.0):
-        y = top + step * (bottom - top)
-        draw.line([(left, y), (right, y)], fill=GRID)
-
-    def mx(index: float) -> float:
-        return left + index / 11 * (right - left)
-
-    def my(value: float) -> float:
-        return bottom - value / 100 * (bottom - top)
-
-    daylight = []
-    for index in range(12):
-        value = 50 - 45 * math.cos(2 * math.pi * index / 12)
-        daylight.append((mx(index), my(value)))
-    draw.line(daylight, fill=BLUE, width=3, joint="curve")
-
-    rng = random.Random(181)
-    volatility = []
-    for index in range(12):
-        value = 50 + rng.uniform(-13, 13)
-        volatility.append((mx(index), my(value)))
-    draw.line(volatility, fill=ORANGE, width=3, joint="curve")
-
-    for index, label in enumerate(months):
-        draw.text((mx(index), bottom + 10), label, fill=MUTED, font=font(9), anchor="ma")
-
-    draw.line([(left + 10, top + 14), (left + 34, top + 14)], fill=BLUE, width=3)
-    draw.text((left + 42, top + 7), "daylight", fill=BLUE, font=font(11, bold=True))
-    draw.line([(left + 130, top + 14), (left + 154, top + 14)], fill=ORANGE, width=3)
-    draw.text((left + 162, top + 7), "realized volatility", fill=ORANGE, font=font(11, bold=True))
-
-    footer(
-        draw,
-        width,
-        height,
-        "A seasonal proxy still has to be separated from holidays, conferences, and the macro calendar.",
-    )
-    out = OUT / "weather-seasonality-volatility.png"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    image.save(out, format="PNG", optimize=True)
-    print(f"wrote {out}")
-    return out
-
-
 def main() -> int:
     render_price_oi()
     render_liquidation_levels()
@@ -946,7 +891,6 @@ def main() -> int:
     render_hour_weekday()
     render_big_trade_footprint()
     render_crowding_dashboard()
-    render_weather_mood()
     return 0
 
 
