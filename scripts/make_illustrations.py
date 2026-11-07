@@ -12,6 +12,7 @@ them with an explicit width so they stay small next to the text.
 
 from __future__ import annotations
 
+import math
 import random
 from pathlib import Path
 
@@ -395,12 +396,557 @@ def render_attention_funnel() -> Path:
     return out
 
 
+def blend(first, second, amount: float):
+    amount = max(0.0, min(1.0, amount))
+    return tuple(int(a + (b - a) * amount) for a, b in zip(first, second))
+
+
+def render_cluster_latency() -> Path:
+    width, height = 900, 400
+    image, draw = canvas(
+        width,
+        height,
+        "The cluster alert arrives after the news",
+        "Venezuela episode: the 20-mention rule versus the news clock",
+    )
+    left, right, line_y = 80, 860, 210
+    day_start, day_end = 7 * 60 + 45, 10 * 60 + 50
+
+    def tx(minute: int) -> float:
+        return left + (minute - day_start) / (day_end - day_start) * (right - left)
+
+    draw.line([(left, line_y), (right, line_y)], fill=(170, 175, 180), width=3)
+    for minute in (8 * 60, 9 * 60, 10 * 60):
+        x = tx(minute)
+        draw.line([(x, line_y - 7), (x, line_y + 7)], fill=(120, 125, 132), width=2)
+        if minute != 8 * 60:
+            draw.text((x, line_y + 14), f"{minute // 60:02d}:00", fill=MUTED, font=font(11), anchor="ma")
+
+    # The gap between public confirmation and the alert is the point.
+    confirm_x, alert_x = tx(10 * 60 + 21), tx(10 * 60 + 40)
+    draw.rectangle([confirm_x, line_y - 9, alert_x, line_y + 9], fill=RED_FILL)
+    draw.line([(confirm_x, 330), (alert_x, 330)], fill=RED, width=2)
+    draw.line([(confirm_x, 325), (confirm_x, 335)], fill=RED, width=2)
+    draw.line([(alert_x, 325), (alert_x, 335)], fill=RED, width=2)
+    draw.text(((confirm_x + alert_x) / 2, 340), "19 min late", fill=RED, font=font(11, bold=True), anchor="ma")
+
+    events = [
+        (8 * 60, "08:00", "helicopter reported", "it had been there an hour earlier", BLUE, True),
+        (9 * 60 + 30, "09:30", "extraction", "the event itself", INK, False),
+        (10 * 60 + 21, "10:21", "Trump confirms", "public confirmation", ORANGE, True),
+        (10 * 60 + 40, "10:40", "20-mention alert", "cluster arrives", RED, False),
+    ]
+    for minute, time_label, title, note, color, above in events:
+        x = tx(minute)
+        if above:
+            draw.line([(x, line_y), (x, line_y - 34)], fill=color, width=2)
+            draw.text((x, line_y - 102), note, fill=MUTED, font=font(11), anchor="ma")
+            draw.text((x, line_y - 78), title, fill=INK, font=font(13, bold=True), anchor="ma")
+            draw.text((x, line_y - 54), time_label, fill=color, font=font(12, bold=True), anchor="ma")
+        else:
+            draw.line([(x, line_y), (x, line_y + 34)], fill=color, width=2)
+            draw.text((x, line_y + 40), time_label, fill=color, font=font(12, bold=True), anchor="ma")
+            draw.text((x, line_y + 60), title, fill=INK, font=font(13, bold=True), anchor="ma")
+            draw.text((x, line_y + 82), note, fill=MUTED, font=font(11), anchor="ma")
+        draw.ellipse([x - 6, line_y - 6, x + 6, line_y + 6], fill=color)
+
+    footer(draw, width, height, "Corroboration improved relevance; it did not fix the delay.")
+    out = OUT / "cluster-latency.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    image.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}")
+    return out
+
+
+def render_implied_path() -> Path:
+    width, height = 880, 460
+    image, draw = canvas(
+        width,
+        height,
+        "The implied path is already a price",
+        "A repricing can lead other assets only if they adjust later",
+    )
+    left, top, right, bottom = 90, 120, 820, 380
+    plot_h = bottom - top
+
+    for step in (0.0, 0.25, 0.5, 0.75, 1.0):
+        y = top + step * plot_h
+        draw.line([(left, y), (right, y)], fill=GRID)
+    draw.text((left - 14, top), "high", fill=MUTED, font=font(10), anchor="ra")
+    draw.text((left - 14, bottom), "low", fill=MUTED, font=font(10), anchor="ra")
+
+    event_x = left + 0.55 * (right - left)
+    dashed(draw, (event_x, top), (event_x, bottom), ORANGE, width=2, dash=6, gap=5)
+    draw.text((event_x + 10, top + 12), "repricing", fill=ORANGE, font=font(12, bold=True))
+    draw.text((event_x + 10, top + 30), "FOMC · CPI · speech", fill=MUTED, font=font(10))
+
+    step_points = [(left, 205), (event_x, 205), (event_x, 300), (right, 300)]
+    draw.line(step_points, fill=BLUE, width=3, joint="curve")
+    draw.text((right - 8, 284), "implied path", fill=BLUE, font=font(12, bold=True), anchor="ra")
+
+    rng = random.Random(61)
+    asset_points = []
+    for index in range(41):
+        x = left + index / 40 * (right - left)
+        y = 252 + rng.uniform(-16, 16) + (4 if index > 30 else 0)
+        asset_points.append((x, y))
+    draw.line(asset_points, fill=ORANGE, width=3, joint="curve")
+    draw.text((left + 8, asset_points[0][1] - 34), "other assets", fill=ORANGE, font=font(12, bold=True), anchor="la")
+
+    draw.text((event_x + 12, 330), "does it follow?", fill=MUTED, font=font(12))
+    footer(
+        draw,
+        width,
+        height,
+        "A change in the implied path updates a market price. The tradeable question is the second move.",
+    )
+    out = OUT / "implied-path-lead-lag.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    image.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}")
+    return out
+
+
+def render_oi_bands() -> Path:
+    width, height = 880, 500
+    image, draw = canvas(
+        width,
+        height,
+        "Where positions were opened",
+        "Open interest binned by price; opacity follows the size of the band",
+    )
+    left, top, right, bottom = 90, 120, 830, 430
+    candles = make_ohlc(100.0, 0.0018, 0.014, 46, seed=91)
+    price_low = min(candle[2] for candle in candles)
+    price_high = max(candle[1] for candle in candles)
+    pad = (price_high - price_low) * 0.06
+    price_low -= pad
+    price_high += pad
+
+    def py(value: float) -> float:
+        return bottom - (value - price_low) / (price_high - price_low) * (bottom - top)
+
+    band_count = 10
+    strengths = [2, 6, 3, 9, 5, 8, 4, 7, 3, 5]
+    for index in range(band_count):
+        low = price_low + (price_high - price_low) * index / band_count
+        high = price_low + (price_high - price_low) * (index + 1) / band_count
+        y0, y1 = py(high), py(low)
+        positive = index % 3 != 1
+        base = BLUE if positive else PURPLE
+        strength = strengths[index] / 9
+        draw.rectangle([left, y0, right, y1], fill=blend(BG, base, 0.08 + 0.28 * strength), outline=blend(BG, base, 0.28 + 0.3 * strength))
+
+    draw.text((left + 10, top + 8), "OI added on up moves", fill=BLUE, font=font(11, bold=True))
+    draw.text((left + 10, top + 26), "OI added on down moves", fill=PURPLE, font=font(11, bold=True))
+
+    slot = (right - left) / len(candles)
+    body = max(slot * 0.55, 3)
+    for index, (open_, high, low, close) in enumerate(candles):
+        x = left + slot * (index + 0.5)
+        color = GREEN if close >= open_ else RED
+        draw.line([(x, py(high)), (x, py(low))], fill=color, width=1)
+        y_top = min(py(open_), py(close))
+        y_bottom = max(py(open_), py(close))
+        draw.rectangle([x - body / 2, y_top, x + body / 2, max(y_bottom, y_top + 2)], fill=color)
+
+    last_price = candles[-1][3]
+    dashed(draw, (left, py(last_price)), (right, py(last_price)), INK, width=2, dash=7, gap=5)
+    draw.text((left + 8, py(last_price) - 18), "price now", fill=INK, font=font(11, bold=True), anchor="la")
+    draw.text((left, bottom + 8), "price low", fill=MUTED, font=font(10))
+    draw.text((left, top - 16), "price high", fill=MUTED, font=font(10))
+
+    footer(
+        draw,
+        width,
+        height,
+        "A retest of a high-interest band can meet traders defending or adding to positions.",
+    )
+    out = OUT / "open-interest-bands.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    image.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}")
+    return out
+
+
+def render_supply_unlocks() -> Path:
+    width, height = 880, 520
+    image, draw = canvas(
+        width,
+        height,
+        "An unlock is a schedule, not a sell order",
+        "Circulating supply steps up; the price effect depends on who receives the tokens",
+    )
+    left, right = 90, 830
+    supply_top, supply_bottom = 112, 280
+    price_top, price_bottom = 320, 470
+    volume_top = 442
+
+    unlock_days = [45, 90, 135]
+    unlock_sizes = [8, 12, 5]
+    supply_low, supply_high = 96, 132
+    price_low, price_high = 84, 112
+
+    def sx(day: float) -> float:
+        return left + day / 180 * (right - left)
+
+    def supply_y(value: float) -> float:
+        return supply_bottom - (value - supply_low) / (supply_high - supply_low) * (supply_bottom - supply_top)
+
+    def price_y(value: float) -> float:
+        return price_bottom - (value - price_low) / (price_high - price_low) * (price_bottom - price_top)
+
+    draw.rounded_rectangle([left, supply_top, right, supply_bottom], radius=8, fill=CARD, outline=GRID)
+    draw.rounded_rectangle([left, price_top, right, price_bottom], radius=8, fill=CARD, outline=GRID)
+    draw.text((left + 12, supply_top + 10), "circulating supply", fill=BLUE, font=font(12, bold=True))
+    draw.text((left + 12, price_top + 10), "price (indexed)", fill=INK, font=font(12, bold=True))
+
+    supply = 100.0
+    supply_points = [(left, supply_y(supply))]
+    previous_x = left
+    for day, size in zip(unlock_days, unlock_sizes):
+        x = sx(day)
+        supply_points.append((x, supply_y(supply)))
+        supply += size
+        supply_points.append((x, supply_y(supply)))
+        previous_x = x
+    supply_points.append((right, supply_y(supply)))
+    draw.line(supply_points, fill=BLUE, width=3, joint="curve")
+
+    for day, size in zip(unlock_days, unlock_sizes):
+        x = sx(day)
+        dashed(draw, (x, supply_top), (x, price_bottom), (196, 200, 206), width=1, dash=5, gap=5)
+        draw.polygon([(x - 5, supply_top - 8), (x + 5, supply_top - 8), (x, supply_top - 16)], fill=ORANGE)
+        draw.text((x, supply_top - 20), f"+{size}%", fill=ORANGE, font=font(10, bold=True), anchor="md")
+
+    rng = random.Random(121)
+    price_points = []
+    value = 100.0
+    for index in range(91):
+        day = 2 * index
+        value += rng.uniform(-1.1, 1.2)
+        value = max(price_low + 2, min(price_high - 2, value))
+        price_points.append((sx(day), price_y(value)))
+    draw.line(price_points, fill=INK, width=2, joint="curve")
+
+    for index in range(56):
+        day = index * 180 / 55
+        x = sx(day)
+        height_bar = rng.uniform(4, 13)
+        if min(abs(day - unlock) for unlock in unlock_days) < 9:
+            height_bar *= 2.4
+        draw.rectangle([x - 3, volume_top + (22 - height_bar), x + 3, volume_top + 22], fill=blend(BG, ORANGE, 0.45))
+
+    draw.text((right - 10, supply_bottom - 20), "unlock cliffs", fill=MUTED, font=font(10), anchor="ra")
+    footer(
+        draw,
+        width,
+        height,
+        "Recipient mix and vesting decide whether an unlock becomes sell pressure.",
+    )
+    out = OUT / "supply-unlocks.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    image.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}")
+    return out
+
+
+def draw_probability_panel(draw, box, values, labels, title, show_y: bool, show_50: bool = True) -> None:
+    x0, y0, x1, y1 = box
+    left, top, right, bottom = x0 + 44, y0 + 34, x1 - 8, y1 - 30
+    low, high = 40.0, 60.0
+
+    def py(value: float) -> float:
+        return bottom - (value - low) / (high - low) * (bottom - top)
+
+    draw.text((x0, y0), title, fill=INK, font=font(13, bold=True))
+    for tick in (40, 45, 50, 55, 60):
+        y = py(tick)
+        draw.line([(left, y), (right, y)], fill=GRID)
+        if show_y:
+            draw.text((left - 8, y), str(tick), fill=MUTED, font=font(9), anchor="rm")
+    dashed(draw, (left, py(50)), (right, py(50)), (120, 125, 132), width=2, dash=5, gap=4)
+    if show_50:
+        draw.text((right, py(50) - 8), "50%", fill=MUTED, font=font(9), anchor="ra")
+
+    slot = (right - left) / len(values)
+    bar_w = max(slot * 0.45, 4)
+    rng = random.Random(132)
+    for index, value in enumerate(values):
+        x = left + slot * (index + 0.5)
+        y = py(value)
+        draw.rectangle(
+            [x - bar_w / 2, min(y, py(50)), x + bar_w / 2, max(y, py(50))],
+            fill=blend(BG, BLUE, 0.65),
+        )
+        error = rng.uniform(1.4, 2.4)
+        draw.line([(x, py(value - error)), (x, py(value + error))], fill=(120, 125, 132), width=1)
+        draw.line([(x - 3, py(value - error)), (x + 3, py(value - error))], fill=(120, 125, 132), width=1)
+        draw.line([(x - 3, py(value + error)), (x + 3, py(value + error))], fill=(120, 125, 132), width=1)
+        if labels[index] is not None:
+            draw.text((x, bottom + 8), labels[index], fill=MUTED, font=font(9), anchor="ma")
+
+
+def render_hour_weekday() -> Path:
+    width, height = 900, 480
+    image, draw = canvas(
+        width,
+        height,
+        "Up-move probability by hour and weekday",
+        "The bars sit around the coin-flip line; the spread is inside the noise",
+    )
+    rng = random.Random(131)
+    hourly = [50 + rng.uniform(-2.7, 2.7) for _ in range(24)]
+    weekdays = [50 + rng.uniform(-1.9, 1.9) for _ in range(5)]
+    hour_labels = [f"{hour:02d}" if hour % 3 == 0 else None for hour in range(24)]
+    day_labels = ["Mon", "Tue", "Wed", "Thu", "Fri"]
+
+    draw_probability_panel(
+        draw,
+        (60, 110, 590, 410),
+        hourly,
+        hour_labels,
+        "By hour (UTC)",
+        True,
+    )
+    draw_probability_panel(
+        draw,
+        (620, 110, 860, 410),
+        weekdays,
+        day_labels,
+        "By weekday",
+        False,
+        show_50=False,
+    )
+    footer(
+        draw,
+        width,
+        height,
+        "In testing the differences did not survive as a timing rule; the sample counts matter as much as the bars.",
+    )
+    out = OUT / "hour-weekday-probability.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    image.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}")
+    return out
+
+
+def render_big_trade_footprint() -> Path:
+    width, height = 900, 540
+    image, draw = canvas(
+        width,
+        height,
+        "Volume without open interest is a footprint",
+        "A volume/OI spike flags large participation; it does not say direction",
+    )
+    left, right = 90, 850
+    price_top, price_bottom = 110, 300
+    volume_top, volume_bottom = 316, 392
+    ratio_top, ratio_bottom = 408, 486
+    count = 48
+    spike = 30
+
+    candles = make_ohlc(100.0, 0.0012, 0.016, count, seed=141)
+    price_low = min(candle[2] for candle in candles)
+    price_high = max(candle[1] for candle in candles)
+    pad = (price_high - price_low) * 0.07
+    price_low -= pad
+    price_high += pad
+
+    def px(index: float) -> float:
+        return left + (index + 0.5) / count * (right - left)
+
+    def py(value: float) -> float:
+        return price_bottom - (value - price_low) / (price_high - price_low) * (price_bottom - price_top)
+
+    draw.text((left, price_top - 16), "price", fill=INK, font=font(12, bold=True))
+    slot = (right - left) / count
+    body = max(slot * 0.55, 3)
+    for index, (open_, high, low, close) in enumerate(candles):
+        x = px(index)
+        color = GREEN if close >= open_ else RED
+        draw.line([(x, py(high)), (x, py(low))], fill=color, width=1)
+        y_top = min(py(open_), py(close))
+        y_bottom = max(py(open_), py(close))
+        draw.rectangle([x - body / 2, y_top, x + body / 2, max(y_bottom, y_top + 2)], fill=color)
+
+    rng = random.Random(142)
+    volumes = [rng.uniform(70, 130) for _ in range(count)]
+    volumes[spike] *= 3.1
+    oi = [100 + 0.35 * index + rng.uniform(-1.2, 1.2) for index in range(count)]
+    ratios = [volume / value for volume, value in zip(volumes, oi)]
+    average = sum(ratios) / len(ratios)
+    threshold = average * 1.5
+
+    draw.text((left, volume_top - 16), "volume", fill=INK, font=font(12, bold=True))
+    for index, volume in enumerate(volumes):
+        x = px(index)
+        bar_h = volume / max(volumes) * (volume_bottom - volume_top)
+        draw.rectangle([x - body / 2, volume_bottom - bar_h, x + body / 2, volume_bottom], fill=blend(BG, BLUE, 0.55))
+
+    draw.text((left, ratio_top - 16), "volume / OI", fill=INK, font=font(12, bold=True))
+    ratio_low, ratio_high = 0.5, max(ratios) * 1.08
+
+    def ry(value: float) -> float:
+        return ratio_bottom - (value - ratio_low) / (ratio_high - ratio_low) * (ratio_bottom - ratio_top)
+
+    draw.rectangle([left, ratio_top, right, ratio_bottom], fill=CARD, outline=GRID)
+    dashed(draw, (left, ry(threshold)), (right, ry(threshold)), RED, width=2, dash=6, gap=5)
+    draw.text((right - 4, ry(threshold) - 14), "1.5× average", fill=RED, font=font(10, bold=True), anchor="ra")
+    ratio_points = [(px(index), ry(value)) for index, value in enumerate(ratios)]
+    draw.line(ratio_points, fill=PURPLE, width=2, joint="curve")
+
+    spike_x = px(spike)
+    dashed(draw, (spike_x, price_top), (spike_x, ratio_bottom), ORANGE, width=2, dash=6, gap=5)
+    draw.polygon([(spike_x - 5, price_top - 8), (spike_x + 5, price_top - 8), (spike_x, price_top - 16)], fill=ORANGE)
+    draw.text((spike_x + 8, price_top - 18), "spike", fill=ORANGE, font=font(11, bold=True))
+    draw.text((spike_x + 8, price_top - 2), "direction not implied", fill=MUTED, font=font(10))
+
+    footer(
+        draw,
+        width,
+        height,
+        "The flag says a large player may be active; it does not say which way.",
+    )
+    out = OUT / "big-trade-footprint.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    image.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}")
+    return out
+
+
+def render_crowding_dashboard() -> Path:
+    width, height = 900, 440
+    image, draw = canvas(
+        width,
+        height,
+        "Crowding is what most participants see",
+        "Three common inputs combined into one confirmation score",
+    )
+
+    rows = [
+        ("RSI (14)", "74", "overbought", 74 / 100, RED),
+        ("Bollinger position", "0.92", "near the upper band", 0.92, ORANGE),
+        ("Distance from 50/200 MA", "+6.8%", "stretched above both", 0.84, ORANGE),
+    ]
+    for index, (name, value, note, position, color) in enumerate(rows):
+        y0 = 112 + index * 96
+        draw.rounded_rectangle([60, y0, 560, y0 + 76], radius=10, fill=CARD, outline=GRID)
+        draw.text((76, y0 + 12), name, fill=INK, font=font(14, bold=True))
+        draw.text((544, y0 + 12), value, fill=color, font=font(14, bold=True), anchor="ra")
+        draw.text((76, y0 + 36), note, fill=MUTED, font=font(11))
+        track_x0, track_x1, track_y = 76, 544, y0 + 58
+        draw.rounded_rectangle([track_x0, track_y - 4, track_x1, track_y + 4], radius=4, fill=(232, 234, 230))
+        marker_x = track_x0 + position * (track_x1 - track_x0)
+        draw.rounded_rectangle([track_x0, track_y - 4, marker_x, track_y + 4], radius=4, fill=blend(BG, color, 0.55))
+        draw.ellipse([marker_x - 5, track_y - 7, marker_x + 5, track_y + 7], fill=color)
+
+    card_x0, card_x1 = 590, 860
+    draw.rounded_rectangle([card_x0, 112, card_x1, 388], radius=10, fill=CARD, outline=GRID)
+    draw.text(((card_x0 + card_x1) / 2, 126), "Crowding score", fill=INK, font=font(14, bold=True), anchor="ma")
+
+    cx, cy, radius = (card_x0 + card_x1) / 2, 300, 100
+    draw.arc([cx - radius, cy - radius, cx + radius, cy + radius], 180, 252, fill=GREEN, width=16)
+    draw.arc([cx - radius, cy - radius, cx + radius, cy + radius], 252, 306, fill=ORANGE, width=16)
+    draw.arc([cx - radius, cy - radius, cx + radius, cy + radius], 306, 360, fill=RED, width=16)
+
+    score = 78
+    angle = math.radians(180 + score / 100 * 180)
+    needle_x = cx + math.cos(angle) * (radius - 20)
+    needle_y = cy + math.sin(angle) * (radius - 20)
+    draw.line([(cx, cy), (needle_x, needle_y)], fill=INK, width=4)
+    draw.ellipse([cx - 7, cy - 7, cx + 7, cy + 7], fill=INK)
+    draw.text((cx, cy + 22), f"{score} / 100", fill=INK, font=font(18, bold=True), anchor="ma")
+    draw.text((cx, cy + 46), "confirmation, not timing", fill=MUTED, font=font(11), anchor="ma")
+
+    for value, label in ((0, "0"), (50, "50"), (100, "100")):
+        angle = math.radians(180 + value / 100 * 180)
+        tx = cx + math.cos(angle) * (radius + 16)
+        ty = cy + math.sin(angle) * (radius + 16)
+        draw.text((tx, ty), label, fill=MUTED, font=font(9), anchor="mm")
+
+    footer(
+        draw,
+        width,
+        height,
+        "The score says the setup is widely visible; it does not say when it reverses.",
+    )
+    out = OUT / "indicator-crowding-dashboard.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    image.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}")
+    return out
+
+
+def render_weather_mood() -> Path:
+    width, height = 880, 460
+    image, draw = canvas(
+        width,
+        height,
+        "Weather and seasonality against market activity",
+        "Daylight and volatility move on different clocks",
+    )
+    left, top, right, bottom = 90, 132, 820, 380
+    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    for step in (0.0, 0.25, 0.5, 0.75, 1.0):
+        y = top + step * (bottom - top)
+        draw.line([(left, y), (right, y)], fill=GRID)
+
+    def mx(index: float) -> float:
+        return left + index / 11 * (right - left)
+
+    def my(value: float) -> float:
+        return bottom - value / 100 * (bottom - top)
+
+    daylight = []
+    for index in range(12):
+        value = 50 - 45 * math.cos(2 * math.pi * index / 12)
+        daylight.append((mx(index), my(value)))
+    draw.line(daylight, fill=BLUE, width=3, joint="curve")
+
+    rng = random.Random(181)
+    volatility = []
+    for index in range(12):
+        value = 50 + rng.uniform(-13, 13)
+        volatility.append((mx(index), my(value)))
+    draw.line(volatility, fill=ORANGE, width=3, joint="curve")
+
+    for index, label in enumerate(months):
+        draw.text((mx(index), bottom + 10), label, fill=MUTED, font=font(9), anchor="ma")
+
+    draw.line([(left + 10, top + 14), (left + 34, top + 14)], fill=BLUE, width=3)
+    draw.text((left + 42, top + 7), "daylight", fill=BLUE, font=font(11, bold=True))
+    draw.line([(left + 130, top + 14), (left + 154, top + 14)], fill=ORANGE, width=3)
+    draw.text((left + 162, top + 7), "realized volatility", fill=ORANGE, font=font(11, bold=True))
+
+    footer(
+        draw,
+        width,
+        height,
+        "A seasonal proxy still has to be separated from holidays, conferences, and the macro calendar.",
+    )
+    out = OUT / "weather-seasonality-volatility.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    image.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}")
+    return out
+
+
 def main() -> int:
     render_price_oi()
     render_liquidation_levels()
     render_listing_paths()
     render_orderbook_walls()
     render_attention_funnel()
+    render_cluster_latency()
+    render_implied_path()
+    render_oi_bands()
+    render_supply_unlocks()
+    render_hour_weekday()
+    render_big_trade_footprint()
+    render_crowding_dashboard()
+    render_weather_mood()
     return 0
 
 

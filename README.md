@@ -237,6 +237,8 @@ The published sample is a small, synthetic demo, not the original live capture. 
 
 A live log from the Venezuela episode shows the latency problem directly. A helicopter was reported over Venezuela at 08:00 Paris time (it had been there an hour earlier), and the extraction happened at 09:30. The alert arrived at 10:40, but Donald Trump had already confirmed the extraction at 10:21. The tool waits for 20 mentions before sending an alert, so the cluster arrived after confirmation. Corroboration improved relevance, but not timeliness.
 
+<img src="assets/illustrations/cluster-latency.png" alt="Field-note timeline: a 20-mention cluster alert arrives after public confirmation" width="620">
+
 ### Verdict
 
 🟠 The cluster filter improves relevance but not risk-adjusted return after costs. The Venezuela log shows the timing failure: by the time 20 mentions accumulate, the confirmation can already be public.
@@ -257,6 +259,8 @@ Changes in the market-implied policy path lead rate-sensitive assets, and foreca
 ### Mechanism
 
 FedWatch probabilities are derived from fed funds futures, so a change in the implied path is a market price updating, not an external signal. It can still lead other assets if rate markets are the fastest venue for processing new macro information; the question is whether FX, equities, and crypto adjust later.
+
+<img src="assets/illustrations/implied-path-lead-lag.png" alt="Illustration: an implied-rate path reprices while other assets wander without a clear lag" width="520">
 
 ### Test
 
@@ -362,6 +366,8 @@ Open interest by price range shows where a lot of trades were opened and where p
 
 Traders remember where they entered. Binned OI marks price ranges where positions were opened, so a retest of those ranges can trigger reactions from traders defending or adding to existing positions. That is why high-interest ranges may act as support or resistance.
 
+<img src="assets/illustrations/open-interest-bands.png" alt="Illustration: candles over horizontal open-interest bands, with opacity following band size" width="500">
+
 ### Test
 
 Build a price-binned OI histogram, extract the top N high-interest ranges per week, and measure touches, rejections, and penetrations against random and volume-profile ranges. Split by period and symbol.
@@ -457,6 +463,8 @@ Token unlocks and airdrops create predictable supply pressure when the recipient
 
 Unlocks add circulating supply; recipients with a low cost basis are more likely to sell. Airdrops create recipients with no sunk cost, which makes selling psychologically easier. The size of the pressure depends on who receives the tokens and when they become transferable, not just on the headline date.
 
+<img src="assets/illustrations/supply-unlocks.png" alt="Illustration: circulating supply stepping up at unlock cliffs, with price and volume below" width="520">
+
 ### Test
 
 Unlock calendar, recipient composition, vesting schedule, and pre-event positioning. Measure abnormal returns and volume around the unlock, not just the headline date.
@@ -485,6 +493,8 @@ The probability of an up move, and the average size of the move, are not uniform
 
 Market participation and liquidity vary by session. Scheduled macro releases cluster at certain hours, and weekday flows differ as different regions come online. Those differences can change both the probability of an up move and the size of the move.
 
+<img src="assets/illustrations/hour-weekday-probability.png" alt="Illustration: hourly and weekday up-move probabilities hovering around 50%" width="560">
+
 ### Test
 
 Bucket signed candle bodies by hour of day and by weekday, then report the probability of an up move, the mean and median return, and the sample count. The first pass must aggregate one sample per hour or day, not one per chart bar, and the result must survive costs.
@@ -512,6 +522,8 @@ When open interest is small but volume is high, it should mean a large player is
 ### Mechanism
 
 Small OI means few outstanding positions; high volume against that base implies a large player is entering and can move price before the crowd. The ratio is a candidate footprint, not direct evidence of who traded or why.
+
+<img src="assets/illustrations/big-trade-footprint.png" alt="Illustration: a volume/OI spike flagged across price, volume, and ratio panels" width="520">
 
 ### Test
 
@@ -621,6 +633,8 @@ Indicators are not a timing signal; they are a measure of what most participants
 
 Widely watched indicators create common reference points. When RSI, Bollinger position, and moving averages all sit at an extreme, many participants see the same setup and place stops and orders around it. That clustering, not the indicator value itself, is the candidate signal.
 
+<img src="assets/illustrations/indicator-crowding-dashboard.png" alt="Illustration: RSI, Bollinger position, and moving-average distance combined into a crowding score" width="500">
+
 ### Test
 
 Build a cross-sectional crowding score from RSI, Bollinger position, and distance from moving averages. Test whether extremes predict reversal after costs, and whether the effect is stronger when the signal is widely watched.
@@ -648,6 +662,8 @@ Weather and seasonality affect mood and market activity. Summer may be slower be
 ### Mechanism
 
 Weather and daylight affect mood, and mood can affect risk appetite and trading activity. Seasonality can also proxy for trader holidays, conference schedules, and the macro calendar, so any effect must be separated from those known calendar patterns.
+
+<img src="assets/illustrations/weather-seasonality-volatility.png" alt="Illustration: a daylight curve and a realized-volatility line moving on different clocks" width="520">
 
 ### Test
 
