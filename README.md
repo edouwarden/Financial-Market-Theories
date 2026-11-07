@@ -98,6 +98,10 @@ A separate single live trade is recorded in `results/sample/executed_trade.json`
 
 Matching the same event across venues is the hard part. Titles usually differ, and a small wording change can alter the resolution, so exact-string matching is not enough. Automating it without an LLM means hand-built rules plus manual review; a semantic model helps with matching but adds cost and its own error mode. Sizing is limited on the other side too: Polymarket usually has far more liquidity than the second venue, so the shallow book sets capacity long before the signal does.
 
+<a href="theories/01-surebet-capacity/results/polymarket-positions.png"><img src="theories/01-surebet-capacity/results/polymarket-positions.png" alt="Full Polymarket screenshot: a sell panel on the left and an open position on the right" width="880"></a>
+
+*Full Polymarket screenshot: a sell panel on the left and an open position on the right.*
+
 ### Verdict
 
 🟢 The edge is capacity-constrained. The sample's gross edge dies around 71 shares / ~$67 total cost. The live trade confirms a larger dislocation existed at least once.
@@ -441,11 +445,11 @@ A fun project with no clear result. `scripts/polymarket-insider.js` filters rece
 
 ### Field note
 
-One trade from the Polymarket feed: **$6.9k on “Maduro out in 2026” at 2.5% YES**, a day before his capture, for a gain of about **$250k**. It is a striking hit, but a single trade does not make the screen repeatable. The feed shows the position, not whether the trader was informed, lucky, or early on public reporting.
+One alert from the Polymarket feed: **$2.2k on “Maduro out in 2025?” at 1.46% YES**, with **$148k to win**. It is a striking alert, but a single trade does not make the screen repeatable. The feed shows the position, not whether the trader was informed, lucky, or early on public reporting.
 
-<img src="theories/11-whale-concentration/results/polymarket-position-example.png" alt="Polymarket position row for a small Ethereum market bet" width="860">
+<img src="theories/11-whale-concentration/results/maduro-whale-alert.png" alt="WeirdBetAlert: a $2.2k YES position at 1.46% on 'Maduro out in 2025?', with $148k to win" width="400">
 
-*Example position from the Polymarket feed. This is a separate small ETH position, not the $6.9k trade above.*
+*The alert behind the field note: $2.2k YES at 1.46%, with $148k to win.*
 
 ### Verdict
 
