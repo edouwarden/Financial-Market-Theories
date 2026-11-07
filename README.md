@@ -443,6 +443,10 @@ A fun project with no clear result. `scripts/polymarket-insider.js` filters rece
 
 One trade from the Polymarket feed: **$6.9k on “Maduro out in 2026” at 2.5% YES**, a day before his capture, for a gain of about **$250k**. It is a striking hit, but a single trade does not make the screen repeatable. The feed shows the position, not whether the trader was informed, lucky, or early on public reporting.
 
+<img src="theories/11-whale-concentration/results/polymarket-position-example.png" alt="Polymarket position row for a small Ethereum market bet" width="860">
+
+*Example position from the Polymarket feed. This is a separate small ETH position, not the $6.9k trade above.*
+
 ### Verdict
 
 🔴 A fun project with no clear edge.
