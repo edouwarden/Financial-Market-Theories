@@ -239,13 +239,13 @@ The published sample is a small, synthetic demo, not the original live capture. 
 
 ### Field note
 
-A live log from the Venezuela episode shows the latency problem directly. A helicopter was reported over Venezuela at 08:00 Paris time (it had been there an hour earlier), and the extraction happened at 09:30. The alert arrived at 10:40, but Donald Trump had already confirmed the extraction at 10:21. The tool waits for 20 mentions before sending an alert, so the cluster arrived after confirmation. Corroboration improved relevance, but not timeliness.
+A live log from the Venezuela episode shows the timing was not the problem. Articles about the helicopter appeared at 07:44 Paris time. The first cluster detection came at 07:55, 11 minutes later, from 7 mentions inside a 20-minute window. The earlier note claiming a 20-mention alert arrived after public confirmation was wrong. The remaining question is relevance and after-cost return, not latency.
 
-<img src="assets/illustrations/cluster-latency.png" alt="Field-note timeline: a 20-mention cluster alert arrives after public confirmation" width="620">
+<img src="assets/illustrations/cluster-latency.png" alt="Field-note timeline: articles at 07:44 Paris and first cluster detection at 07:55, 11 minutes later" width="620">
 
 ### Verdict
 
-🟠 The cluster filter improves relevance but not risk-adjusted return after costs. The Venezuela log shows the timing failure: by the time 20 mentions accumulate, the confirmation can already be public.
+🟠 The cluster filter improves relevance, but the published sample is a synthetic demo rather than a labelled forward-return test. Detection was fast in the one live episode, so timing is not the objection; relevance and after-cost return remain open.
 
 
 ---

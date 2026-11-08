@@ -402,39 +402,35 @@ def blend(first, second, amount: float):
 
 
 def render_cluster_latency() -> Path:
-    width, height = 900, 400
+    width, height = 900, 380
     image, draw = canvas(
         width,
         height,
-        "The cluster alert arrives after the news",
-        "Venezuela episode: the 20-mention rule versus the news clock",
+        "Fast detection; relevance is still the open question",
+        "Venezuela helicopter episode, Paris time: first article to first detection",
     )
-    left, right, line_y = 80, 860, 210
-    day_start, day_end = 7 * 60 + 45, 10 * 60 + 50
+    left, right, line_y = 80, 860, 200
+    day_start, day_end = 7 * 60 + 40, 8 * 60 + 5
 
     def tx(minute: int) -> float:
         return left + (minute - day_start) / (day_end - day_start) * (right - left)
 
     draw.line([(left, line_y), (right, line_y)], fill=(170, 175, 180), width=3)
-    for minute in (8 * 60, 9 * 60, 10 * 60):
+    for minute in (7 * 60 + 45, 7 * 60 + 50, 8 * 60):
         x = tx(minute)
         draw.line([(x, line_y - 7), (x, line_y + 7)], fill=(120, 125, 132), width=2)
-        if minute != 8 * 60:
-            draw.text((x, line_y + 14), f"{minute // 60:02d}:00", fill=MUTED, font=font(11), anchor="ma")
+        draw.text((x, line_y + 14), f"{minute // 60:02d}:{minute % 60:02d}", fill=MUTED, font=font(11), anchor="ma")
 
-    # The gap between public confirmation and the alert is the point.
-    confirm_x, alert_x = tx(10 * 60 + 21), tx(10 * 60 + 40)
-    draw.rectangle([confirm_x, line_y - 9, alert_x, line_y + 9], fill=RED_FILL)
-    draw.line([(confirm_x, 330), (alert_x, 330)], fill=RED, width=2)
-    draw.line([(confirm_x, 325), (confirm_x, 335)], fill=RED, width=2)
-    draw.line([(alert_x, 325), (alert_x, 335)], fill=RED, width=2)
-    draw.text(((confirm_x + alert_x) / 2, 340), "19 min late", fill=RED, font=font(11, bold=True), anchor="ma")
+    article_x, detect_x = tx(7 * 60 + 44), tx(7 * 60 + 55)
+    draw.rectangle([article_x, line_y - 9, detect_x, line_y + 9], fill=GREEN_FILL)
+    draw.line([(article_x, 300), (detect_x, 300)], fill=GREEN, width=2)
+    draw.line([(article_x, 294), (article_x, 306)], fill=GREEN, width=2)
+    draw.line([(detect_x, 294), (detect_x, 306)], fill=GREEN, width=2)
+    draw.text(((article_x + detect_x) / 2, 310), "11 min", fill=GREEN, font=font(11, bold=True), anchor="ma")
 
     events = [
-        (8 * 60, "08:00", "helicopter reported", "it had been there an hour earlier", BLUE, True),
-        (9 * 60 + 30, "09:30", "extraction", "the event itself", INK, False),
-        (10 * 60 + 21, "10:21", "Trump confirms", "public confirmation", ORANGE, True),
-        (10 * 60 + 40, "10:40", "20-mention alert", "cluster arrives", RED, False),
+        (7 * 60 + 44, "07:44", "first articles", "helicopter over Venezuela", ORANGE, True),
+        (7 * 60 + 55, "07:55", "first detection", "7 mentions in a 20-minute window", GREEN, False),
     ]
     for minute, time_label, title, note, color, above in events:
         x = tx(minute)
@@ -450,7 +446,7 @@ def render_cluster_latency() -> Path:
             draw.text((x, line_y + 82), note, fill=MUTED, font=font(11), anchor="ma")
         draw.ellipse([x - 6, line_y - 6, x + 6, line_y + 6], fill=color)
 
-    footer(draw, width, height, "Corroboration improved relevance; it did not fix the delay.")
+    footer(draw, width, height, "The earlier 20-mention delay claim was wrong: this episode was detected quickly.")
     out = OUT / "cluster-latency.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     image.save(out, format="PNG", optimize=True)
