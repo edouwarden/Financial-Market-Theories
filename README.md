@@ -239,13 +239,13 @@ The published sample is a small, synthetic demo, not the original live capture. 
 
 ### Field note
 
-A live log from the Venezuela episode shows the timing was not the problem. Articles about the helicopter appeared at 07:44 Paris time. The first cluster detection came at 07:55, 11 minutes later, from 7 mentions inside a 20-minute window. The earlier note claiming a 20-mention alert arrived after public confirmation was wrong. The remaining question is relevance and after-cost return, not latency.
+A live log from the Venezuela episode shows two clocks. Articles about the helicopter appeared at 07:44 Paris time. The first cluster detection came at 07:55, 11 minutes later, from 7 mentions inside a 20-minute window. The actionable 20-mention alert still arrived at 10:40, after Donald Trump had already confirmed the extraction at 10:21. The sensor saw the story early; the alert rule was 19 minutes behind public confirmation.
 
-<img src="assets/illustrations/cluster-latency.png" alt="Field-note timeline: articles at 07:44 Paris and first cluster detection at 07:55, 11 minutes later" width="620">
+<img src="assets/illustrations/cluster-latency.png" alt="Field-note timeline: first detection at 07:55, 11 minutes after articles at 07:44; 20-mention alert at 10:40, 19 minutes after Trump's 10:21 confirmation" width="620">
 
 ### Verdict
 
-🟠 The cluster filter improves relevance, but the published sample is a synthetic demo rather than a labelled forward-return test. Detection was fast in the one live episode, so timing is not the objection; relevance and after-cost return remain open.
+🟠 The cluster filter improves relevance, but the published sample is a synthetic demo rather than a labelled forward-return test. In the live episode the sensor detected the story in 11 minutes, yet the 20-mention alert still landed after public confirmation, so timeliness depends on the alert rule. Relevance and after-cost return remain open.
 
 
 ---

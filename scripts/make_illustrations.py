@@ -402,51 +402,72 @@ def blend(first, second, amount: float):
 
 
 def render_cluster_latency() -> Path:
-    width, height = 900, 380
+    width, height = 900, 620
     image, draw = canvas(
         width,
         height,
-        "Fast detection; relevance is still the open question",
-        "Venezuela helicopter episode, Paris time: first article to first detection",
+        "The sensor was early; the alert was late",
+        "Venezuela helicopter episode, Paris time: detection and confirmation on two clocks",
     )
-    left, right, line_y = 80, 860, 200
-    day_start, day_end = 7 * 60 + 40, 8 * 60 + 5
+    left, right = 80, 860
 
-    def tx(minute: int) -> float:
-        return left + (minute - day_start) / (day_end - day_start) * (right - left)
+    def lane(line_y, day_start, day_end, ticks, caption, caption_color, events):
+        draw.text((left, line_y - 130), caption, fill=caption_color, font=font(12, bold=True))
 
-    draw.line([(left, line_y), (right, line_y)], fill=(170, 175, 180), width=3)
-    for minute in (7 * 60 + 45, 7 * 60 + 50, 8 * 60):
-        x = tx(minute)
-        draw.line([(x, line_y - 7), (x, line_y + 7)], fill=(120, 125, 132), width=2)
-        draw.text((x, line_y + 14), f"{minute // 60:02d}:{minute % 60:02d}", fill=MUTED, font=font(11), anchor="ma")
+        def tx(minute: int) -> float:
+            return left + (minute - day_start) / (day_end - day_start) * (right - left)
 
-    article_x, detect_x = tx(7 * 60 + 44), tx(7 * 60 + 55)
-    draw.rectangle([article_x, line_y - 9, detect_x, line_y + 9], fill=GREEN_FILL)
-    draw.line([(article_x, 300), (detect_x, 300)], fill=GREEN, width=2)
-    draw.line([(article_x, 294), (article_x, 306)], fill=GREEN, width=2)
-    draw.line([(detect_x, 294), (detect_x, 306)], fill=GREEN, width=2)
-    draw.text(((article_x + detect_x) / 2, 310), "11 min", fill=GREEN, font=font(11, bold=True), anchor="ma")
+        draw.line([(left, line_y), (right, line_y)], fill=(170, 175, 180), width=3)
+        for minute in ticks:
+            x = tx(minute)
+            draw.line([(x, line_y - 7), (x, line_y + 7)], fill=(120, 125, 132), width=2)
+            draw.text(
+                (x, line_y + 14),
+                f"{minute // 60:02d}:{minute % 60:02d}",
+                fill=MUTED,
+                font=font(11),
+                anchor="ma",
+            )
+        for minute, time_label, title, note, color, above in events:
+            x = tx(minute)
+            if above:
+                draw.line([(x, line_y), (x, line_y - 34)], fill=color, width=2)
+                draw.text((x, line_y - 102), note, fill=MUTED, font=font(11), anchor="ma")
+                draw.text((x, line_y - 78), title, fill=INK, font=font(13, bold=True), anchor="ma")
+                draw.text((x, line_y - 54), time_label, fill=color, font=font(12, bold=True), anchor="ma")
+            else:
+                draw.line([(x, line_y), (x, line_y + 34)], fill=color, width=2)
+                draw.text((x, line_y + 40), time_label, fill=color, font=font(12, bold=True), anchor="ma")
+                draw.text((x, line_y + 60), title, fill=INK, font=font(13, bold=True), anchor="ma")
+                draw.text((x, line_y + 82), note, fill=MUTED, font=font(11), anchor="ma")
+            draw.ellipse([x - 6, line_y - 6, x + 6, line_y + 6], fill=color)
 
-    events = [
-        (7 * 60 + 44, "07:44", "first articles", "helicopter over Venezuela", ORANGE, True),
-        (7 * 60 + 55, "07:55", "first detection", "7 mentions in a 20-minute window", GREEN, False),
-    ]
-    for minute, time_label, title, note, color, above in events:
-        x = tx(minute)
-        if above:
-            draw.line([(x, line_y), (x, line_y - 34)], fill=color, width=2)
-            draw.text((x, line_y - 102), note, fill=MUTED, font=font(11), anchor="ma")
-            draw.text((x, line_y - 78), title, fill=INK, font=font(13, bold=True), anchor="ma")
-            draw.text((x, line_y - 54), time_label, fill=color, font=font(12, bold=True), anchor="ma")
-        else:
-            draw.line([(x, line_y), (x, line_y + 34)], fill=color, width=2)
-            draw.text((x, line_y + 40), time_label, fill=color, font=font(12, bold=True), anchor="ma")
-            draw.text((x, line_y + 60), title, fill=INK, font=font(13, bold=True), anchor="ma")
-            draw.text((x, line_y + 82), note, fill=MUTED, font=font(11), anchor="ma")
-        draw.ellipse([x - 6, line_y - 6, x + 6, line_y + 6], fill=color)
+    lane(
+        220,
+        7 * 60 + 40,
+        8 * 60 + 5,
+        (7 * 60 + 45, 7 * 60 + 50, 8 * 60),
+        "First sighting: 11 minutes from article to detection",
+        GREEN,
+        [
+            (7 * 60 + 44, "07:44", "first articles", "helicopter over Venezuela", ORANGE, True),
+            (7 * 60 + 55, "07:55", "first detection", "7 mentions in a 20-minute window", GREEN, False),
+        ],
+    )
+    lane(
+        480,
+        10 * 60,
+        10 * 60 + 50,
+        (10 * 60 + 10, 10 * 60 + 20, 10 * 60 + 30, 10 * 60 + 50),
+        "Actionable alert: 19 minutes after public confirmation",
+        RED,
+        [
+            (10 * 60 + 21, "10:21", "Trump confirms", "public confirmation", ORANGE, True),
+            (10 * 60 + 40, "10:40", "20-mention alert", "cluster arrives", RED, False),
+        ],
+    )
 
-    footer(draw, width, height, "The earlier 20-mention delay claim was wrong: this episode was detected quickly.")
+    footer(draw, width, height, "The sensor saw the story early; the 20-mention rule still delivered the alert after confirmation.")
     out = OUT / "cluster-latency.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     image.save(out, format="PNG", optimize=True)
