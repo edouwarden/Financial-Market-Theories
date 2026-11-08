@@ -4,7 +4,7 @@ const https = require('https');
 const { createCanvas, loadImage } = require('canvas');
 
 // Configuration
-const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || 'VOTRE_CLE_API_ICI';
+const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || 'YOUR_API_KEY_HERE';
 const YOUTUBERS = [
 	"CoinBureau",
 	"AltcoinDaily",
@@ -489,10 +489,10 @@ async function main() {
 		console.log("=== YouTube Daily Grid Generator (API Version) ===");
 		console.log(`Date/heure actuelle (US): ${new Date().toLocaleString("en-US", { timeZone: "America/New_York" })}`);
 
-		if (YOUTUBE_API_KEY === 'VOTRE_CLE_API_ICI') {
-			console.log("⚠️  ATTENTION: Vous devez configurer votre clé API YouTube dans la variable d'environnement YOUTUBE_API_KEY");
-			console.log("   Exemple: export YOUTUBE_API_KEY='votre_cle_api'");
-			console.log("   Ou modifiez directement la variable YOUTUBE_API_KEY dans le script");
+		if (YOUTUBE_API_KEY === 'YOUR_API_KEY_HERE') {
+			console.log("⚠️  WARNING: Set your YouTube API key in the YOUTUBE_API_KEY environment variable");
+			console.log("   Example: export YOUTUBE_API_KEY='your_api_key'");
+			console.log("   Or edit the YOUTUBE_API_KEY variable directly in the script");
 			return;
 		}
 
