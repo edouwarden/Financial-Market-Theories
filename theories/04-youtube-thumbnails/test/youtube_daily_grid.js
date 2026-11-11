@@ -91,15 +91,15 @@ const YOUTUBERS = [
 ];
 
 
-// Configuration des délais
-const REQUEST_DELAY = 1000; // 1 seconde entre les requêtes
+// Delay configuration
+const REQUEST_DELAY = 1000; // 1 second between requests
 
 /**
- * Récupérer la dernière vidéo d'un YouTuber
+ * Get the latest video from a YouTuber
  */
 async function getLatestVideo(youtuberName) {
 	try {
-		console.log(`Récupération vidéos pour ${youtuberName}...`);
+		console.log(`Fetching videos for ${youtuberName}...`);
 
 		const channel = await youtube.findOne(youtuberName, { type: "channel" });
 		await channel.videos.next();
@@ -113,18 +113,18 @@ async function getLatestVideo(youtuberName) {
 		};
 
 	} catch (e) {
-		console.log(`Erreur récupération vidéo pour ${youtuberName}: ${e.message}`);
+		console.log(`Error fetching video for ${youtuberName}: ${e.message}`);
 		return null;
 	}
 }
 
 /**
- * Récupérer toutes les vidéos du jour
+ * Get all of today's videos
  */
 async function getTodayVideos() {
 	const todayVideos = [];
 
-	console.log(`Récupération des vidéos pour ${YOUTUBERS.length} YouTubers...`);
+	console.log(`Fetching videos for ${YOUTUBERS.length} YouTubers...`);
 
 	for (let i = 0; i < YOUTUBERS.length; i++) {
 		const youtuber = YOUTUBERS[i];
@@ -133,47 +133,47 @@ async function getTodayVideos() {
 			const video = await getLatestVideo(youtuber);
 			if (video && video.uploadDate && !video.uploadDate.includes("day") && !video.uploadDate.includes("days") && !video.uploadDate.includes("week") && !video.uploadDate.includes("weeks"))
 				todayVideos.push(video);
-			if (i < YOUTUBERS.length - 1) 
+			if (i < YOUTUBERS.length - 1)
 				await new Promise(resolve => setTimeout(resolve, REQUEST_DELAY));
 		} catch (e) {
-			console.log(`Erreur pour ${youtuber}: ${e.message}`);
+			console.log(`Error for ${youtuber}: ${e.message}`);
 		}
 	}
 	return todayVideos;
 }
 
 /**
- * Créer une grille d'images
+ * Create a grid of images
  */
 async function createImageGrid(videos) {
 	if (videos.length === 0) {
-		console.log("Aucune vidéo du jour trouvée");
+		console.log("No video found for today");
 		return null;
 	}
 
-	// Calculer les dimensions de la grille
+	// Calculate the grid dimensions
 	const cols = Math.ceil(Math.sqrt(videos.length));
 	const rows = Math.ceil(videos.length / cols);
 
-	// Dimensions des thumbnails
+	// Thumbnail dimensions
 	const thumbnailWidth = 168;
 	const thumbnailHeight = 94;
 	const padding = 0;
 	const titleHeight = 0;
 
-	// Dimensions du canvas
+	// Canvas dimensions
 	const canvasWidth = cols * (thumbnailWidth + padding) + padding;
 	const canvasHeight = rows * (thumbnailHeight + titleHeight + padding) + padding;
 
-	// Créer le canvas
+	// Create the canvas
 	const canvas = createCanvas(canvasWidth, canvasHeight);
 	const ctx = canvas.getContext('2d');
 
-	// Fond blanc
+	// White background
 	ctx.fillStyle = '#ffffff';
 	ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-	// Charger et dessiner chaque thumbnail
+	// Load and draw each thumbnail
 	for (let i = 0; i < videos.length; i++) {
 		const video = videos[i];
 		const row = Math.floor(i / cols);
@@ -183,34 +183,34 @@ async function createImageGrid(videos) {
 		const y = row * (thumbnailHeight + titleHeight + padding) + padding;
 
 		try {
-			// Charger l'image
+			// Load the image
 			const img = await loadImage(video.thumbnail.url);
 
-			// Dessiner le thumbnail
+			// Draw the thumbnail
 			ctx.drawImage(img, x, y, thumbnailWidth, thumbnailHeight);
 
-			// Dessiner le titre (tronqué)
+			// Draw the title (truncated)
 			//ctx.fillStyle = '#000000';
 			//ctx.font = '14px Arial';
 			//const title = video.title.length > 40 ? video.title.substring(0, 40) + '...' : video.title;
 			//ctx.fillText(title, x, y + thumbnailHeight + 20);
 
-			// Dessiner le nom du channel
+			// Draw the channel name
 			//ctx.fillStyle = '#666666';
 			//ctx.font = '12px Arial';
 			//ctx.fillText(video.channel, x, y + thumbnailHeight + 35);
 
-			console.log(`✓ Thumbnail ${i + 1}/${videos.length} dessiné`);
+			console.log(`✓ Thumbnail ${i + 1}/${videos.length} drawn`);
 
 		} catch (e) {
-			console.log(`Erreur chargement image pour ${video.thumbnail}: ${e.message}`);
+			console.log(`Error loading image for ${video.thumbnail}: ${e.message}`);
 
-			// Dessiner un rectangle gris en cas d'erreur
+			// Draw a gray rectangle in case of error
 			ctx.fillStyle = '#cccccc';
 			ctx.fillRect(x, y, thumbnailWidth, thumbnailHeight);
 			ctx.fillStyle = '#000000';
 			ctx.font = '14px Arial';
-			ctx.fillText('Erreur chargement', x, y + thumbnailHeight / 2);
+			ctx.fillText('Loading error', x, y + thumbnailHeight / 2);
 		}
 	}
 	const buffer = canvas.toBuffer('image/png');
@@ -218,33 +218,32 @@ async function createImageGrid(videos) {
 }
 
 /**
- * Fonction principale
+ * Main function
  */
 async function main() {
 	try {
 		console.log("=== YouTube Daily Grid Generator ===");
 
-		// Récupérer les vidéos du jour
+		// Get today's videos
 		const todayVideos = await getTodayVideos();
 		if (todayVideos.length === 0) {
-			console.log("Aucune vidéo publiée aujourd'hui trouvée.");
+			console.log("No video published today was found.");
 			return;
 		}
 
-		console.log(`\n${todayVideos.length} vidéos du jour trouvées:`);
+		console.log(`\n${todayVideos.length} videos from today found:`);
 
-		// Créer la grille
+		// Create the grid
 		const grid = await createImageGrid(todayVideos);
 
-				
+
 
 	} catch (e) {
-		console.error("Erreur dans le script principal:", e);
+		console.error("Error in main script:", e);
 	}
 }
 
-// Exécuter le script
+// Run the script
 if (require.main === module) {
 	main();
 }
-

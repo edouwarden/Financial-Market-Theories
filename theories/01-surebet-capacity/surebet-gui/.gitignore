@@ -1,0 +1,10 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python build output
+__pycache__/
+*.py[cod]
+build/
+dist/

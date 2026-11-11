@@ -1,0 +1,117 @@
+//@version=5
+indicator(title="Crypto Narratives: Relative Strength", shorttitle = "CN", overlay=false, precision=0)
+
+rsi_val = input(14, title='RSI')
+line_val = input(2, title='Line Width')
+offset_val = input(5, title='Label Offset')
+
+// Bitcoin and Ethereum
+BTC_RSI = request.security("INDEX:BTCUSD", "", ta.rsi(close, rsi_val))
+ETH_RSI = request.security("COINBASE:ETHUSD", "", ta.rsi(close, rsi_val))
+
+// AI Tokens
+ARC_RSI = request.security("KUCOIN:ARCUSDT", "", ta.rsi(close, rsi_val))
+AIXBT_RSI = request.security("BITGET:AIXBTUSDT", "", ta.rsi(close, rsi_val))
+SPEC_RSI = request.security("CRYPTO:SPECUSD", "", ta.rsi(close, rsi_val))
+GRIFFAIN_RSI = request.security("CRYPTO:GRIFFAINUSD", "", ta.rsi(close, rsi_val))
+AI_TOKENS = (ARC_RSI + AIXBT_RSI + SPEC_RSI + GRIFFAIN_RSI) / 4
+
+// Fee Switch Tokens
+AAVE_RSI = request.security("CRYPTO:AAVEUSD", "", ta.rsi(close, rsi_val))
+UNI_RSI = request.security("CRYPTO:UNIUSD", "", ta.rsi(close, rsi_val))
+TON_RSI = request.security("CRYPTO:TONUSD", "", ta.rsi(close, rsi_val))
+FEE_SWITCH = (AAVE_RSI + UNI_RSI + TON_RSI) / 3
+
+// Naming Services
+ENS_RSI = request.security("COINBASE:ENSUSD", "", ta.rsi(close, rsi_val))
+FIDA_RSI = request.security("CRYPTO:FIDAUSD", "", ta.rsi(close, rsi_val))
+NAMING_SERVICES = (ENS_RSI + FIDA_RSI) / 2
+
+// DAGS
+DAG_RSI = request.security("CRYPTO:DAGUSD", "", ta.rsi(close, rsi_val))
+HBAR_RSI = request.security("CRYPTO:HBARUSD", "", ta.rsi(close, rsi_val))
+IOTA_RSI = request.security("CRYPTO:IOTAUSD", "", ta.rsi(close, rsi_val))
+KAS_RSI = request.security("CRYPTO:KASUSD", "", ta.rsi(close, rsi_val))
+DAGS = (DAG_RSI + HBAR_RSI + IOTA_RSI + KAS_RSI) / 4
+
+// Data Availability
+AR_RSI = request.security("CRYPTO:ARUSD", "", ta.rsi(close, rsi_val))
+FIL_RSI = request.security("CRYPTO:FILUSD", "", ta.rsi(close, rsi_val))
+DATA_AVAILABILITY = (AR_RSI + FIL_RSI) / 2
+
+// Oracle Tokens
+PYTH_RSI = request.security("CRYPTO:PYTHUSD", "", ta.rsi(close, rsi_val))
+ORACLE = PYTH_RSI
+
+// DEX Tokens
+AERO_RSI = request.security("COINBASE:AEROUSD", "", ta.rsi(close, rsi_val))
+CAKE_RSI = request.security("CRYPTO:CAKEUSD", "", ta.rsi(close, rsi_val))
+HFT_RSI = request.security("CRYPTO:HFTUSD", "", ta.rsi(close, rsi_val))
+DEX = (AERO_RSI + CAKE_RSI + HFT_RSI) / 3
+
+// Gaming Tokens
+AXS_RSI = request.security("CRYPTO:AXSUSD", "", ta.rsi(close, rsi_val))
+GALA_RSI = request.security("CRYPTO:GALAUSD", "", ta.rsi(close, rsi_val))
+MANA_RSI = request.security("CRYPTO:MANAUSD", "", ta.rsi(close, rsi_val))
+GAMING = (AXS_RSI + GALA_RSI + MANA_RSI) / 3
+
+// Decentralized Identifier (DID)
+WLD_RSI = request.security("PYTH:WLDUSD", "", ta.rsi(close, rsi_val))
+TALENT_RSI = request.security("MEXC:TALENTUSDT", "", ta.rsi(close, rsi_val))
+DID = (WLD_RSI + TALENT_RSI) / 2
+
+// Analytics Tokens
+AIKEK_RSI = request.security("UNISWAP:AIKEKWETH_7B9761.USD", "", ta.rsi(close, rsi_val))
+COOKIE2_RSI = request.security("CRYPTO:COOKIE2USD", "", ta.rsi(close, rsi_val))
+GRT_RSI = request.security("BITSTAMP:GRTUSD", "", ta.rsi(close, rsi_val))
+ANALYTICS = (AIKEK_RSI + COOKIE2_RSI + GRT_RSI) / 3
+
+// CEX Tokens
+BGB_RSI = request.security("CRYPTO:BGBUSD", "", ta.rsi(close, rsi_val))
+BNB_RSI = request.security("CRYPTO:BNBUSD", "", ta.rsi(close, rsi_val))
+CEX = (BGB_RSI + BNB_RSI) / 2
+
+// SocialFi Tokens
+GAL_RSI = request.security("CRYPTO:GALUSD", "", ta.rsi(close, rsi_val))
+HIVE_RSI = request.security("CRYPTO:HIVEUSD", "", ta.rsi(close, rsi_val))
+SOCIALFI = (GAL_RSI + HIVE_RSI) / 2
+
+// RWAs & DeFi
+AAVE_USDT_RSI = request.security("BINANCE:AAVEUSDT", "", ta.rsi(close, rsi_val))
+ONDO_USDT_RSI = request.security("KUCOIN:ONDOUSDT", "", ta.rsi(close, rsi_val))
+PENDLE_USDT_RSI = request.security("OKX:PENDLEUSDT", "", ta.rsi(close, rsi_val))
+RWA_DEFI = (AAVE_USDT_RSI + ONDO_USDT_RSI + PENDLE_USDT_RSI) / 3
+
+// Simple Moving Averages
+btcsma = ta.sma(BTC_RSI, 3)
+ethsma = ta.sma(ETH_RSI, 3)
+aisma = ta.sma(AI_TOKENS, 3)
+feeswitch_sma = ta.sma(FEE_SWITCH, 3)
+naming_sma = ta.sma(NAMING_SERVICES, 3)
+dags_sma = ta.sma(DAGS, 3)
+data_sma = ta.sma(DATA_AVAILABILITY, 3)
+oracle_sma = ta.sma(ORACLE, 3)
+dex_sma = ta.sma(DEX, 3)
+gaming_sma = ta.sma(GAMING, 3)
+did_sma = ta.sma(DID, 3)
+analytics_sma = ta.sma(ANALYTICS, 3)
+cex_sma = ta.sma(CEX, 3)
+socialfi_sma = ta.sma(SOCIALFI, 3)
+rwa_defi_sma = ta.sma(RWA_DEFI, 3)
+
+// Plot
+plot(btcsma, color=color.yellow, title="BTC", linewidth=line_val)
+plot(ethsma, color=color.white, title="ETH", linewidth=line_val)
+plot(aisma, color=color.red, title="AI Tokens", linewidth=line_val)
+plot(feeswitch_sma, color=color.green, title="Fee Switch", linewidth=line_val)
+plot(naming_sma, color=color.purple, title="Naming Services", linewidth=line_val)
+plot(dags_sma, color=color.yellow, title="DAGs", linewidth=line_val)
+plot(data_sma, color=color.aqua, title="Data Availability", linewidth=line_val)
+plot(oracle_sma, color=color.maroon, title="Oracle", linewidth=line_val)
+plot(dex_sma, color=color.blue, title="DEX", linewidth=line_val)
+plot(gaming_sma, color=color.teal, title="Gaming", linewidth=line_val)
+plot(did_sma, color=color.navy, title="DID", linewidth=line_val)
+plot(analytics_sma, color=color.gray, title="Analytics", linewidth=line_val)
+plot(cex_sma, color=color.orange, title="CEX", linewidth=line_val)
+plot(socialfi_sma, color=color.lime, title="SocialFi", linewidth=line_val)
+plot(rwa_defi_sma, color=color.white, title="RWAs & DeFi", linewidth=line_val)

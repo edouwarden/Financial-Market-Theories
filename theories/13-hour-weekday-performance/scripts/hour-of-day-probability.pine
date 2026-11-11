@@ -1,0 +1,59 @@
+//@version=5
+indicator("Average performance by hour", overlay=true)
+
+// Inputs
+start_date = input.time(timestamp("2024-10-10"), title="Start date")
+end_date = input.time(timestamp("2024-12-10"), title="End date")
+
+// Variables to store performance by hour.
+var float[] hourly_perf = array.new_float(24, na)
+var int[] hourly_counts = array.new_int(24, 0)
+
+// Add a performance to a given hour.
+add_to_hourly_performance(hour, float perf) =>
+    if time >= start_date and time <= end_date and hour >= 0 and hour < 24
+        current_sum = array.get(hourly_perf, hour)
+        current_count = array.get(hourly_counts, hour)
+        new_sum = na(current_sum) ? perf : current_sum + perf
+        new_count = current_count + 1
+        array.set(hourly_perf, hour, new_sum)
+        array.set(hourly_counts, hour, new_count)
+
+// Fetch data with the security function.
+daily_open = request.security(syminfo.tickerid, "60", open)
+daily_close = request.security(syminfo.tickerid, "60", close)
+hour_of_day = hour
+
+// Compute the hourly performance.
+performance = daily_close - daily_open
+
+// Add the performance for each hour.
+add_to_hourly_performance(hour_of_day, performance)
+
+// Compute the hourly averages.
+calculate_hourly_averages() =>
+    float[] hourly_avg = array.new_float(24, na)
+    for i = 0 to 23
+        total_perf = array.get(hourly_perf, i)
+        count = array.get(hourly_counts, i)
+        avg = na(total_perf) or count == 0 ? na : total_perf / count
+        array.set(hourly_avg, i, avg)
+    hourly_avg
+
+// Compute the hourly averages.
+hourly_avg = calculate_hourly_averages()
+
+// Display the results as a table.
+var table hourly_table = table.new(position.bottom_left, 3, 25, bgcolor=color.new(color.white, 90))
+if bar_index == 0
+    table.cell(hourly_table, 0, 0, "Hour", bgcolor=color.gray, text_color=color.white)
+    table.cell(hourly_table, 1, 0, "Average performance", bgcolor=color.gray, text_color=color.white)
+
+    for i = 0 to 23
+        table.cell(hourly_table, 0, i + 1, str.tostring(i) + "h", text_color=color.white)
+
+// Update the table data.
+for i = 0 to 23
+    avg = array.get(hourly_avg, i)
+    avg_str = na(avg) ? "N/A" : str.tostring(avg, "#.##") + "%"
+    table.cell(hourly_table, 1, i + 1, avg_str, text_color=color.white)

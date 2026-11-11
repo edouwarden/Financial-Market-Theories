@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script de test pour vérifier le bon fonctionnement du système d'optimisation
+Test script to verify that the optimization system works correctly
 """
 
 import os
@@ -9,163 +9,161 @@ import glob
 import sys
 
 def test_dependencies():
-    """Teste si toutes les dépendances sont installées"""
-    print("🔍 Test des dépendances...")
-    
+    """Tests whether all dependencies are installed"""
+    print("🔍 Testing dependencies...")
+
     required_packages = [
-        'tensorflow', 'numpy', 'pandas', 'sklearn', 
+        'tensorflow', 'numpy', 'pandas', 'sklearn',
         'matplotlib', 'seaborn', 'glob'
     ]
-    
+
     missing_packages = []
-    
+
     for package in required_packages:
         try:
             __import__(package)
             print(f"✅ {package}")
         except ImportError:
-            print(f"❌ {package} - MANQUANT")
+            print(f"❌ {package} - MISSING")
             missing_packages.append(package)
-    
+
     if missing_packages:
-        print(f"\n❌ Packages manquants: {', '.join(missing_packages)}")
-        print("💡 Lancez: python install_dependencies.py")
+        print(f"\n❌ Missing packages: {', '.join(missing_packages)}")
+        print("💡 Run: python install_dependencies.py")
         return False
-    
-    print("✅ Toutes les dépendances sont installées")
+
+    print("✅ All dependencies are installed")
     return True
 
 def test_data_files():
-    """Teste si les fichiers de données existent"""
-    print("\n📁 Test des fichiers de données...")
-    
-    # Vérifier les données historiques
+    """Tests whether the data files exist"""
+    print("\n📁 Testing data files...")
+
+    # Check the historical data
     historical_files = glob.glob('data/new_*.csv')
     if historical_files:
-        print(f"✅ Données historiques trouvées: {len(historical_files)} fichiers")
+        print(f"✅ Historical data found: {len(historical_files)} files")
     else:
-        print("❌ Aucun fichier de données historiques trouvé (data/new_*.csv)")
+        print("❌ No historical data files found (data/new_*.csv)")
         return False
-    
-    # Vérifier les données de succès
+
+    # Check the success data
     success_files = glob.glob('data/success_*.csv')
     if success_files:
-        print(f"✅ Données de succès trouvées: {len(success_files)} fichiers")
+        print(f"✅ Success data found: {len(success_files)} files")
     else:
-        print("❌ Aucun fichier de données de succès trouvé (data/success_*.csv)")
+        print("❌ No success data files found (data/success_*.csv)")
         return False
-    
+
     return True
 
 def test_data_loading():
-    """Teste le chargement des données"""
-    print("\n📥 Test du chargement des données...")
-    
+    """Tests data loading"""
+    print("\n📥 Testing data loading...")
+
     try:
-        # Test avec un petit échantillon
+        # Test with a small sample
         from neural_filter_optimizer import NeuralFilterOptimizer
-        
+
         optimizer = NeuralFilterOptimizer()
         optimizer.load_data()
-        
+
         if len(optimizer.historical_data) > 0:
-            print(f"✅ Données historiques chargées: {len(optimizer.historical_data)} tokens")
+            print(f"✅ Historical data loaded: {len(optimizer.historical_data)} tokens")
         else:
-            print("❌ Aucune donnée historique chargée")
+            print("❌ No historical data loaded")
             return False
-        
+
         if len(optimizer.success_data) > 0:
-            print(f"✅ Données de succès chargées: {len(optimizer.success_data)} enregistrements")
+            print(f"✅ Success data loaded: {len(optimizer.success_data)} records")
         else:
-            print("❌ Aucune donnée de succès chargée")
+            print("❌ No success data loaded")
             return False
-        
+
         return True
-        
+
     except Exception as e:
-        print(f"❌ Erreur lors du chargement: {e}")
+        print(f"❌ Error during loading: {e}")
         return False
 
 def test_model_creation():
-    """Teste la création d'un modèle simple"""
-    print("\n🧠 Test de création de modèle...")
-    
+    """Tests the creation of a simple model"""
+    print("\n🧠 Testing model creation...")
+
     try:
         import tensorflow as tf
         from tensorflow import keras
         from tensorflow.keras import layers
-        
-        # Créer un modèle simple
+
+        # Create a simple model
         model = keras.Sequential([
             layers.Dense(64, activation='relu', input_shape=(13,)),
             layers.Dense(32, activation='relu'),
             layers.Dense(1, activation='sigmoid')
         ])
-        
+
         model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-        
-        print("✅ Modèle créé avec succès")
+
+        print("✅ Model created successfully")
         return True
-        
+
     except Exception as e:
-        print(f"❌ Erreur lors de la création du modèle: {e}")
+        print(f"❌ Error during model creation: {e}")
         return False
 
 def test_advanced_optimizer():
-    """Teste l'optimiseur avancé"""
-    print("\n🚀 Test de l'optimiseur avancé...")
-    
+    """Tests the advanced optimizer"""
+    print("\n🚀 Testing the advanced optimizer...")
+
     try:
         from advanced_neural_optimizer import AdvancedNeuralFilterOptimizer
-        
+
         optimizer = AdvancedNeuralFilterOptimizer()
-        print("✅ Optimiseur avancé importé avec succès")
+        print("✅ Advanced optimizer imported successfully")
         return True
-        
+
     except Exception as e:
-        print(f"❌ Erreur avec l'optimiseur avancé: {e}")
+        print(f"❌ Error with the advanced optimizer: {e}")
         return False
 
 def main():
-    """Fonction principale de test"""
-    print("🧪 Test du système d'optimisation de filtres")
+    """Main test function"""
+    print("🧪 Testing the filter optimization system")
     print("=" * 50)
-    
+
     tests = [
-        ("Dépendances", test_dependencies),
-        ("Fichiers de données", test_data_files),
-        ("Chargement des données", test_data_loading),
-        ("Création de modèle", test_model_creation),
-        ("Optimiseur avancé", test_advanced_optimizer)
+        ("Dependencies", test_dependencies),
+        ("Data files", test_data_files),
+        ("Data loading", test_data_loading),
+        ("Model creation", test_model_creation),
+        ("Advanced optimizer", test_advanced_optimizer)
     ]
-    
+
     passed_tests = 0
     total_tests = len(tests)
-    
+
     for test_name, test_func in tests:
         try:
             if test_func():
                 passed_tests += 1
             else:
-                print(f"❌ Test '{test_name}' a échoué")
+                print(f"❌ Test '{test_name}' failed")
         except Exception as e:
-            print(f"❌ Test '{test_name}' a généré une erreur: {e}")
-    
+            print(f"❌ Test '{test_name}' raised an error: {e}")
+
     print("\n" + "=" * 50)
-    print(f"📊 Résumé des tests: {passed_tests}/{total_tests} réussis")
-    
+    print(f"📊 Test summary: {passed_tests}/{total_tests} passed")
+
     if passed_tests == total_tests:
-        print("🎉 Tous les tests sont passés! Le système est prêt.")
-        print("\n🚀 Vous pouvez maintenant lancer l'optimiseur:")
+        print("🎉 All tests passed! The system is ready.")
+        print("\n🚀 You can now launch the optimizer:")
         print("   python run_optimizer.py")
     else:
-        print("⚠️ Certains tests ont échoué. Vérifiez les erreurs ci-dessus.")
-        print("\n💡 Solutions possibles:")
-        print("   - Lancez: python install_dependencies.py")
-        print("   - Vérifiez que vos données sont dans le dossier 'data/'")
-        print("   - Vérifiez la version de Python (3.8+)")
+        print("⚠️ Some tests failed. Check the errors above.")
+        print("\n💡 Possible solutions:")
+        print("   - Run: python install_dependencies.py")
+        print("   - Check that your data is in the 'data/' folder")
+        print("   - Check the Python version (3.8+)")
 
 if __name__ == "__main__":
     main()
-
-

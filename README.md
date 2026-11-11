@@ -55,6 +55,12 @@ Each theory below follows the same layout: a banner, a numbered section, a folde
     *Can indicator scores measure crowding rather than timing?*
 18. **[Weather mood](#18)**<br>
     *Does the weather during the trading session change mood and same-day market behaviour?*
+19. **[Narratives](#19)**<br>
+    *Do relative-strength rankings inside a narrative or asset basket identify the next outperformer?*
+20. **[Asset with offset](#20)**<br>
+    *Can a leading series, shifted by a manual lag and rescaled, expose a recurring lead-lag pattern?*
+21. **[Tick unanimity](#21)**<br>
+    *Do tick counts and direction inside a candle separate a two-sided area of interest from a one-sided repricing?*
 
 ---
 
@@ -109,6 +115,8 @@ Matching the same event across venues is the hard part. Titles usually differ, a
 ### Next
 
 Add a fee/slippage sensitivity table. A 2025 Futuur/Polymarket title-similarity scan is kept as a compact sample in `data/sample/market_similarity_sample.json`; the full output is gitignored under `data/raw/`.
+
+The original manual two-platform calculator is kept with this theory in [`surebet-gui/`](theories/01-surebet-capacity/surebet-gui/). It was the first iteration: enter the YES and NO prices by hand and split the stake. The later capacity client in [`scripts/capacity-cli/`](theories/01-surebet-capacity/scripts/capacity-cli/) reads order-book depth from the API. Both are research artefacts, not part of the operational tool set. The optional Futuur clients read `FUTUUR_PUBLIC_KEY`, `FUTUUR_PRIVATE_KEY`, `FUTUUR_MARKET_ID`, and `RAPIDAPI_KEY` from the environment.
 
 ---
 
@@ -313,7 +321,7 @@ Event study around the first spot listing and the first perpetual listing. Measu
 
 ### Observation
 
-In live use the first-hour drop appears often enough to be real, but it is inconsistent. The bearish move can start at the open or only after five to ten minutes, and the drop usually lands between 20% and 40%. In roughly 10% of cases it is slower, or the coin goes up from the open instead. Shorting also has less upside than the long side, especially on low-cap coins, so the payoff is asymmetric. The classifier in `scripts/legacy/listing-events.js` parses listing events and has a self-test.
+In live use the first-hour drop appears often enough to be real, but it is inconsistent. The bearish move can start at the open or only after five to ten minutes, and the drop usually lands between 20% and 40%. In roughly 10% of cases it is slower, or the coin goes up from the open instead. Shorting also has less upside than the long side, especially on low-cap coins, so the payoff is asymmetric. The listing classifier used for the observation was not retained in the published repository.
 
 ### Verdict
 
@@ -479,7 +487,7 @@ Unlock calendar, recipient composition, vesting schedule, and pre-event position
 
 ### Observation
 
-A good idea, but nothing clear came out of it. The screen is kept as a portfolio alert. `scripts/legacy/supply-events.js` normalizes supply-event records and has a working `--self-test`.
+A good idea, but nothing clear came out of it. The screen is kept as a portfolio alert. The supply-event normaliser used for the observation was not retained in the published repository.
 
 ### Verdict
 
@@ -615,7 +623,7 @@ Build a composite attention index from search, news, social, and a fixed basket 
 
 Useful as a confirmation indicator in practice. `data/sample/google-news.json` contains 241 raw Google News rows (238 usable daily observations, 2025-10-09 → 2026-08-18), and `data/sample/twitter-mention.json` contains a 130-token Twitter sample. The Google News count is a clean daily proxy for attention.
 
-The Amazon adoption leg is a slower version of the same question: `scripts/legacy/amazonsell.js` parses an Amazon keyword search. `avgSoldPerListedProduct` divides total page-1 sales by the number of listed products, which makes it a per-listing sales rate.
+The Amazon adoption leg is a slower version of the same question. It used an Amazon keyword-search parser that was not retained. `avgSoldPerListedProduct` divides total page-1 sales by the number of listed products, which makes it a per-listing sales rate.
 
 ![Google News bitcoin count, log scale](theories/16-attention-index/results/google-news-attention.png)
 
@@ -649,7 +657,7 @@ Build a cross-sectional crowding score from RSI, Bollinger position, and distanc
 
 ### Observation
 
-Useful as a confirmation indicator, in the same way as the attention index. Two collectors (`tradingview-indicators.js`, `tradingview-idea.js`) retrieve technical summaries and recent ideas. The first attempt found no significant result.
+Useful as a confirmation indicator, in the same way as the attention index. Two collectors retrieved technical summaries and recent ideas, but they were not retained in the published repository. The first attempt found no significant result.
 
 ### Verdict
 
@@ -694,18 +702,113 @@ The broad claim fails: absolute heat and cold, 30°C+ waves, rain, cloud, and st
 
 ---
 
+![Narratives](assets/banners/narratives.png)
+
+## 19
+
+**Folder:** [`theories/19-narratives/`](theories/19-narratives/)
+
+### Claim
+
+Assets that are outperforming their peers keep outperforming long enough to cover the cost of rotating into them.
+
+### Mechanism
+
+Narratives are a coordination device: flow attracts flow. When one crypto sector, country index, or asset class starts to outperform, it gets attention, media coverage, and fresh allocation, which can extend the move. Plotting relative strength for every member of a basket on one axis makes that rotation visible instead of reading each chart separately. The scripts cover crypto sectors (AI, fee-switch, naming, data availability, oracles, DEX, gaming, DID), countries, and global assets, plus a 5-minute/1-day relative-strength screener against SPY.
+
+<img src="assets/illustrations/narratives-rotation.png" alt="Illustration: seven narrative assets ranked by relative strength, with one clear leader and a retrospective rank table" width="620">
+
+### Test
+
+Four current Pine scripts and three archived revisions. Each requests a fixed basket and plots relative strength as RSI or money flow; the screener ranks instruments by relative strength over a 12-bar lookback. These are chart tools. There is no entry rule, no forward-return table, and no cost model. The basket is hand-picked, so survivorship and selection bias are built in.
+
+### Observation
+
+The charts do what they claim: they make leadership and rotation easy to see. They do not show that the leader keeps leading. Narrative membership is arbitrary and often assigned after the fact, leadership flips are frequent, and a visual ranking says nothing about entry timing, crowding, or fees. This is a reasonable base for a more complex rotation or pair strategy, but nothing here is a tested edge.
+
+### Verdict
+
+🟠 Context only. A useful relative-strength map, not a trade signal.
+
+---
+
+![Asset with offset](assets/banners/asset-with-offset.png)
+
+## 20
+
+**Folder:** [`theories/20-asset-with-offset/`](theories/20-asset-with-offset/)
+
+### Claim
+
+A leading series, shifted by a fixed lag and rescaled, lines up with a later market move often enough to be exploitable.
+
+### Mechanism
+
+New money and credit do not reach every asset at once. Global M2, aggregated across countries and converted to USD, is a candidate leader: liquidity is created, then deployed into risk assets with a delay. The script overlays M2, gold, Nasdaq 100, BTC, global rates, and three custom symbols on a price chart. Each overlay has a manual `Offset (days)`, `Start`, and `Mult`, so the analyst chooses the lag and the scale. BTC and ETH have price presets.
+
+<img src="assets/illustrations/asset-with-offset-lag.png" alt="Illustration: an M2 series shifted and rescaled to line up with a later risk-asset series, with manual offset, start, and multiplier inputs" width="620">
+
+### Test
+
+One Pine v6 overlay, tested by visual alignment only. The lag is not estimated, there is no out-of-sample check, and there is no statistical test. Offset and multiplier are free parameters, so the same series can be fitted to many past turns. Economic series requested with `lookahead_on` also risk using revised or later-published values.
+
+### Observation
+
+The premise is reasonable: liquidity does move through assets in sequence. The implementation is an eyeball tool, not a test, and no clear edge was found. A convincing overlay after the fact is weak evidence because two free parameters can always be tuned to the visible turns. To become a tested theory it needs a lag fixed before the fact, a defined entry and exit, and a forward test.
+
+The overlay is adapted from **Chase Money / FinFluential**; the M2 framing follows the series associated with **MigueFinance**.
+
+### Verdict
+
+🟠 Context only. A manual lead-lag sketch with no demonstrated edge.
+
+---
+
+![Tick unanimity](assets/banners/tick-unanimity.png)
+
+## 21
+
+**Folder:** [`theories/21-tick-unanimity/`](theories/21-tick-unanimity/)
+
+### Claim
+
+Tick activity, not candle size, tells the story. A flat candle with many ticks in both directions marks an area of interest; a large candle with one-way ticks marks agreement on a new price, often after news.
+
+### Mechanism
+
+A candle hides the path of trades. Ticks are the trades themselves, so counting them inside a candle separates three cases: a flat candle with many two-way ticks is a fight at a price (absorption), a flat candle with few ticks is genuinely ignored, and a large candle with many same-direction ticks is one-sided agreement on a repricing. The contrast between body size, tick count, and tick direction is the signal; elapsed time is not.
+
+<img src="assets/illustrations/tick-unanimity-candles.png" alt="Illustration: a flat candle with many two-way ticks, a large one-way candle after news, and a flat candle with only two ticks" width="620">
+
+### Test
+
+The Pine script counts up and down micro-movements in lower-timeframe bars. TradingView does not expose historical raw ticks, so 1-second bars are used as a proxy and the window is a count of bars, not seconds. A clean test needs trade-level tick data: classify flat/heavy two-sided candles against large/one-way candles, then measure what price does next. No forward-return test or threshold optimisation has been run.
+
+### Observation
+
+The reading is a useful clue, not a verdict. Two-sided tick activity in a flat candle says someone is defending a price; one-way activity in a large candle says the market has agreed on a new price. The proxy can blur both cases, because a 1-second bar is not a tick and quiet periods can still print bars. The next step is to normalise tick counts by session and compare with volume and spread, then test continuation after one-sided candles and reaction at two-sided levels.
+
+### Verdict
+
+🟠 Context only. A promising tick-reading framework, not a validated signal.
+
+---
+
 ## Tools
 
-Operational utilities live in the sibling repository `Trading-Support-Tools`.
+Operational utilities live in the sibling repository [`Trading-Support-Tools`](https://github.com/edouwarden/Trading-Support-Tools). Research-adjacent Pine work lives in [19 Narratives](#19), [20 Asset with offset](#20), and [21 Tick unanimity](#21).
 
 ### Week calendar
-A trader utility that summarizes the week's macro and market events. It is not a theory and does not produce a signal.
+[`Trading-Support-Tools/week-calendar/`](https://github.com/edouwarden/Trading-Support-Tools/tree/main/week-calendar) fetches the weekly macro calendar, normalises timestamps to UTC, and exports text, JSON, CSV, or ICS. It is not a theory and does not produce a signal.
 
-### Charting
-Shared chart-generation helpers for the theory reports.
+### Disclosure flow
+[`Trading-Support-Tools/disclosure-flow/`](https://github.com/edouwarden/Trading-Support-Tools/tree/main/disclosure-flow) normalises insider and politician disclosure feeds into compact reports. The output is a reading aid, not a signal.
+
+### Chart overlays
+[`Trading-Support-Tools` §05](https://github.com/edouwarden/Trading-Support-Tools#05) shows the two chart helpers that are mine: a divider between days and a fill from each day's first price. The underlying Pine indicator is a third-party composite, so its source is not published.
 
 ### Execution and journal
-`Trading-Support-Tools/betterGTrade/` contains the live execution journal and the reconciliation work. The bot's execution code is not part of this repository.
+[`Trading-Support-Tools` §01](https://github.com/edouwarden/Trading-Support-Tools#01) is the execution-bot case study. The export and analysis live in [`Trading-Support-Tools/journal/`](https://github.com/edouwarden/Trading-Support-Tools/tree/main/journal). The bot's execution code is not part of either repository.
 
 ---
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Script d'application du filtre de performance créé
-Utilise le filtre optimal pour évaluer de nouveaux tokens
+Script for applying the created performance filter
+Uses the optimal filter to evaluate new tokens
 """
 
 import json
@@ -9,17 +9,17 @@ import sys
 from datetime import datetime
 
 def load_performance_filter():
-    """Charge le filtre de performance optimal"""
+    """Loads the optimal performance filter"""
     try:
         with open('performance_filter.json', 'r') as f:
             return json.load(f)
     except FileNotFoundError:
-        print("❌ Fichier performance_filter.json non trouvé")
-        print("Exécutez d'abord final_filter_analysis.py pour créer le filtre")
+        print("❌ performance_filter.json file not found")
+        print("Run final_filter_analysis.py first to create the filter")
         return None
 
 def extract_txns_5m(token_data):
-    """Extrait le nombre de transactions 5 minutes d'un token"""
+    """Extracts the 5-minute transaction count from a token"""
     try:
         if 'txns' in token_data and 'm5' in token_data['txns']:
             txns = token_data['txns']['m5']
@@ -30,42 +30,42 @@ def extract_txns_5m(token_data):
 
 def apply_performance_filter(token_data, filter_config):
     """
-    Applique le filtre de performance à un token
-    
+    Applies the performance filter to a token
+
     Args:
-        token_data: Données du token (dict)
-        filter_config: Configuration du filtre (dict)
-    
+        token_data: Token data (dict)
+        filter_config: Filter configuration (dict)
+
     Returns:
-        dict: Résultat de l'évaluation avec détails
+        dict: Evaluation result with details
     """
     if not filter_config or 'filter_criteria' not in filter_config:
         return {
             'passed': False,
-            'reason': 'Configuration de filtre invalide'
+            'reason': 'Invalid filter configuration'
         }
-    
-    criteria = filter_config['filter_criteria'][0]  # Premier critère
-    
-    # Extraire la valeur du champ requis
+
+    criteria = filter_config['filter_criteria'][0]  # First criterion
+
+    # Extract the value of the required field
     field = criteria['field']
     threshold = criteria['value']
-    
+
     if field == 'txns_5m':
         value = extract_txns_5m(token_data)
     else:
         return {
             'passed': False,
-            'reason': f'Champ {field} non supporté'
+            'reason': f'Field {field} not supported'
         }
-    
-    # Appliquer le critère
+
+    # Apply the criterion
     passed = False
     if criteria['type'] == 'min_threshold':
         passed = value >= threshold
     elif criteria['type'] == 'max_threshold':
         passed = value <= threshold
-    
+
     return {
         'passed': passed,
         'field': field,
@@ -77,64 +77,64 @@ def apply_performance_filter(token_data, filter_config):
 
 def evaluate_token(token_data):
     """
-    Évalue un token avec le filtre de performance
-    
+    Evaluates a token with the performance filter
+
     Args:
-        token_data: Données du token (dict)
-    
+        token_data: Token data (dict)
+
     Returns:
-        dict: Résultat de l'évaluation
+        dict: Evaluation result
     """
-    # Charger le filtre
+    # Load the filter
     filter_config = load_performance_filter()
     if not filter_config:
         return None
-    
-    # Appliquer le filtre
+
+    # Apply the filter
     result = apply_performance_filter(token_data, filter_config)
-    
-    # Ajouter des informations supplémentaires
+
+    # Add additional information
     if result['passed']:
-        result['recommendation'] = '✅ TOKEN RECOMMANDÉ'
-        result['confidence'] = 'Élevée (basé sur les patterns des top performants)'
+        result['recommendation'] = '✅ RECOMMENDED TOKEN'
+        result['confidence'] = 'High (based on top performers patterns)'
     else:
-        result['recommendation'] = '❌ TOKEN NON RECOMMANDÉ'
-        result['confidence'] = 'Modérée (critère non satisfait)'
-    
+        result['recommendation'] = '❌ TOKEN NOT RECOMMENDED'
+        result['confidence'] = 'Moderate (criterion not met)'
+
     return result
 
 def print_evaluation_result(result):
-    """Affiche le résultat de l'évaluation de manière formatée"""
+    """Displays the evaluation result in a formatted way"""
     if not result:
-        print("❌ Impossible d'évaluer le token")
+        print("❌ Unable to evaluate the token")
         return
-    
+
     print("\n" + "="*60)
-    print("ÉVALUATION DU TOKEN")
+    print("TOKEN EVALUATION")
     print("="*60)
-    
+
     print(f"🎯 {result['recommendation']}")
-    print(f"📊 Confiance: {result['confidence']}")
-    
-    print(f"\n📈 Détails du filtre:")
-    print(f"   - Critère: {result['description']}")
-    print(f"   - Valeur actuelle: {result['value']}")
-    print(f"   - Seuil requis: {result['threshold']}")
+    print(f"📊 Confidence: {result['confidence']}")
+
+    print(f"\n📈 Filter details:")
+    print(f"   - Criterion: {result['description']}")
+    print(f"   - Current value: {result['value']}")
+    print(f"   - Required threshold: {result['threshold']}")
     print(f"   - Type: {result['type']}")
-    
+
     if result['passed']:
-        print(f"\n✅ Le token SATISFAIT le critère de filtre")
-        print(f"   → Recommandé pour l'investissement")
+        print(f"\n✅ The token MEETS the filter criterion")
+        print(f"   → Recommended for investment")
     else:
-        print(f"\n❌ Le token NE SATISFAIT PAS le critère de filtre")
-        print(f"   → Non recommandé selon ce filtre")
+        print(f"\n❌ The token DOES NOT MEET the filter criterion")
+        print(f"   → Not recommended according to this filter")
 
 def example_usage():
-    """Exemple d'utilisation du filtre"""
-    print("🔍 EXEMPLE D'UTILISATION DU FILTRE")
+    """Example of using the filter"""
+    print("🔍 FILTER USAGE EXAMPLE")
     print("="*60)
-    
-    # Exemple de token
+
+    # Example token
     example_token = {
         "baseToken": {
             "address": "example_token_address",
@@ -150,39 +150,39 @@ def example_usage():
         "priceUsd": "0.0001",
         "marketCap": 50000
     }
-    
-    print("Token d'exemple:")
-    print(f"   - Nom: {example_token['baseToken']['name']}")
+
+    print("Example token:")
+    print(f"   - Name: {example_token['baseToken']['name']}")
     print(f"   - Symbol: {example_token['baseToken']['symbol']}")
-    print(f"   - Transactions 5min: {extract_txns_5m(example_token)}")
-    
-    # Évaluer le token
+    print(f"   - 5min transactions: {extract_txns_5m(example_token)}")
+
+    # Evaluate the token
     result = evaluate_token(example_token)
     print_evaluation_result(result)
 
 def batch_evaluate_tokens(tokens_data):
     """
-    Évalue un lot de tokens
-    
+    Evaluates a batch of tokens
+
     Args:
-        tokens_data: Liste de tokens à évaluer
-    
+        tokens_data: List of tokens to evaluate
+
     Returns:
-        dict: Résultats de l'évaluation
+        dict: Evaluation results
     """
-    print(f"\n🔍 ÉVALUATION DE {len(tokens_data)} TOKENS")
+    print(f"\n🔍 EVALUATING {len(tokens_data)} TOKENS")
     print("="*60)
-    
+
     results = {
         'total': len(tokens_data),
         'passed': 0,
         'failed': 0,
         'details': []
     }
-    
+
     for i, token in enumerate(tokens_data, 1):
-        print(f"\n[{i}/{len(tokens_data)}] Évaluation du token...")
-        
+        print(f"\n[{i}/{len(tokens_data)}] Evaluating token...")
+
         result = evaluate_token(token)
         if result:
             results['details'].append(result)
@@ -190,55 +190,51 @@ def batch_evaluate_tokens(tokens_data):
                 results['passed'] += 1
             else:
                 results['failed'] += 1
-    
-    # Afficher le résumé
-    print(f"\n📊 RÉSUMÉ DE L'ÉVALUATION:")
-    print(f"   - Total évalué: {results['total']}")
-    print(f"   - Tokens recommandés: {results['passed']}")
-    print(f"   - Tokens non recommandés: {results['failed']}")
-    print(f"   - Taux de recommandation: {results['passed']/results['total']*100:.2f}%")
-    
+
+    # Display the summary
+    print(f"\n📊 EVALUATION SUMMARY:")
+    print(f"   - Total evaluated: {results['total']}")
+    print(f"   - Recommended tokens: {results['passed']}")
+    print(f"   - Non-recommended tokens: {results['failed']}")
+    print(f"   - Recommendation rate: {results['passed']/results['total']*100:.2f}%")
+
     return results
 
 def main():
-    """Fonction principale"""
-    print("🎯 APPLICATION DU FILTRE DE PERFORMANCE")
+    """Main function"""
+    print("🎯 APPLYING THE PERFORMANCE FILTER")
     print("="*60)
-    
+
     if len(sys.argv) > 1:
         command = sys.argv[1]
-        
+
         if command == "example":
             example_usage()
         elif command == "evaluate" and len(sys.argv) > 2:
-            # Évaluer un token spécifique (fichier JSON)
+            # Evaluate a specific token (JSON file)
             try:
                 with open(sys.argv[2], 'r') as f:
                     token_data = json.load(f)
                 result = evaluate_token(token_data)
                 print_evaluation_result(result)
             except FileNotFoundError:
-                print(f"❌ Fichier {sys.argv[2]} non trouvé")
+                print(f"❌ File {sys.argv[2]} not found")
             except json.JSONDecodeError:
-                print(f"❌ Fichier {sys.argv[2]} n'est pas un JSON valide")
+                print(f"❌ File {sys.argv[2]} is not valid JSON")
         else:
-            print("❌ Commande invalide")
+            print("❌ Invalid command")
             print_usage()
     else:
         print_usage()
 
 def print_usage():
-    """Affiche l'aide d'utilisation"""
-    print("\n📖 UTILISATION:")
+    """Displays usage help"""
+    print("\n📖 USAGE:")
     print("   python3 apply_filter.py example")
-    print("   python3 apply_filter.py evaluate <fichier_token.json>")
-    print("\n📝 Exemples:")
+    print("   python3 apply_filter.py evaluate <token_file.json>")
+    print("\n📝 Examples:")
     print("   python3 apply_filter.py example")
     print("   python3 apply_filter.py evaluate token_data.json")
 
 if __name__ == "__main__":
     main()
-
-
-
-

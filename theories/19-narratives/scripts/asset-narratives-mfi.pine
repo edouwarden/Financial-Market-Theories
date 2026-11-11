@@ -1,0 +1,81 @@
+//@version=5
+indicator(title="Global Financial Asset Trends: Money Flow", shorttitle="GFAT", overlay=false, precision=0)
+
+// Input Parameters
+line_val = input(2, title='Line Width')
+offset_val = input(5, title='Label Offset')
+
+// Function to calculate MFI
+calc_mfi(symbol) =>
+    sec = request.security(symbol, timeframe.period, [high, low, close, volume])
+    ta.mfi(sec, 14)
+
+// Commodities
+GOLD_MFI = calc_mfi("TVC:GOLD") // Gold
+OIL_MFI = calc_mfi("TVC:USOIL") // Crude Oil
+SILVER_MFI = calc_mfi("TVC:SILVER") // Silver
+COM_avg_mfi = (GOLD_MFI + OIL_MFI + SILVER_MFI) / 3
+
+// Real Estate
+VNQ_MFI = calc_mfi("AMEX:VNQ") // Real Estate ETF
+IYR_MFI = calc_mfi("NYSE:IYR") // iShares US Real Estate ETF
+RE_avg_mfi = (VNQ_MFI + IYR_MFI) / 2
+
+// Stocks
+SPX_MFI = calc_mfi("CME_MINI:ES1!") // S&P 500
+DAX_MFI = calc_mfi("XETR:DAX") // Germany DAX
+NIKKEI_MFI = calc_mfi("TVC:NI225") // Nikkei 225
+STOCK_avg_mfi = (SPX_MFI + DAX_MFI + NIKKEI_MFI) / 3
+
+// Major Cryptocurrencies
+BTC_MFI = calc_mfi("CRYPTO:BTCUSD") // Bitcoin
+ETH_MFI = calc_mfi("CRYPTO:ETHUSD") // Ethereum
+BNB_MFI = calc_mfi("CRYPTO:BNBUSD") // Binance Coin
+MAJOR_CRYPTO_avg_mfi = (BTC_MFI + ETH_MFI + BNB_MFI) / 3
+
+// Minor Cryptocurrencies
+ADA_MFI = calc_mfi("CRYPTO:ADAUSD") // Cardano
+SOL_MFI = calc_mfi("CRYPTO:SOLUSD") // Solana
+DOT_MFI = calc_mfi("CRYPTO:DOTUSD") // Polkadot
+DOGE_MFI = calc_mfi("CRYPTO:DOGEUSD") // Dogecoin
+SHIB_MFI = calc_mfi("CRYPTO:SHIBUSD") // Shiba Inu
+MINOR_CRYPTO_avg_mfi = (ADA_MFI + SOL_MFI + DOT_MFI + DOGE_MFI + SHIB_MFI) / 5
+
+// Simple Moving Averages for each group using average MFI
+COM_sma = ta.sma(COM_avg_mfi, 3)
+RE_sma = ta.sma(RE_avg_mfi, 3)
+STOCK_sma = ta.sma(STOCK_avg_mfi, 3)
+MAJOR_CRYPTO_sma = ta.sma(MAJOR_CRYPTO_avg_mfi, 3)
+MINOR_CRYPTO_sma = ta.sma(MINOR_CRYPTO_avg_mfi, 3)
+
+// Plotting the SMAs
+plot(COM_sma, color=color.yellow, title="Commodities", linewidth=line_val)
+plot(RE_sma, color=color.blue, title="Real Estate", linewidth=line_val)
+plot(STOCK_sma, color=color.red, title="Stocks", linewidth=line_val)
+plot(MAJOR_CRYPTO_sma, color=color.green, title="Major Cryptocurrencies", linewidth=line_val)
+plot(MINOR_CRYPTO_sma, color=color.purple, title="Minor Cryptocurrencies", linewidth=line_val)
+
+// Labels
+labels_on = input(true, title="Show Labels")
+
+var label lab1 = na
+var label lab2 = na
+var label lab3 = na
+var label lab4 = na
+var label lab5 = na
+
+if barstate.islast and labels_on
+    label.delete(lab1)
+    lab1 := label.new(x=bar_index + offset_val, y=COM_sma, text="Commodities", style=label.style_label_left, color=color.yellow, textcolor=color.black)
+    label.delete(lab2)
+    lab2 := label.new(x=bar_index + offset_val, y=RE_sma, text="Real Estate", style=label.style_label_left, color=color.blue, textcolor=color.white)
+    label.delete(lab3)
+    lab3 := label.new(x=bar_index + offset_val, y=STOCK_sma, text="Stocks", style=label.style_label_left, color=color.red, textcolor=color.white)
+    label.delete(lab4)
+    lab4 := label.new(x=bar_index + offset_val, y=MAJOR_CRYPTO_sma, text="Major Cryptocurrencies", style=label.style_label_left, color=color.green, textcolor=color.white)
+    label.delete(lab5)
+    lab5 := label.new(x=bar_index + offset_val, y=MINOR_CRYPTO_sma, text="Minor Cryptocurrencies", style=label.style_label_left, color=color.purple, textcolor=color.white)
+
+// MFI Overbought/Oversold Levels
+plot(80, color=color.white, title="80", linewidth=line_val)
+plot(20, color=color.white, title="20", linewidth=line_val)

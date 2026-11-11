@@ -1,0 +1,157 @@
+//@version=5
+// Ticks are trades, not seconds. Pine Script does not expose historical raw
+// ticks, so this script uses 1-second bars as the closest available proxy.
+// The window counts lower-timeframe bars, not elapsed time; a clean test needs
+// trade-level tick data.
+indicator("Tick Unanimity Ratio", shorttitle="TUR", overlay=false)
+
+// Parameters
+period_length = input.int(30, "Lower-timeframe bars per window", minval=1, maxval=300, tooltip="Count of 1-second bars used as a tick proxy, not a time-based signal.")
+smoothing = input.int(1, "Smoothing (windows)", minval=1, maxval=50)
+min_movement = input.float(1.0, "Minimum movement (points)", minval=0.1, step=0.1)
+
+// Analyse a candle and count tick-direction micro-movements.
+analyze_candle(open_price, high_price, low_price, close_price) =>
+    up_movements = 0.0
+    down_movements = 0.0
+
+    // Open -> Close movement (main move).
+    body_movement = math.abs(close_price - open_price)
+    if body_movement >= min_movement
+        if close_price > open_price
+            up_movements += 1
+        else if close_price < open_price
+            down_movements += 1
+
+    // Wick analysis.
+    if close_price > open_price  // Bullish candle
+        // Low -> Open (potential down move).
+        low_to_open = open_price - low_price
+        if low_to_open >= min_movement
+            down_movements += 1
+
+        // Close -> High (additional up move).
+        close_to_high = high_price - close_price
+        if close_to_high >= min_movement
+            up_movements += 1
+
+    else if close_price < open_price  // Bearish candle
+        // High -> Open (potential down move).
+        high_to_open = high_price - open_price
+        if high_to_open >= min_movement
+            down_movements += 1
+
+        // Close -> Low (additional down move).
+        close_to_low = close_price - low_price
+        if close_to_low >= min_movement
+            down_movements += 1
+    else  // Neutral candle
+        // Wick analysis.
+        low_to_open = open_price - low_price
+        if low_to_open >= min_movement
+            down_movements += 1
+
+        open_to_high = high_price - open_price
+        if open_to_high >= min_movement
+            up_movements += 1
+
+    [up_movements, down_movements]
+
+// Check continuity.
+is_continuous(current_open, previous_close) =>
+    math.abs(current_open - previous_close) < min_movement
+
+// Main function: compute the unanimity ratio.
+calculate_unanimity() =>
+    // Fetch the latest 1S bars (tick proxy).
+    closes_array = request.security_lower_tf(syminfo.tickerid, "1S", close)
+    opens_array = request.security_lower_tf(syminfo.tickerid, "1S", open)
+    highs_array = request.security_lower_tf(syminfo.tickerid, "1S", high)
+    lows_array = request.security_lower_tf(syminfo.tickerid, "1S", low)
+
+    total_up = 0.0
+    total_down = 0.0
+    valid_bars = 0.0
+
+    // Ensure the arrays are not empty.
+    array_size = array.size(closes_array)
+
+    if array_size > 0 and array.size(opens_array) > 0 and array.size(highs_array) > 0 and array.size(lows_array) > 0
+        // Take the latest 'period_length' bars, or all if fewer are available.
+        actual_length = math.min(array_size, period_length)
+        start_index = array_size - actual_length
+
+        for i = 0 to actual_length - 1
+            index = start_index + i
+            if index < array_size and index < array.size(opens_array) and index < array.size(highs_array) and index < array.size(lows_array)
+                close_price = array.get(closes_array, index)
+                open_price = array.get(opens_array, index)
+                high_price = array.get(highs_array, index)
+                low_price = array.get(lows_array, index)
+
+                if not na(close_price) and not na(open_price) and not na(high_price) and not na(low_price)
+                    // Check continuity with the previous bar.
+                    is_valid_continuity = true
+                    if i > 0 and index > 0
+                        previous_close = array.get(closes_array, index - 1)
+                        if not na(previous_close)
+                            is_valid_continuity := is_continuous(open_price, previous_close)
+
+                    if is_valid_continuity
+                        [up_moves, down_moves] = analyze_candle(open_price, high_price, low_price, close_price)
+                        total_up += up_moves
+                        total_down += down_moves
+                        if up_moves > 0 or down_moves > 0
+                            valid_bars += 1
+
+    // Compute unanimity.
+    max_count = math.max(total_up, total_down)
+    min_count = math.min(total_up, total_down)
+
+    unanimity_ratio = 0.0
+    if min_count > 0
+        unanimity_ratio := max_count / min_count
+    else if max_count > 0
+        unanimity_ratio := max_count
+    else
+        unanimity_ratio := 1.0
+
+    [total_up, total_down, valid_bars, unanimity_ratio]
+
+// Compute the unanimity ratio.
+[up_moves, down_moves, valid_bars, raw_unanimity] = calculate_unanimity()
+
+// Apply smoothing.
+smoothed_unanimity = ta.sma(raw_unanimity, smoothing)
+
+// Normalisation.
+normalized_unanimity = math.min(smoothed_unanimity, 10)
+
+// Display.
+plot(normalized_unanimity, title="Tick Unanimity", color=color.purple, linewidth=2)
+hline(1, "Balance", color=color.gray, linestyle=hline.style_dashed)
+hline(3, "Average Unanimity", color=color.orange, linestyle=hline.style_dotted)
+
+// Color by unanimity.
+bar_color = normalized_unanimity > 3 ? color.new(color.green, 85) :
+             normalized_unanimity < 1.5 ? color.new(color.red, 85) :
+             color.new(color.yellow, 90)
+bgcolor(bar_color, title="Unanimity Color")
+
+// Info table.
+var table info_table = table.new(position.top_right, 2, 7, bgcolor=color.new(color.white, 80), border_width=1)
+if barstate.islast
+    table.cell(info_table, 0, 0, "Up movements:", text_color=color.black)
+    table.cell(info_table, 1, 0, str.tostring(up_moves, "#"), text_color=color.green)
+    table.cell(info_table, 0, 1, "Down movements:", text_color=color.black)
+    table.cell(info_table, 1, 1, str.tostring(down_moves, "#"), text_color=color.red)
+    table.cell(info_table, 0, 2, "Valid bars:", text_color=color.black)
+    table.cell(info_table, 1, 2, str.tostring(valid_bars, "#"), text_color=color.blue)
+    table.cell(info_table, 0, 3, "Min movement:", text_color=color.black)
+    table.cell(info_table, 1, 3, str.tostring(min_movement, "#.##"), text_color=color.orange)
+    table.cell(info_table, 0, 4, "Difference:", text_color=color.black)
+    table.cell(info_table, 1, 4, str.tostring(math.abs(up_moves - down_moves), "#"), text_color=color.black)
+    table.cell(info_table, 0, 5, "Total movements:", text_color=color.black)
+    table.cell(info_table, 1, 5, str.tostring(up_moves + down_moves, "#"), text_color=color.purple)
+    table.cell(info_table, 0, 6, "Unanimity:", text_color=color.black)
+    table.cell(info_table, 1, 6, str.tostring(normalized_unanimity, "#.##"), text_color=color.black)

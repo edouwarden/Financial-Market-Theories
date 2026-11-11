@@ -60,6 +60,9 @@ KICKERS = {
     "16": "ATTENTION LEAD-LAG",
     "17": "INDICATOR CONSENSUS",
     "18": "WEATHER AND MOOD",
+    "19": "RELATIVE-STRENGTH ROTATION",
+    "20": "MANUAL LEAD-LAG OVERLAY",
+    "21": "TICK ACTIVITY, NOT TIME",
 }
 
 ACCENTS = {
@@ -81,6 +84,9 @@ ACCENTS = {
     "16": ORANGE,
     "17": ROSE,
     "18": INDIGO,
+    "19": TEAL,
+    "20": AMBER,
+    "21": PURPLE,
 }
 
 
@@ -185,7 +191,7 @@ def read_theories() -> list[tuple[str, str]]:
         re.MULTILINE,
     )
     rows = [(f"{int(num):02d}", title) for num, title in pattern.findall(text)]
-    assert len(rows) == 18, f"expected 18 theories in README, found {len(rows)}"
+    assert len(rows) == 21, f"expected 21 theories in README, found {len(rows)}"
     return rows
 
 
@@ -222,7 +228,7 @@ def render_header() -> Path:
     tracked(
         draw,
         (112, 368),
-        "18 THEORIES  ·  CODE  ·  DATA  ·  VERDICTS",
+        "21 THEORIES  ·  CODE  ·  DATA  ·  VERDICTS",
         font(14, bold=True),
         (160, 178, 202, 230),
         spacing=2,

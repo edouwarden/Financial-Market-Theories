@@ -1,0 +1,463 @@
+//@version=6
+// Updated by Chase Money From FinFluential on 5/3/25
+indicator('Asset with offset', overlay=true)
+
+// ===================================================================
+// Market Display Settings
+// ===================================================================
+var g_markets = "Market Display Settings"
+
+// Total M2 settings (1)
+showTotal1 = input.bool(false, "M2-1", inline="total1_show", group=g_markets)
+total1Days = input.int(42, "Offset (days)", inline="total1_show", group=g_markets)
+total1color = input.color(color.yellow, "", inline="total1_show", group=g_markets)
+total1StartPrice = input.float(-680000, "Start", inline="total1_scale", group=g_markets)
+total1Multiplier = input.float(70000, "Mult", minval=0.000001, step=10, inline="total1_scale", group=g_markets)
+
+// Total M2 settings (2)
+showTotal2 = input.bool(false, "M2-2", inline="total2_show", group=g_markets)
+total2Days = input.int(0, "Offset (days)", inline="total2_show", group=g_markets)
+total2color = input.color(color.orange, "", inline="total2_show", group=g_markets)
+total2StartPrice = input.float(-680000, "Start", inline="total2_scale", group=g_markets)
+total2Multiplier = input.float(70000, "Mult", minval=0.000001, step=10, inline="total2_scale", group=g_markets)
+
+// Total M2 settings (3)
+showTotal3 = input.bool(false, "M2-3", inline="total3_show", group=g_markets)
+total3Days = input.int(-42, "Offset (days)", inline="total3_show", group=g_markets)
+total3color = input.color(color.white, "", inline="total3_show", group=g_markets)
+total3StartPrice = input.float(-680000, "Start", inline="total3_scale", group=g_markets)
+total3Multiplier = input.float(70000, "Mult", minval=0.000001, step=10, inline="total3_scale", group=g_markets)
+
+// Gold settings
+showGold = input.bool(false, "Gold", inline="gold_show", group=g_markets)
+goldDays = input.int(90, "Offset (days)", inline="gold_show", group=g_markets)
+goldColor = input.color(color.orange, "", inline="gold_show", group=g_markets)
+goldStartPrice = input.float(0, "Start", inline="gold_scale", group=g_markets)
+goldMultiplier = input.float(1, "Mult", minval=0.000001, step=0.1, inline="gold_scale", group=g_markets)
+
+// Nasdaq settings
+showNasdaq = input.bool(false, "Nasdaq 100", inline="nasdaq_show", group=g_markets)
+nasdaqDays = input.int(-20, "Offset (days)", inline="nasdaq_show", group=g_markets)
+nasdaqColor = input.color(color.teal, "", inline="nasdaq_show", group=g_markets)
+nasdaqStartPrice = input.float(0, "Start", inline="nasdaq_scale", group=g_markets)
+nasdaqMultiplier = input.float(1, "Mult", minval=0.000001, step=0.1, inline="nasdaq_scale", group=g_markets)
+
+// BTC settings
+showBTC = input.bool(false, "BTC", inline="btc_show", group=g_markets)
+btcDays = input.int(20, "Offset (days)", inline="btc_show", group=g_markets)
+btcColor = input.color(color.lime, "", inline="btc_show", group=g_markets)
+btcStartPrice = input.float(0, "Start", inline="btc_scale", group=g_markets)
+btcMultiplier = input.float(1, "Mult", minval=0.000001, step=0.1, inline="btc_scale", group=g_markets)
+
+// Global Rates settings
+showRates = input.bool(false, "Global Rates", inline="rates_show", group=g_markets)
+ratesDays = input.int(0, "Offset (days)", inline="rates_show", group=g_markets)
+ratesColor = input.color(color.purple, "", inline="rates_show", group=g_markets)
+ratesStartPrice = input.float(0, "Start", inline="rates_scale", group=g_markets)
+ratesMultiplier = input.float(10000, "Mult", minval=0.000001, step=1000, inline="rates_scale", group=g_markets)
+invertRates = input.bool(false, "Invert", inline="rates_invert", group=g_markets, tooltip="Invert the interest rate chart (higher rates will appear lower)")
+
+// ===================================================================
+// Custom Symbol Inputs
+// ===================================================================
+var g_custom = "Custom Symbols"
+
+// Custom symbol 1
+showCustom1 = input.bool(false, "Custom 1", inline="custom1_show", group=g_custom)
+custom1Days = input.int(0, "Offset (days)", inline="custom1_show", group=g_custom)
+custom1Color = input.color(color.blue, "", inline="custom1_show", group=g_custom)
+custom1Symbol = input.symbol("", "Symbol", inline="custom1_symbol", group=g_custom)
+custom1StartPrice = input.float(0, "Start", inline="custom1_scale", group=g_custom)
+custom1Multiplier = input.float(1, "Mult", minval=0.000001, step=0.1, inline="custom1_scale", group=g_custom)
+
+// Custom symbol 2
+showCustom2 = input.bool(false, "Custom 2", inline="custom2_show", group=g_custom)
+custom2Days = input.int(0, "Offset (days)", inline="custom2_show", group=g_custom)
+custom2Color = input.color(color.red, "", inline="custom2_show", group=g_custom)
+custom2Symbol = input.symbol("", "Symbol", inline="custom2_symbol", group=g_custom)
+custom2StartPrice = input.float(0, "Start", inline="custom2_scale", group=g_custom)
+custom2Multiplier = input.float(1, "Mult", minval=0.000001, step=0.1, inline="custom2_scale", group=g_custom)
+
+// Custom symbol 3
+showCustom3 = input.bool(false, "Custom 3", inline="custom3_show", group=g_custom)
+custom3Days = input.int(0, "Offset (days)", inline="custom3_show", group=g_custom)
+custom3Color = input.color(color.green, "", inline="custom3_show", group=g_custom)
+custom3Symbol = input.symbol("", "Symbol", inline="custom3_symbol", group=g_custom)
+custom3StartPrice = input.float(0, "Start", inline="custom3_scale", group=g_custom)
+custom3Multiplier = input.float(1, "Mult", minval=0.000001, step=0.1, inline="custom3_scale", group=g_custom)
+
+// ===================================================================
+// Country Weights (M2 Money Supply)
+// ===================================================================
+var g_m2 = "Country Weights (M2 Money Supply)"
+
+// Europe
+incEU = input.bool(true, "Eurozone", inline="eu_gb", group=g_m2)
+wtEU = input.float(1.0, "", minval=0.0, inline="eu_gb", group=g_m2)
+incGB = input.bool(true, "United Kingdom", inline="eu_gb", group=g_m2)
+wtGB = input.float(1.0, "", minval=0.0, inline="eu_gb", group=g_m2)
+
+incCH = input.bool(true, "Switzerland", inline="ch_fi", group=g_m2)
+wtCH = input.float(1.0, "", minval=0.0, inline="ch_fi", group=g_m2)
+incFI = input.bool(true, "Finland", inline="ch_fi", group=g_m2)
+wtFI = input.float(1.0, "", minval=0.0, inline="ch_fi", group=g_m2)
+
+incRU = input.bool(true, "Russia", inline="ru_us", group=g_m2)
+wtRU = input.float(1.0, "", minval=0.0, inline="ru_us", group=g_m2)
+incUS = input.bool(true, "United States", inline="ru_us", group=g_m2)
+wtUS = input.float(1.0, "", minval=0.0, inline="ru_us", group=g_m2)
+
+incCA = input.bool(true, "Canada", inline="ca_jp", group=g_m2)
+wtCA = input.float(1.0, "", minval=0.0, inline="ca_jp", group=g_m2)
+incJP = input.bool(true, "Japan", inline="ca_jp", group=g_m2)
+wtJP = input.float(1.0, "", minval=0.0, inline="ca_jp", group=g_m2)
+
+incCN = input.bool(true, "China", inline="cn_tw", group=g_m2)
+wtCN = input.float(1.0, "", minval=0.0, inline="cn_tw", group=g_m2)
+incTW = input.bool(true, "Taiwan", inline="cn_tw", group=g_m2)
+wtTW = input.float(1.0, "", minval=0.0, inline="cn_tw", group=g_m2)
+
+incHK = input.bool(true, "Hong Kong", inline="hk_in", group=g_m2)
+wtHK = input.float(1.0, "", minval=0.0, inline="hk_in", group=g_m2)
+incIN = input.bool(true, "India", inline="hk_in", group=g_m2)
+wtIN = input.float(1.0, "", minval=0.0, inline="hk_in", group=g_m2)
+
+incPH = input.bool(true, "Philippines", inline="ph_sg", group=g_m2)
+wtPH = input.float(1.0, "", minval=0.0, inline="ph_sg", group=g_m2)
+incSG = input.bool(true, "Singapore", inline="ph_sg", group=g_m2)
+wtSG = input.float(1.0, "", minval=0.0, inline="ph_sg", group=g_m2)
+
+incNZ = input.bool(true, "New Zealand", inline="nz_br", group=g_m2)
+wtNZ = input.float(1.0, "", minval=0.0, inline="nz_br", group=g_m2)
+incBR = input.bool(true, "Brazil", inline="nz_br", group=g_m2)
+wtBR = input.float(1.0, "", minval=0.0, inline="nz_br", group=g_m2)
+
+incCO = input.bool(true, "Colombia", inline="co_mx", group=g_m2)
+wtCO = input.float(1.0, "", minval=0.0, inline="co_mx", group=g_m2)
+incMX = input.bool(true, "Mexico", inline="co_mx", group=g_m2)
+wtMX = input.float(1.0, "", minval=0.0, inline="co_mx", group=g_m2)
+
+incAE = input.bool(true, "UAE", inline="ae_tr", group=g_m2)
+wtAE = input.float(1.0, "", minval=0.0, inline="ae_tr", group=g_m2)
+incTR = input.bool(true, "Turkey", inline="ae_tr", group=g_m2)
+wtTR = input.float(1.0, "", minval=0.0, inline="ae_tr", group=g_m2)
+
+incZA = input.bool(true, "South Africa", inline="za", group=g_m2)
+wtZA = input.float(1.0, "", minval=0.0, inline="za", group=g_m2)
+
+// ===================================================================
+// Global Rates Settings
+// ===================================================================
+var g_rates = "Global Rates Settings"
+rateIncUS = input.bool(true, "US Rate", inline="rate_us", group=g_rates)
+rateWtUS = input.float(1.0, "", minval=0, inline="rate_us", group=g_rates)
+
+rateIncEU = input.bool(true, "Eurozone Rate", inline="rate_eu", group=g_rates)
+rateWtEU = input.float(1.0, "", minval=0, inline="rate_eu", group=g_rates)
+
+rateIncGB = input.bool(true, "UK Rate", inline="rate_gb", group=g_rates)
+rateWtGB = input.float(1.0, "", minval=0, inline="rate_gb", group=g_rates)
+
+rateIncJP = input.bool(true, "Japan Rate", inline="rate_jp", group=g_rates)
+rateWtJP = input.float(1.0, "", minval=0, inline="rate_jp", group=g_rates)
+
+rateIncCN = input.bool(true, "China Rate", inline="rate_cn", group=g_rates)
+rateWtCN = input.float(1.0, "", minval=0, inline="rate_cn", group=g_rates)
+
+// ===================================================================
+// Symbol Detection
+// ===================================================================
+symbol = syminfo.tickerid
+isBTC = str.contains(symbol, "BTC") or str.contains(symbol, "btc")
+isETH = str.contains(symbol, "ETH") or str.contains(symbol, "eth")
+
+// Use preset values for ETH if detected
+if isETH
+    total1StartPrice := -39500.0
+    total1Multiplier := 4000.0
+    total2StartPrice := -39500.0
+    total2Multiplier := 4000.0
+    total3StartPrice := -39500.0
+    total3Multiplier := 4000.0
+
+// ===================================================================
+// Data Collection
+// ===================================================================
+// EUROZONE Data
+EUM2D = request.security("ECONOMICS:EUM2*FX:EURUSD", "D", close, lookahead=barmerge.lookahead_on)
+
+// North America Data
+USM2D = request.security("ECONOMICS:USM2", "D", close, lookahead=barmerge.lookahead_on)
+CAM2D = request.security("ECONOMICS:CAM2*FX_IDC:CADUSD", "D", close, lookahead=barmerge.lookahead_on)
+
+// Non-EU Europe Data
+CHM2D = request.security("ECONOMICS:CHM2*FX_IDC:CHFUSD", "D", close, lookahead=barmerge.lookahead_on)
+GBM2D = request.security("ECONOMICS:GBM2*FX:GBPUSD", "D", close, lookahead=barmerge.lookahead_on)
+FIPOP = request.security("ECONOMICS:FIM2/FX_IDC:USDFIM", "D", close, lookahead=barmerge.lookahead_on)
+RUM2D = request.security("ECONOMICS:RUM2*FX_IDC:RUBUSD", "D", close, lookahead=barmerge.lookahead_on)
+
+// Pacific Data
+NZM2D = request.security("ECONOMICS:NZM2*FX_IDC:NZDUSD", "D", close, lookahead=barmerge.lookahead_on)
+
+// Asia Data
+CNM2D = request.security("ECONOMICS:CNM2*FX_IDC:CNYUSD", "D", close, lookahead=barmerge.lookahead_on)
+TWM2D = request.security("ECONOMICS:TWM2*FX_IDC:TWDUSD", "D", close, lookahead=barmerge.lookahead_on)
+HKM2D = request.security("ECONOMICS:HKM2*FX_IDC:HKDUSD", "D", close, lookahead=barmerge.lookahead_on)
+INM2D = request.security("ECONOMICS:INM2*FX_IDC:INRUSD", "D", close, lookahead=barmerge.lookahead_on)
+JPM2D = request.security("ECONOMICS:JPM2*FX_IDC:JPYUSD", "D", close, lookahead=barmerge.lookahead_on)
+PHM2D = request.security("ECONOMICS:PHM2*FX_IDC:PHPUSD", "D", close, lookahead=barmerge.lookahead_on)
+SGM2D = request.security("ECONOMICS:SGM2*FX_IDC:SGDUSD", "D", close, lookahead=barmerge.lookahead_on)
+
+// Latin America Data
+BRM2D = request.security("ECONOMICS:BRM2*FX_IDC:BRLUSD", "D", close, lookahead=barmerge.lookahead_on)
+COM2D = request.security("ECONOMICS:COM2*FX_IDC:COPUSD", "D", close, lookahead=barmerge.lookahead_on)
+MXM2D = request.security("ECONOMICS:MXM2*FX_IDC:MXNUSD", "D", close, lookahead=barmerge.lookahead_on)
+
+// Middle East Data
+AEM2D = request.security("ECONOMICS:AEM2*FX_IDC:AEDUSD", "D", close, lookahead=barmerge.lookahead_on)
+TRM2D = request.security("ECONOMICS:TRM2*FX_IDC:TRYUSD", "D", close, lookahead=barmerge.lookahead_on)
+
+// Africa Data
+ZAM2D = request.security("ECONOMICS:ZAM2*FX_IDC:ZARUSD", "D", close, lookahead=barmerge.lookahead_on)
+
+// ===================================================================
+// Calculate Global Money Supply M2 with inclusion & weights
+// ===================================================================
+totalRaw = (incEU ? EUM2D * wtEU : 0) +
+          (incUS ? USM2D * wtUS : 0) +
+          (incCA ? CAM2D * wtCA : 0) +
+          (incCH ? CHM2D * wtCH : 0) +
+          (incGB ? GBM2D * wtGB : 0) +
+          (incFI ? FIPOP * wtFI : 0) +
+          (incRU ? RUM2D * wtRU : 0) +
+          (incNZ ? NZM2D * wtNZ : 0) +
+          (incCN ? CNM2D * wtCN : 0) +
+          (incTW ? TWM2D * wtTW : 0) +
+          (incHK ? HKM2D * wtHK : 0) +
+          (incIN ? INM2D * wtIN : 0) +
+          (incJP ? JPM2D * wtJP : 0) +
+          (incPH ? PHM2D * wtPH : 0) +
+          (incSG ? SGM2D * wtSG : 0) +
+          (incBR ? BRM2D * wtBR : 0) +
+          (incCO ? COM2D * wtCO : 0) +
+          (incMX ? MXM2D * wtMX : 0) +
+          (incAE ? AEM2D * wtAE : 0) +
+          (incTR ? TRM2D * wtTR : 0) +
+          (incZA ? ZAM2D * wtZA : 0)
+
+total = totalRaw / 10000000000000
+
+// ===================================================================
+// Timeframe Conversion for Bar Offsets
+// ===================================================================
+// How many bars represent one day on the current chart?
+var float barsPerDay = na
+
+if timeframe.isseconds
+    barsPerDay := 86400.0 / timeframe.multiplier
+else if timeframe.isminutes
+    barsPerDay := 1440.0 / timeframe.multiplier
+else if timeframe.isintraday
+    barsPerDay := 24.0 / timeframe.multiplier
+else if timeframe.isdaily
+    // Daily or higher timeframes → one bar already equals ≥1 day
+    barsPerDay := 1.0 / timeframe.multiplier
+else if timeframe.isweekly
+    barsPerDay := 1/(7.0 / timeframe.multiplier)
+else
+    barsPerDay := 1.0 / timeframe.multiplier
+
+// Calculate offsets for all plots
+total1Off = int(math.round(total1Days * barsPerDay))
+total2Off = int(math.round(total2Days * barsPerDay))
+total3Off = int(math.round(total3Days * barsPerDay))
+goldOff = int(math.round(goldDays * barsPerDay))
+nasdaqOff = int(math.round(nasdaqDays * barsPerDay))
+btcOff = int(math.round(btcDays * barsPerDay))
+ratesOff = int(math.round(ratesDays * barsPerDay))
+custom1Off = int(math.round(custom1Days * barsPerDay))
+custom2Off = int(math.round(custom2Days * barsPerDay))
+custom3Off = int(math.round(custom3Days * barsPerDay))
+
+// ===================================================================
+// Additional Market Data & Scaling
+// ===================================================================
+// Total M2 (all three versions)
+adjustedTotal1 = total1StartPrice + (total * total1Multiplier)
+adjustedTotal2 = total2StartPrice + (total * total2Multiplier)
+adjustedTotal3 = total3StartPrice + (total * total3Multiplier)
+
+// Gold
+gold = request.security("TVC:GOLD", timeframe.period, close)
+adjustedGold = goldStartPrice + (gold * goldMultiplier)
+
+// Nasdaq
+ndx = request.security("NDX", timeframe.period, close)
+adjustedNdx = nasdaqStartPrice + (ndx * nasdaqMultiplier)
+
+// BTC
+btc = request.security("BTCUSD", timeframe.period, close)
+adjustedBtc = btcStartPrice + (btc * btcMultiplier)
+
+// Custom symbols data
+custom1Data = request.security(custom1Symbol != "" ? custom1Symbol : syminfo.tickerid, timeframe.period, close)
+adjustedCustom1 = custom1StartPrice + (custom1Data * custom1Multiplier)
+
+custom2Data = request.security(custom2Symbol != "" ? custom2Symbol : syminfo.tickerid, timeframe.period, close)
+adjustedCustom2 = custom2StartPrice + (custom2Data * custom2Multiplier)
+
+custom3Data = request.security(custom3Symbol != "" ? custom3Symbol : syminfo.tickerid, timeframe.period, close)
+adjustedCustom3 = custom3StartPrice + (custom3Data * custom3Multiplier)
+
+// ===================================================================
+// Global Rates Calculation
+// ===================================================================
+// Fetch individual policy/benchmark rates (using TV symbols)
+rateUS = request.security("ECONOMICS:USIRYY", timeframe.period, close)   // Fed Funds upper
+rateEU = request.security("EUINTR", timeframe.period, close)            // ECB main refi
+rateGB = request.security("ECONOMICS:GBIRYY", timeframe.period, close)   // BoE Bank Rate
+rateJP = request.security("ECONOMICS:JPIRYY", timeframe.period, close)   // BoJ Policy Rate
+rateCN = request.security("ECONOMICS:CNIRYY", timeframe.period, close)   // PBoC Loan Prime Rate 1yr
+
+// Calculate weighted average
+var float wtSumRates = 0.0
+wtSumRates := (rateIncUS ? rateWtUS : 0) + (rateIncEU ? rateWtEU : 0) +
+              (rateIncGB ? rateWtGB : 0) + (rateIncJP ? rateWtJP : 0) +
+              (rateIncCN ? rateWtCN : 0)
+
+globalRatesRaw = (rateIncUS ? rateUS * rateWtUS : 0) +
+                 (rateIncEU ? rateEU * rateWtEU : 0) +
+                 (rateIncGB ? rateGB * rateWtGB : 0) +
+                 (rateIncJP ? rateJP * rateWtJP : 0) +
+                 (rateIncCN ? rateCN * rateWtCN : 0)
+
+globalRates = wtSumRates > 0 ? globalRatesRaw / wtSumRates : na
+
+// Apply inversion if selected
+if invertRates and not na(globalRates)
+    // Find a reasonable maximum value for inversion
+    // We use a fixed value of 10 as a reasonable maximum interest rate
+    // This ensures the inversion works well across different rate regimes
+    globalRates := 10 - globalRates
+
+// Apply start price and multiplier
+adjustedRates = ratesStartPrice + (globalRates * ratesMultiplier)
+
+// ===================================================================
+// Plotting
+// ===================================================================
+// Plot all three M2 series
+plot(showTotal1 ? adjustedTotal1 : na, title="Global M2-1",
+     color=total1color, linewidth=2, offset=total1Off)
+plot(showTotal2 ? adjustedTotal2 : na, title="Global M2-2",
+     color=total2color, linewidth=2, offset=total2Off)
+plot(showTotal3 ? adjustedTotal3 : na, title="Global M2-3",
+     color=total3color, linewidth=2, offset=total3Off)
+
+// Plot additional series
+plot(showGold ? adjustedGold : na, title="Gold", color=goldColor, linewidth=2, offset=goldOff)
+plot(showNasdaq ? adjustedNdx : na, title="Nasdaq", color=nasdaqColor, linewidth=2, offset=nasdaqOff)
+plot(showBTC ? adjustedBtc : na, title="BTC", color=btcColor, linewidth=2, offset=btcOff)
+plot(showRates ? adjustedRates : na, title="Global Rates", color=ratesColor, linewidth=2, offset=ratesOff)
+
+// Plot custom symbols
+plot(showCustom1 ? adjustedCustom1 : na, title="Custom 1", color=custom1Color, linewidth=2, offset=custom1Off)
+plot(showCustom2 ? adjustedCustom2 : na, title="Custom 2", color=custom2Color, linewidth=2, offset=custom2Off)
+plot(showCustom3 ? adjustedCustom3 : na, title="Custom 3", color=custom3Color, linewidth=2, offset=custom3Off)
+
+// ===================================================================
+// Labels for Current Values
+// ===================================================================
+// Label customization inputs
+var g_labels = "Label Settings"
+
+// M2 Label settings
+label1Text = input.string("M2-1", "Label Text", inline="label1", group=g_labels)
+label1Color = input.color(color.yellow, "", inline="label1", group=g_labels)
+label1ColorText = input.color(color.white, "", inline="label1", group=g_labels)
+
+label2Text = input.string("M2-2", "Label Text", inline="label2", group=g_labels)
+label2Color = input.color(color.orange, "", inline="label2", group=g_labels)
+label2ColorText = input.color(color.white, "", inline="label2", group=g_labels)
+
+label3Text = input.string("M2-3", "Label Text", inline="label3", group=g_labels)
+label3Color = input.color(color.white, "", inline="label3", group=g_labels)
+label3ColorText = input.color(color.white, "", inline="label3", group=g_labels)
+
+// Additional series label settings
+goldLabelText = input.string("Gold", "Label Text", inline="gold_label", group=g_labels)
+goldLabelColor = input.color(color.orange, "", inline="gold_label", group=g_labels)
+goldLabelColorText = input.color(color.white, "", inline="gold_label", group=g_labels)
+
+nasdaqLabelText = input.string("Nasdaq", "Label Text", inline="nasdaq_label", group=g_labels)
+nasdaqLabelColor = input.color(color.teal, "", inline="nasdaq_label", group=g_labels)
+nasdaqLabelColorText = input.color(color.white, "", inline="nasdaq_label", group=g_labels)
+
+btcLabelText = input.string("BTC", "Label Text", inline="btc_label", group=g_labels)
+btcLabelColor = input.color(color.lime, "", inline="btc_label", group=g_labels)
+btcLabelColorText = input.color(color.white, "", inline="btc_label", group=g_labels)
+
+ratesLabelText = input.string("Rates", "Label Text", inline="rates_label", group=g_labels)
+ratesLabelColor = input.color(color.purple, "", inline="rates_label", group=g_labels)
+ratesLabelColorText = input.color(color.white, "", inline="rates_label", group=g_labels)
+
+// Custom symbol label settings
+custom1LabelText = input.string("Custom1", "Label Text", inline="custom1_label", group=g_labels)
+custom1LabelColor = input.color(color.blue, "", inline="custom1_label", group=g_labels)
+custom1LabelColorText = input.color(color.white, "", inline="custom1_label", group=g_labels)
+
+custom2LabelText = input.string("Custom2", "Label Text", inline="custom2_label", group=g_labels)
+custom2LabelColor = input.color(color.red, "", inline="custom2_label", group=g_labels)
+custom2LabelColorText = input.color(color.white, "", inline="custom2_label", group=g_labels)
+
+custom3LabelText = input.string("Custom3", "Label Text", inline="custom3_label", group=g_labels)
+custom3LabelColor = input.color(color.green, "", inline="custom3_label", group=g_labels)
+custom3LabelColorText = input.color(color.white, "", inline="custom3_label", group=g_labels)
+
+// Create labels to display current values of plotted series
+if barstate.islast
+    // M2 Labels
+    if showTotal1 and not na(adjustedTotal1)
+        label.new(bar_index + total1Off, adjustedTotal1, text=label1Text + ": " + str.tostring(adjustedTotal1, "#.##"),
+                 color=label1Color, style=label.style_label_left, textcolor=label1ColorText, size=size.small)
+
+    if showTotal2 and not na(adjustedTotal2)
+        label.new(bar_index + total2Off, adjustedTotal2, text=label2Text + ": " + str.tostring(adjustedTotal2, "#.##"),
+                 color=label2Color, style=label.style_label_left, textcolor=label2ColorText, size=size.small)
+
+    if showTotal3 and not na(adjustedTotal3)
+        label.new(bar_index + total3Off, adjustedTotal3, text=label3Text + ": " + str.tostring(adjustedTotal3, "#.##"),
+                 color=label3Color, style=label.style_label_left, textcolor=label3ColorText, size=size.small)
+
+    // Gold Label
+    if showGold and not na(adjustedGold)
+        label.new(bar_index + goldOff, adjustedGold, text=goldLabelText + ": " + str.tostring(adjustedGold, "#.##"),
+                 color=goldLabelColor, style=label.style_label_left, textcolor=goldLabelColorText, size=size.small)
+
+    // Nasdaq Label
+    if showNasdaq and not na(adjustedNdx)
+        label.new(bar_index + nasdaqOff, adjustedNdx, text=nasdaqLabelText + ": " + str.tostring(adjustedNdx, "#.##"),
+                 color=nasdaqLabelColor, style=label.style_label_left, textcolor=nasdaqLabelColorText, size=size.small)
+
+    // BTC Label
+    if showBTC and not na(adjustedBtc)
+        label.new(bar_index + btcOff, adjustedBtc, text=btcLabelText + ": " + str.tostring(adjustedBtc, "#.##"),
+                 color=btcLabelColor, style=label.style_label_left, textcolor=btcLabelColorText, size=size.small)
+
+    // Global Rates Label
+    if showRates and not na(adjustedRates)
+        label.new(bar_index + ratesOff, adjustedRates, text=ratesLabelText + ": " + str.tostring(adjustedRates, "#.##"),
+                 color=ratesLabelColor, style=label.style_label_left, textcolor=ratesLabelColorText, size=size.small)
+
+    // Custom Symbol Labels
+    if showCustom1 and not na(adjustedCustom1)
+        label.new(bar_index + custom1Off, adjustedCustom1, text=custom1LabelText + ": " + str.tostring(adjustedCustom1, "#.##"),
+                 color=custom1LabelColor, style=label.style_label_left, textcolor=custom1LabelColorText, size=size.small)
+
+    if showCustom2 and not na(adjustedCustom2)
+        label.new(bar_index + custom2Off, adjustedCustom2, text=custom2LabelText + ": " + str.tostring(adjustedCustom2, "#.##"),
+                 color=custom2LabelColor, style=label.style_label_left, textcolor=custom2LabelColorText, size=size.small)
+
+    if showCustom3 and not na(adjustedCustom3)
+        label.new(bar_index + custom3Off, adjustedCustom3, text=custom3LabelText + ": " + str.tostring(adjustedCustom3, "#.##"),
+                 color=custom3LabelColor, style=label.style_label_left, textcolor=custom3LabelColorText, size=size.small)

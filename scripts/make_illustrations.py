@@ -895,6 +895,302 @@ def render_crowding_dashboard() -> Path:
     return out
 
 
+def render_narratives() -> Path:
+    width, height = 900, 520
+    image, draw = canvas(
+        width,
+        height,
+        "Leadership is visible; persistence is the open question",
+        "Relative strength across one narrative basket, one line per asset",
+    )
+    left, top, right, bottom = 80, 120, 620, 430
+    y_min, y_max = 84, 134
+    count = 60
+
+    def py(value: float) -> float:
+        return bottom - (value - y_min) / (y_max - y_min) * (bottom - top)
+
+    for value in (90, 100, 110, 120, 130):
+        y = py(value)
+        draw.line([(left, y), (right, y)], fill=GRID)
+        draw.text((left - 12, y), str(value), fill=MUTED, font=font(10), anchor="rm")
+    draw.text((left - 12, top - 18), "RS", fill=MUTED, font=font(11, bold=True), anchor="lm")
+
+    series = [
+        ("AI", [96, 99, 104, 113, 126], GREEN),
+        ("DeFi", [100, 104, 99, 108, 112], BLUE),
+        ("RWA", [99, 100, 101, 103, 108], ORANGE),
+        ("Gaming", [104, 101, 108, 103, 106], PURPLE),
+        ("L2", [98, 97, 102, 105, 103], (74, 122, 150)),
+        ("Oracles", [101, 106, 104, 100, 98], MUTED),
+        ("Memes", [108, 112, 104, 96, 91], RED),
+    ]
+
+    def path(values, seed: int, noise: float = 0.55):
+        rng = random.Random(seed)
+        points = []
+        for index in range(count):
+            t = index / (count - 1) * (len(values) - 1)
+            base = min(int(t), len(values) - 2)
+            fraction = t - base
+            value = values[base] * (1 - fraction) + values[base + 1] * fraction
+            value += rng.uniform(-noise, noise)
+            points.append((left + index / (count - 1) * (right - left), py(value)))
+        return points
+
+    for index, (name, values, color) in enumerate(series):
+        points = path(values, seed=170 + index)
+        draw.line(points, fill=color, width=2, joint="curve")
+        end_x, end_y = points[-1]
+        draw.ellipse([end_x - 3, end_y - 3, end_x + 3, end_y + 3], fill=color)
+        if name in ("AI", "Memes"):
+            label = "leader" if name == "AI" else "laggard"
+            offset = -14 if name == "AI" else 16
+            draw.text((end_x - 6, end_y + offset), label, fill=color, font=font(10, bold=True), anchor="ra")
+
+    dashed(draw, (right, top), (right, bottom), ORANGE, width=1, dash=4, gap=4)
+    draw.text((right - 4, top - 18), "now", fill=ORANGE, font=font(10, bold=True), anchor="ra")
+
+    card_x0, card_x1 = 646, 862
+    draw.rounded_rectangle([card_x0, 106, card_x1, 404], radius=10, fill=CARD, outline=GRID)
+    draw.text((card_x0 + 14, 120), "Rank today", fill=INK, font=font(14, bold=True))
+    draw.text((card_x0 + 14, 140), "retrospective, not predictive", fill=MUTED, font=font(10))
+
+    ranked = sorted(series, key=lambda item: item[1][-1], reverse=True)
+    for rank, (name, values, color) in enumerate(ranked):
+        y = 168 + rank * 32
+        if rank == 0:
+            draw.rounded_rectangle([card_x0 + 8, y - 7, card_x1 - 8, y + 25], radius=7, fill=GREEN_FILL, outline=GREEN)
+        draw.text((card_x0 + 18, y), str(rank + 1), fill=MUTED, font=font(10, bold=True))
+        draw.rounded_rectangle([card_x0 + 38, y + 1, card_x0 + 50, y + 13], radius=3, fill=color)
+        draw.text((card_x0 + 60, y - 1), name, fill=INK, font=font(12, bold=rank == 0))
+        draw.text((card_x1 - 18, y - 1), f"{values[-1]:.0f}", fill=color, font=font(12, bold=True), anchor="ra")
+
+    draw.text((card_x0 + 14, 380), "tomorrow?", fill=ORANGE, font=font(11, bold=True))
+    footer(
+        draw,
+        width,
+        height,
+        "The ranking is a map of what already happened; persistence still needs a forward test.",
+    )
+    out = OUT / "narratives-rotation.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    image.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}")
+    return out
+
+
+def render_asset_offset() -> Path:
+    width, height = 900, 540
+    image, draw = canvas(
+        width,
+        height,
+        "A lag can always be fitted after the fact",
+        "The same leading series, shifted and rescaled by hand",
+    )
+    left, top, right, bottom = 80, 120, 860, 390
+
+    for step in (0.0, 0.25, 0.5, 0.75, 1.0):
+        y = bottom - step * (bottom - top)
+        draw.line([(left, y), (right, y)], fill=GRID)
+    draw.text((left - 12, top), "high", fill=MUTED, font=font(10), anchor="rm")
+    draw.text((left - 12, bottom), "low", fill=MUTED, font=font(10), anchor="rm")
+    draw.text((left, top - 18), "normalized, rescaled", fill=MUTED, font=font(10))
+
+    def make_series(peaks, slope: float, seed: int, noise: float = 0.015):
+        rng = random.Random(seed)
+        values = []
+        for index in range(80):
+            x = index / 79
+            value = 0.18 + slope * x
+            for center, height, spread in peaks:
+                value += height * math.exp(-((x - center) / spread) ** 2)
+            value += rng.uniform(-noise, noise)
+            values.append(value)
+        low, high = min(values), max(values)
+        return [(value - low) / (high - low) for value in values]
+
+    m2 = make_series(
+        [(0.18, 0.45, 0.045), (0.48, 0.55, 0.05), (0.78, 0.62, 0.045)],
+        slope=0.10,
+        seed=181,
+    )
+    asset = make_series(
+        [(0.26, 0.40, 0.05), (0.56, 0.48, 0.05), (0.86, 0.56, 0.05)],
+        slope=0.08,
+        seed=182,
+        noise=0.020,
+    )
+
+    def px(index: int) -> float:
+        return left + index / 79 * (right - left)
+
+    def py(value: float) -> float:
+        return bottom - value * (bottom - top)
+
+    m2_points = [(px(index), py(value)) for index, value in enumerate(m2)]
+    asset_points = [(px(index), py(value)) for index, value in enumerate(asset)]
+    draw.line(m2_points, fill=ORANGE, width=3, joint="curve")
+    draw.line(asset_points, fill=BLUE, width=3, joint="curve")
+
+    draw.line([(left + 6, 108), (left + 42, 108)], fill=ORANGE, width=3)
+    draw.text((left + 50, 101), "M2 (shifted +42 d, rescaled)", fill=ORANGE, font=font(11, bold=True))
+    draw.line([(left + 250, 108), (left + 286, 108)], fill=BLUE, width=3)
+    draw.text((left + 294, 101), "risk asset", fill=BLUE, font=font(11, bold=True))
+
+    for m2_index, asset_index in ((14, 21), (38, 45), (62, 69)):
+        x0, x1 = px(m2_index), px(asset_index)
+        dashed(draw, (x0, top), (x0, bottom), ORANGE, width=1, dash=4, gap=4)
+        dashed(draw, (x1, top), (x1, bottom), BLUE, width=1, dash=4, gap=4)
+        y = top + 34
+        draw.line([(x0 + 4, y), (x1 - 4, y)], fill=INK, width=1)
+        draw.polygon([(x0 + 4, y), (x0 + 11, y - 4), (x0 + 11, y + 4)], fill=INK)
+        draw.polygon([(x1 - 4, y), (x1 - 11, y - 4), (x1 - 11, y + 4)], fill=INK)
+        if m2_index == 14:
+            draw.text(((x0 + x1) / 2, y - 12), "42 d", fill=INK, font=font(10, bold=True), anchor="ma")
+
+    draw.text((px(14) - 6, py(m2[14]) - 16), "leader", fill=ORANGE, font=font(10, bold=True), anchor="ra")
+    draw.text((px(69) + 4, py(asset[69]) - 18), "follows", fill=BLUE, font=font(10, bold=True), anchor="la")
+
+    draw.rounded_rectangle([80, 410, 860, 482], radius=10, fill=CARD, outline=GRID)
+    draw.text((96, 420), "Manual inputs", fill=INK, font=font(12, bold=True))
+    knobs = [("Offset (days)", "42"), ("Start", "-680,000"), ("Mult", "70,000")]
+    for index, (label, value) in enumerate(knobs):
+        x0 = 212 + index * 198
+        draw.rounded_rectangle([x0, 418, x0 + 178, 472], radius=8, fill=ORANGE_FILL, outline=blend(ORANGE_FILL, ORANGE, 0.35))
+        draw.text((x0 + 12, 425), label, fill=MUTED, font=font(10))
+        draw.text((x0 + 12, 442), value, fill=ORANGE, font=font(15, bold=True))
+    draw.text((846, 425), "not estimated", fill=ORANGE, font=font(10, bold=True), anchor="ra")
+
+    footer(
+        draw,
+        width,
+        height,
+        "Two free parameters can fit the past. Evidence needs a lag fixed before the fact.",
+    )
+    out = OUT / "asset-with-offset-lag.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    image.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}")
+    return out
+
+
+def render_tick_unanimity() -> Path:
+    width, height = 900, 560
+    image, draw = canvas(
+        width,
+        height,
+        "A flat candle is not always empty",
+        "Tick count and direction separate a two-sided fight from a one-way repricing",
+    )
+
+    panels = [
+        {
+            "title": "Area of interest",
+            "note": "flat candle, many ticks both ways",
+            "open": 236,
+            "close": 236,
+            "high": 228,
+            "low": 244,
+            "body": 10,
+            "color": ORANGE,
+            "ticks": ["up", "down"] * 8,
+            "ratio": "1.0x",
+            "badge": "two-sided",
+            "badge_color": ORANGE,
+            "hint": "a fight at this price",
+        },
+        {
+            "title": "Agreement",
+            "note": "large candle, one-way ticks",
+            "open": 275,
+            "close": 175,
+            "high": 152,
+            "low": 300,
+            "body": 34,
+            "color": GREEN,
+            "ticks": ["up"] * 9 + ["down"],
+            "ratio": "9.0x",
+            "badge": "one-sided",
+            "badge_color": GREEN,
+            "hint": "repricing, often on news",
+        },
+        {
+            "title": "No interest",
+            "note": "flat candle, few ticks",
+            "open": 238,
+            "close": 234,
+            "high": 228,
+            "low": 248,
+            "body": 10,
+            "color": MUTED,
+            "ticks": ["up", "down"],
+            "ratio": "1.0x",
+            "badge": "2 ticks",
+            "badge_color": MUTED,
+            "hint": "quiet, no fight here",
+        },
+    ]
+
+    for index, panel in enumerate(panels):
+        x0 = 55 + index * 270
+        x1 = x0 + 250
+        y0, y1 = 92, 486
+        cx = (x0 + x1) / 2
+        draw.rounded_rectangle([x0, y0, x1, y1], radius=10, fill=CARD, outline=GRID)
+        draw.text((x0 + 14, y0 + 12), panel["title"], fill=INK, font=font(15, bold=True))
+        draw.text((x0 + 14, y0 + 34), panel["note"], fill=MUTED, font=font(10))
+
+        draw.line([(cx, panel["high"]), (cx, panel["low"])], fill=panel["color"], width=2)
+        body_top = min(panel["open"], panel["close"])
+        body_bottom = max(body_top + 8, max(panel["open"], panel["close"]))
+        draw.rectangle(
+            [cx - panel["body"] / 2, body_top, cx + panel["body"] / 2, body_bottom],
+            fill=panel["color"],
+        )
+
+        draw.text((x0 + 14, 310), "ticks inside the candle", fill=MUTED, font=font(10, bold=True))
+        ticks = panel["ticks"]
+        spacing = min(24, 168 / len(ticks))
+        total_width = spacing * len(ticks)
+        start_x = cx - total_width / 2 + spacing / 2
+        for tick_index, direction in enumerate(ticks):
+            tick_x = start_x + tick_index * spacing
+            color = GREEN if direction == "up" else RED
+            height = 26 if index == 1 else (22 if index == 0 else 18)
+            draw.line([(tick_x, 330), (tick_x, 330 + height)], fill=color, width=2)
+            body_h = max(height * 0.55, 5)
+            draw.rectangle([tick_x - 3, 330 + (height - body_h) / 2, tick_x + 3, 330 + (height + body_h) / 2], fill=color)
+
+        up = ticks.count("up")
+        down = ticks.count("down")
+        draw.text((x0 + 14, 376), f"up {up}  ·  down {down}  ·  {len(ticks)} ticks", fill=MUTED, font=font(10))
+        draw.text((cx, 402), panel["ratio"], fill=panel["badge_color"], font=font(24, bold=True), anchor="ma")
+        draw.text((cx, 426), "unanimity ratio", fill=MUTED, font=font(9), anchor="ma")
+
+        badge_color = panel["badge_color"]
+        draw.rounded_rectangle(
+            [x0 + 24, 442, x1 - 24, 470],
+            radius=8,
+            fill=blend(CARD, badge_color, 0.12),
+            outline=blend(CARD, badge_color, 0.45),
+        )
+        draw.text((cx, 456), panel["badge"], fill=badge_color, font=font(10, bold=True), anchor="mm")
+        draw.text((cx, 476), panel["hint"], fill=MUTED, font=font(9), anchor="ma")
+
+    footer(
+        draw,
+        width,
+        height,
+        "The ratio alone is not the signal: many two-sided ticks show interest, one-way ticks show agreement.",
+    )
+    out = OUT / "tick-unanimity-candles.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    image.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}")
+    return out
+
+
 def main() -> int:
     render_price_oi()
     render_liquidation_levels()
@@ -908,6 +1204,9 @@ def main() -> int:
     render_hour_weekday()
     render_big_trade_footprint()
     render_crowding_dashboard()
+    render_narratives()
+    render_asset_offset()
+    render_tick_unanimity()
     return 0
 
 

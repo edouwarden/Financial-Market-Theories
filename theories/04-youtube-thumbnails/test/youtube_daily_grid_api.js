@@ -89,7 +89,7 @@ const YOUTUBERS = [
 	"MonsieurTK"
 ];
 
-// Mapping des noms d'utilisateur vers les Channel IDs (nécessaire pour l'API YouTube)
+// Mapping of usernames to Channel IDs (required for the YouTube API)
 const CHANNEL_IDS = {
 	"CoinBureau": "UCqK_GSMbpiV8spgD3ZGloSw",
 	"AltcoinDaily": "UC9lT9XdT6BjgC6YQ5e0wBzQ",
@@ -174,23 +174,23 @@ const CHANNEL_IDS = {
 	"MonsieurTK": "UCI7M65p3Q-DQXi8g9w0iICg"
 };
 
-// Dossiers de cache
+// Cache directories
 const CACHE_DIR = "youtube_cache";
 const COMPOSITE_DIR = "composite_images";
 const METADATA_DIR = "youtube_metadata";
 
-// Créer les dossiers s'ils n'existent pas
+// Create the directories if they don't exist
 [CACHE_DIR, COMPOSITE_DIR, METADATA_DIR].forEach(dir => {
 	if (!fs.existsSync(dir)) {
 		fs.mkdirSync(dir, { recursive: true });
 	}
 });
 
-// Configuration des délais
-const REQUEST_DELAY = 1000; // 1 seconde entre les requêtes
+// Delay configuration
+const REQUEST_DELAY = 1000; // 1 second between requests
 
 /**
- * Fonction utilitaire pour faire des requêtes HTTPS
+ * Utility function to make HTTPS requests
  */
 function makeRequest(url) {
 	return new Promise((resolve, reject) => {
@@ -214,7 +214,7 @@ function makeRequest(url) {
 }
 
 /**
- * Fonction utilitaire pour télécharger une image
+ * Utility function to download an image
  */
 function downloadImage(url, filepath) {
 	return new Promise((resolve, reject) => {
@@ -226,14 +226,14 @@ function downloadImage(url, filepath) {
 				resolve();
 			});
 		}).on('error', (err) => {
-			fs.unlink(filepath, () => { }); // Supprimer le fichier en cas d'erreur
+			fs.unlink(filepath, () => { }); // Delete the file in case of error
 			reject(err);
 		});
 	});
 }
 
 /**
- * Obtenir l'image en cache ou la télécharger
+ * Get the image from cache or download it
  */
 async function getCachedImage(videoId, thumbnailUrl) {
 	const cachePath = path.join(CACHE_DIR, `${videoId}.png`);
@@ -242,35 +242,35 @@ async function getCachedImage(videoId, thumbnailUrl) {
 		return await loadImage(cachePath);
 	}
 
-	// Télécharger l'image
+	// Download the image
 	await downloadImage(thumbnailUrl, cachePath);
 	return await loadImage(cachePath);
 }
 
 /**
- * Vérifier si une date est dans la journée actuelle (heure US)
+ * Check whether a date falls on the current day (US time)
  */
 function isTodayUS(publishedAt) {
 	const now = new Date();
 	const publishedDate = new Date(publishedAt);
 
-	// Convertir en heure US (EST/EDT)
+	// Convert to US time (EST/EDT)
 	const usTime = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
 	const publishedUS = new Date(publishedDate.toLocaleString("en-US", { timeZone: "America/New_York" }));
 
-	// Comparer les dates (année, mois, jour)
+	// Compare the dates (year, month, day)
 	return usTime.getFullYear() === publishedUS.getFullYear() &&
 		usTime.getMonth() === publishedUS.getMonth() &&
 		usTime.getDate() === publishedUS.getDate();
 }
 
 /**
- * Récupérer les métadonnées d'une vidéo YouTube via l'API
+ * Get the metadata of a YouTube video via the API
  */
 async function getVideoMetadata(videoId) {
 	const metadataPath = path.join(METADATA_DIR, `${videoId}.json`);
 
-	// Vérifier le cache
+	// Check the cache
 	if (fs.existsSync(metadataPath)) {
 		try {
 			const cached = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
@@ -278,11 +278,11 @@ async function getVideoMetadata(videoId) {
 				return cached;
 			}
 		} catch (e) {
-			console.log(`Erreur lecture cache pour ${videoId}: ${e.message}`);
+			console.log(`Error reading cache for ${videoId}: ${e.message}`);
 		}
 	}
 
-	// Récupérer depuis l'API YouTube
+	// Get from the YouTube API
 	try {
 		const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}&key=${YOUTUBE_API_KEY}`;
 		const data = await makeRequest(url);
@@ -294,11 +294,11 @@ async function getVideoMetadata(videoId) {
 				viewCount: parseInt(video.statistics.viewCount) || 0
 			};
 
-			// Sauvegarder en cache
+			// Save to cache
 			try {
 				fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2));
 			} catch (e) {
-				console.log(`Erreur sauvegarde cache pour ${videoId}: ${e.message}`);
+				console.log(`Error saving cache for ${videoId}: ${e.message}`);
 			}
 
 			return metadata;
@@ -306,38 +306,38 @@ async function getVideoMetadata(videoId) {
 
 		return { publishedAt: null, viewCount: 0 };
 	} catch (e) {
-		console.log(`Erreur récupération métadonnées pour ${videoId}: ${e.message}`);
+		console.log(`Error fetching metadata for ${videoId}: ${e.message}`);
 		return { publishedAt: null, viewCount: 0 };
 	}
 }
 
 /**
- * Récupérer la dernière vidéo d'un YouTuber via l'API YouTube
+ * Get the latest video from a YouTuber via the YouTube API
  */
 async function getLatestVideo(youtuberName) {
 	try {
 		const channelId = CHANNEL_IDS[youtuberName];
 
 		if (!channelId) {
-			console.log(`Channel ID non trouvé pour ${youtuberName}`);
+			console.log(`Channel ID not found for ${youtuberName}`);
 			return null;
 		}
 
-		console.log(`Récupération vidéos pour ${youtuberName} (${channelId})...`);
+		console.log(`Fetching videos for ${youtuberName} (${channelId})...`);
 
-		// Récupérer la dernière vidéo du channel
+		// Get the latest video from the channel
 		const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=1&order=date&type=video&key=${YOUTUBE_API_KEY}`;
 		const searchData = await makeRequest(searchUrl);
 
 		if (!searchData.items || searchData.items.length === 0) {
-			console.log(`Aucune vidéo trouvée pour ${youtuberName}`);
+			console.log(`No video found for ${youtuberName}`);
 			return null;
 		}
 
 		const video = searchData.items[0];
 		const videoId = video.id.videoId;
 
-		// Récupérer les métadonnées détaillées
+		// Get the detailed metadata
 		const metadata = await getVideoMetadata(videoId);
 
 		return {
@@ -350,18 +350,18 @@ async function getLatestVideo(youtuberName) {
 		};
 
 	} catch (e) {
-		console.log(`Erreur récupération vidéo pour ${youtuberName}: ${e.message}`);
+		console.log(`Error fetching video for ${youtuberName}: ${e.message}`);
 		return null;
 	}
 }
 
 /**
- * Récupérer toutes les vidéos du jour
+ * Get all of today's videos
  */
 async function getTodayVideos() {
 	const todayVideos = [];
 
-	console.log(`Récupération des vidéos pour ${YOUTUBERS.length} YouTubers...`);
+	console.log(`Fetching videos for ${YOUTUBERS.length} YouTubers...`);
 
 	for (let i = 0; i < YOUTUBERS.length; i++) {
 		const youtuber = YOUTUBERS[i];
@@ -371,18 +371,18 @@ async function getTodayVideos() {
 
 			if (video && video.publishedAt && isTodayUS(video.publishedAt)) {
 				todayVideos.push(video);
-				console.log(`✓ ${youtuber}: vidéo du jour trouvée - "${video.title}"`);
+				console.log(`✓ ${youtuber}: video from today found - "${video.title}"`);
 			} else {
-				console.log(`✗ ${youtuber}: pas de vidéo du jour`);
+				console.log(`✗ ${youtuber}: no video from today`);
 			}
 
-			// Délai entre les requêtes pour respecter les limites de l'API
+			// Delay between requests to respect the API limits
 			if (i < YOUTUBERS.length - 1) {
 				await new Promise(resolve => setTimeout(resolve, REQUEST_DELAY));
 			}
 
 		} catch (e) {
-			console.log(`Erreur pour ${youtuber}: ${e.message}`);
+			console.log(`Error for ${youtuber}: ${e.message}`);
 		}
 	}
 
@@ -390,38 +390,38 @@ async function getTodayVideos() {
 }
 
 /**
- * Créer une grille d'images
+ * Create a grid of images
  */
 async function createImageGrid(videos) {
 	if (videos.length === 0) {
-		console.log("Aucune vidéo du jour trouvée");
+		console.log("No video found for today");
 		return null;
 	}
 
-	console.log(`Création de la grille avec ${videos.length} vidéos...`);
+	console.log(`Creating the grid with ${videos.length} videos...`);
 
-	// Calculer les dimensions de la grille
+	// Calculate the grid dimensions
 	const cols = Math.ceil(Math.sqrt(videos.length));
 	const rows = Math.ceil(videos.length / cols);
 
-	// Dimensions des thumbnails
+	// Thumbnail dimensions
 	const thumbnailSize = 320;
 	const padding = 10;
 	const titleHeight = 40;
 
-	// Dimensions du canvas
+	// Canvas dimensions
 	const canvasWidth = cols * (thumbnailSize + padding) + padding;
 	const canvasHeight = rows * (thumbnailSize + titleHeight + padding) + padding;
 
-	// Créer le canvas
+	// Create the canvas
 	const canvas = createCanvas(canvasWidth, canvasHeight);
 	const ctx = canvas.getContext('2d');
 
-	// Fond blanc
+	// White background
 	ctx.fillStyle = '#ffffff';
 	ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-	// Charger et dessiner chaque thumbnail
+	// Load and draw each thumbnail
 	for (let i = 0; i < videos.length; i++) {
 		const video = videos[i];
 		const row = Math.floor(i / cols);
@@ -431,63 +431,63 @@ async function createImageGrid(videos) {
 		const y = row * (thumbnailSize + titleHeight + padding) + padding;
 
 		try {
-			// Charger l'image
+			// Load the image
 			const img = await getCachedImage(video.videoId, video.thumbnailUrl);
 
-			// Dessiner le thumbnail
+			// Draw the thumbnail
 			ctx.drawImage(img, x, y, thumbnailSize, thumbnailSize);
 
-			// Dessiner le titre (tronqué)
+			// Draw the title (truncated)
 			ctx.fillStyle = '#000000';
 			ctx.font = 'bold 14px Arial';
 			const title = video.title.length > 40 ? video.title.substring(0, 40) + '...' : video.title;
 			ctx.fillText(title, x, y + thumbnailSize + 20);
 
-			// Dessiner le nom du channel et les vues
+			// Draw the channel name and the views
 			ctx.fillStyle = '#666666';
 			ctx.font = '12px Arial';
-			const views = video.viewCount ? `${video.viewCount.toLocaleString()} vues` : 'Vues inconnues';
+			const views = video.viewCount ? `${video.viewCount.toLocaleString()} views` : 'Unknown views';
 			ctx.fillText(`${video.channel} • ${views}`, x, y + thumbnailSize + 35);
 
-			console.log(`✓ Thumbnail ${i + 1}/${videos.length} dessiné`);
+			console.log(`✓ Thumbnail ${i + 1}/${videos.length} drawn`);
 
 		} catch (e) {
-			console.log(`Erreur chargement image pour ${video.videoId}: ${e.message}`);
+			console.log(`Error loading image for ${video.videoId}: ${e.message}`);
 
-			// Dessiner un rectangle gris en cas d'erreur
+			// Draw a gray rectangle in case of error
 			ctx.fillStyle = '#cccccc';
 			ctx.fillRect(x, y, thumbnailSize, thumbnailSize);
 			ctx.fillStyle = '#000000';
 			ctx.font = '14px Arial';
-			ctx.fillText('Erreur chargement', x, y + thumbnailSize / 2);
+			ctx.fillText('Loading error', x, y + thumbnailSize / 2);
 		}
 	}
 
-	// Ajouter un titre en haut de l'image
+	// Add a title at the top of the image
 	ctx.fillStyle = '#000000';
 	ctx.font = 'bold 24px Arial';
-	const title = `Vidéos Crypto du ${new Date().toLocaleDateString('fr-FR', { timeZone: 'America/New_York' })} (${videos.length} vidéos)`;
+	const title = `Crypto Videos for ${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })} (${videos.length} videos)`;
 	const titleWidth = ctx.measureText(title).width;
 	ctx.fillText(title, (canvasWidth - titleWidth) / 2, 30);
 
-	// Sauvegarder l'image
+	// Save the image
 	const timestamp = Date.now();
 	const outputPath = path.join(COMPOSITE_DIR, `daily_grid_${timestamp}.png`);
 
 	const buffer = canvas.toBuffer('image/png');
 	fs.writeFileSync(outputPath, buffer);
 
-	console.log(`Grille sauvegardée: ${outputPath}`);
+	console.log(`Grid saved: ${outputPath}`);
 	return outputPath;
 }
 
 /**
- * Fonction principale
+ * Main function
  */
 async function main() {
 	try {
 		console.log("=== YouTube Daily Grid Generator (API Version) ===");
-		console.log(`Date/heure actuelle (US): ${new Date().toLocaleString("en-US", { timeZone: "America/New_York" })}`);
+		console.log(`Current date/time (US): ${new Date().toLocaleString("en-US", { timeZone: "America/New_York" })}`);
 
 		if (YOUTUBE_API_KEY === 'YOUR_API_KEY_HERE') {
 			console.log("⚠️  WARNING: Set your YouTube API key in the YOUTUBE_API_KEY environment variable");
@@ -496,34 +496,34 @@ async function main() {
 			return;
 		}
 
-		// Récupérer les vidéos du jour
+		// Get today's videos
 		const todayVideos = await getTodayVideos();
 
 		if (todayVideos.length === 0) {
-			console.log("Aucune vidéo publiée aujourd'hui trouvée.");
+			console.log("No video published today was found.");
 			return;
 		}
 
-		console.log(`\n${todayVideos.length} vidéos du jour trouvées:`);
+		console.log(`\n${todayVideos.length} videos from today found:`);
 		todayVideos.forEach(video => {
-			console.log(`- ${video.channel}: ${video.title} (${video.viewCount.toLocaleString()} vues)`);
+			console.log(`- ${video.channel}: ${video.title} (${video.viewCount.toLocaleString()} views)`);
 		});
 
-		// Créer la grille
+		// Create the grid
 		const gridPath = await createImageGrid(todayVideos);
 
 		if (gridPath) {
-			console.log(`\n✅ Grille créée avec succès: ${gridPath}`);
+			console.log(`\n✅ Grid created successfully: ${gridPath}`);
 		} else {
-			console.log("\n❌ Erreur lors de la création de la grille");
+			console.log("\n❌ Error while creating the grid");
 		}
 
 	} catch (e) {
-		console.error("Erreur dans le script principal:", e);
+		console.error("Error in main script:", e);
 	}
 }
 
-// Exécuter le script
+// Run the script
 if (require.main === module) {
 	main();
 }
@@ -534,4 +534,3 @@ module.exports = {
 	isTodayUS,
 	getLatestVideo
 };
-

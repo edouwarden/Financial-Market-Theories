@@ -1,0 +1,38 @@
+//@version=6
+indicator('RS Screener: 5M & 1D', overlay = false)
+
+// === PARAMETERS ===
+int length = 12 // Lookback period for RS calculation
+string benchmark = 'SPY' // Benchmark ticker (SPY)
+
+// === REQUEST NECESSARY DATA ===
+// Fetch data for the stock
+close5 = request.security(syminfo.tickerid, '5', close)
+close5_prev = request.security(syminfo.tickerid, '5', close[length])
+ATR5_prev = request.security(syminfo.tickerid, '5', ta.atr(length)[1])
+
+closeD = request.security(syminfo.tickerid, 'D', close)
+closeD_prev = request.security(syminfo.tickerid, 'D', close[length])
+ATRD_prev = request.security(syminfo.tickerid, 'D', ta.atr(length)[1])
+
+// Fetch data for the benchmark (SPY)
+spyClose5 = request.security(benchmark, '5', close)
+spyClose5_prev = request.security(benchmark, '5', close[length])
+spyATR5_prev = request.security(benchmark, '5', ta.atr(length)[1])
+
+spyCloseD = request.security(benchmark, 'D', close)
+spyCloseD_prev = request.security(benchmark, 'D', close[length])
+spyATRD_prev = request.security(benchmark, 'D', ta.atr(length)[1])
+
+// === COMPUTE RELATIVE STRENGTH ===
+// 5M RS Calculation
+powerIndex5 = spyATR5_prev != 0 ? (spyClose5 - spyClose5_prev) / spyATR5_prev : 0
+RS_5M = ATR5_prev != 0 ? (close5 - close5_prev - powerIndex5 * ATR5_prev) / ATR5_prev : 0
+
+// 1D RS Calculation
+powerIndexD = spyATRD_prev != 0 ? (spyCloseD - spyCloseD_prev) / spyATRD_prev : 0
+RS_1D = ATRD_prev != 0 ? (closeD - closeD_prev - powerIndexD * ATRD_prev) / ATRD_prev : 0
+
+// === OUTPUT FOR SCREENING ===
+plot(RS_5M, title = 'RS_5M')
+plot(RS_1D, title = 'RS_1D')

@@ -1,0 +1,75 @@
+//@version=5
+indicator(title="Global Financial Asset Trends: Relative Strength", shorttitle = "GFAT", overlay=false, precision=0)
+
+// Input Parameters
+line_val = input(2, title='Line Width')
+offset_val = input(5, title='Label Offset')
+
+// Commodities
+GOLD_RSI = request.security("TVC:GOLD", "", ta.rsi(close, 14)) // Gold
+OIL_RSI = request.security("TVC:USOIL", "", ta.rsi(close, 14)) // Crude Oil
+SILVER_RSI = request.security("TVC:SILVER", "", ta.rsi(close, 14)) // Silver
+COM_avg_rsi = (GOLD_RSI + OIL_RSI + SILVER_RSI) / 3
+
+// Real Estate
+VNQ_RSI = request.security("AMEX:VNQ", "", ta.rsi(close, 14)) // Real Estate ETF
+RE_avg_rsi = (VNQ_RSI ) / 1
+
+// Stocks
+SPX_RSI = request.security("CME_MINI:ES1!", "", ta.rsi(close, 14)) // S&P 500
+DAX_RSI = request.security("XETR:DAX", "", ta.rsi(close, 14)) // Germany DAX
+NIKKEI_RSI = request.security("TVC:NI225", "", ta.rsi(close, 14)) // Nikkei 225
+STOCK_avg_rsi = (SPX_RSI + DAX_RSI + NIKKEI_RSI) / 3
+
+// Major Cryptocurrencies
+BTC_RSI = request.security("CRYPTO:BTCUSD", "", ta.rsi(close, 14)) // Bitcoin
+ETH_RSI = request.security("CRYPTO:ETHUSD", "", ta.rsi(close, 14)) // Ethereum
+BNB_RSI = request.security("CRYPTO:BNBUSD", "", ta.rsi(close, 14)) // Binance Coin
+MAJOR_CRYPTO_avg_rsi = (BTC_RSI + ETH_RSI + BNB_RSI) / 3
+
+// Minor Cryptocurrencies
+ADA_RSI = request.security("CRYPTO:ADAUSD", "", ta.rsi(close, 14)) // Cardano
+SOL_RSI = request.security("CRYPTO:SOLUSD", "", ta.rsi(close, 14)) // Solana
+DOT_RSI = request.security("CRYPTO:DOTUSD", "", ta.rsi(close, 14)) // Polkadot
+DOGE_RSI = request.security("CRYPTO:DOGEUSD", "", ta.rsi(close, 14)) // Dogecoin
+SHIB_RSI = request.security("CRYPTO:SHIBUSD", "", ta.rsi(close, 14)) // Shiba Inu
+MINOR_CRYPTO_avg_rsi = (ADA_RSI + SOL_RSI + DOT_RSI + DOGE_RSI + SHIB_RSI) / 5
+
+// Simple Moving Averages for each group using average RSI
+COM_sma = ta.sma(COM_avg_rsi, 3)
+RE_sma = ta.sma(RE_avg_rsi, 3)
+STOCK_sma = ta.sma(STOCK_avg_rsi, 3)
+MAJOR_CRYPTO_sma = ta.sma(MAJOR_CRYPTO_avg_rsi, 3)
+MINOR_CRYPTO_sma = ta.sma(MINOR_CRYPTO_avg_rsi, 3)
+
+// Plotting the SMAs
+plot(COM_sma, color=color.yellow, title="Commodities", linewidth=line_val)
+plot(RE_sma, color=color.blue, title="Real Estate", linewidth=line_val)
+plot(STOCK_sma, color=color.red, title="Stocks", linewidth=line_val)
+plot(MAJOR_CRYPTO_sma, color=color.green, title="Major Cryptocurrencies", linewidth=line_val)
+plot(MINOR_CRYPTO_sma, color=color.purple, title="Minor Cryptocurrencies", linewidth=line_val)
+
+// Labels
+labels_on = input(true, title="Show Labels")
+
+var label lab1 = na
+var label lab2 = na
+var label lab3 = na
+var label lab4 = na
+var label lab5 = na
+
+if barstate.islast and labels_on
+    label.delete(lab1)
+    lab1 := label.new(x=bar_index + offset_val, y=COM_sma, text="Commodities", style=label.style_label_left, color=color.yellow, textcolor=color.black)
+    label.delete(lab2)
+    lab2 := label.new(x=bar_index + offset_val, y=RE_sma, text="Real Estate", style=label.style_label_left, color=color.blue, textcolor=color.white)
+    label.delete(lab3)
+    lab3 := label.new(x=bar_index + offset_val, y=STOCK_sma, text="Stocks", style=label.style_label_left, color=color.red, textcolor=color.white)
+    label.delete(lab4)
+    lab4 := label.new(x=bar_index + offset_val, y=MAJOR_CRYPTO_sma, text="Major Cryptocurrencies", style=label.style_label_left, color=color.green, textcolor=color.white)
+    label.delete(lab5)
+    lab5 := label.new(x=bar_index + offset_val, y=MINOR_CRYPTO_sma, text="Minor Cryptocurrencies", style=label.style_label_left, color=color.purple, textcolor=color.white)
+
+// RSI Overbought/Oversold Levels
+plot(70, color=color.white, title="70", linewidth=line_val)
+plot(30, color=color.white, title="30", linewidth=line_val)

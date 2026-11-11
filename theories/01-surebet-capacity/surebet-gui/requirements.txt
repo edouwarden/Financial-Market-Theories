@@ -1,0 +1,3 @@
+# Tkinter is part of the Python standard library.
+# Optional dark theme for src/gui.py:
+ttkbootstrap>=1.10

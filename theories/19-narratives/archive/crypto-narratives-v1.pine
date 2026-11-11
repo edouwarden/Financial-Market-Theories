@@ -1,0 +1,223 @@
+//@version=5
+indicator(title="Crypto Narratives: Relative Strength", shorttitle = "CN", overlay=false, precision=0)
+
+rsi_val = input(14, title='RSI')
+line_val = input(2, title='Line Width')
+offset_val = input(5, title='Label Offset')
+
+// AI Tokens
+FET_RSI = request.security("FETUSDT", "", ta.rsi(close, rsi_val))
+INJ_RSI = request.security("INJUSDT", "", ta.rsi(close, rsi_val))
+RNDR_RSI = request.security("RNDRUSDT", "", ta.rsi(close, rsi_val))
+ai_data = (FET_RSI + INJ_RSI + RNDR_RSI) / 3
+
+// Meme Coins
+DOGE_RSI = request.security("DOGEUSDT", "", ta.rsi(close, rsi_val))
+//WPEPE_RSI = request.security("WPEPEUSDT", "", ta.rsi(close, rsi_val))
+FLOCK_RSI = request.security("FLOCKUSDT", "", ta.rsi(close, rsi_val))
+meme_coins = (DOGE_RSI + FLOCK_RSI) / 2
+
+// Real World Assets (RWA)
+ONDO_RSI = request.security("ONDOUSDT", "", ta.rsi(close, rsi_val))
+TOKEN_RSI = request.security("TOKENUSDT", "", ta.rsi(close, rsi_val))
+PENDLE_RSI = request.security("PENDLEUSDT", "", ta.rsi(close, rsi_val))
+rwa = (ONDO_RSI + TOKEN_RSI + PENDLE_RSI) / 3
+
+// DeFi
+UNI_RSI = request.security("UNIUSDT", "", ta.rsi(close, rsi_val))
+AAVE_RSI = request.security("AAVEUSDT", "", ta.rsi(close, rsi_val))
+CRV_RSI = request.security("CRVUSDT", "", ta.rsi(close, rsi_val))
+old_defi = (UNI_RSI + AAVE_RSI + CRV_RSI) / 3
+
+// Layer 1 Protocols
+SEI_RSI = request.security("SEIUSDT", "", ta.rsi(close, rsi_val))
+SUI_RSI = request.security("SUIUSDT", "", ta.rsi(close, rsi_val))
+KAS_RSI = request.security("BYBIT:KASUSDT", "", ta.rsi(close, rsi_val))
+layer1 = (SEI_RSI + SUI_RSI + KAS_RSI) / 3
+
+// Gaming Tokens
+GALA_RSI = request.security("GALAUSDT", "", ta.rsi(close, rsi_val))
+ENJ_RSI = request.security("ENJUSDT", "", ta.rsi(close, rsi_val))
+IMX_RSI = request.security("IMXUSDT", "", ta.rsi(close, rsi_val))
+gaming_tokens = (GALA_RSI + ENJ_RSI + IMX_RSI) / 3
+
+// Restaking Tokens
+TENET_RSI = request.security("BYBIT:TENETUSDT", "", ta.rsi(close, rsi_val))
+ALT_RSI = request.security("ALTUSDT", "", ta.rsi(close, rsi_val))
+RSTK_RSI = request.security("ETHFIUSDT", "", ta.rsi(close, rsi_val))
+restaking = (TENET_RSI + ALT_RSI + RSTK_RSI) / 3
+
+// DePIN Tokens
+STORJ_RSI = request.security("STORJUSDT", "", ta.rsi(close, rsi_val))
+OCEAN_RSI = request.security("OCEANUSDT", "", ta.rsi(close, rsi_val))
+AR_RSI = request.security("ARUSDT", "", ta.rsi(close, rsi_val))
+FIL_RSI = request.security("FILUSDT", "", ta.rsi(close, rsi_val))
+depin = (STORJ_RSI + OCEAN_RSI + AR_RSI + FIL_RSI) / 4
+
+// DeSci Tokens
+VITA_RSI = request.security("VITAUSDT", "", ta.rsi(close, rsi_val))
+SCIE_RSI = request.security("SCIEUSDT", "", ta.rsi(close, rsi_val))
+LABS_RSI = request.security("LABSUSDT", "", ta.rsi(close, rsi_val))
+desci = (VITA_RSI + SCIE_RSI + LABS_RSI) / 3
+
+// GambleFi Tokens
+ROLL_RSI = request.security("ROLLUSDT", "", ta.rsi(close, rsi_val))
+BET_RSI = request.security("BETUSDT", "", ta.rsi(close, rsi_val))
+LUCK_RSI = request.security("LUCKUSDT", "", ta.rsi(close, rsi_val))
+gamblefi = (ROLL_RSI + BET_RSI + LUCK_RSI) / 3
+
+// Modular Blockchain Tokens
+MOD_RSI = request.security("MODUSDT", "", ta.rsi(close, rsi_val))
+FLEX_RSI = request.security("FLEXUSDT", "", ta.rsi(close, rsi_val))
+INTER_RSI = request.security("INTERUSDT", "", ta.rsi(close, rsi_val))
+modular_blockchain = (MOD_RSI + FLEX_RSI + INTER_RSI) / 3
+
+// Fee Switch Tokens
+SUSHI_RSI = request.security("SUSHIUSDT", "", ta.rsi(close, rsi_val))
+feeswitch = (UNI_RSI + SUSHI_RSI) / 2
+
+// PolitiFi Tokens
+VOTE_RSI = request.security("VOTEUSDT", "", ta.rsi(close, rsi_val))
+GOV_RSI = request.security("GOVUSDT", "", ta.rsi(close, rsi_val))
+PATRIOT_RSI = request.security("PATRIOTUSDT", "", ta.rsi(close, rsi_val))
+politifi = (VOTE_RSI + GOV_RSI + PATRIOT_RSI) / 3
+
+// Prediction Market Tokens
+//PRED_RSI = request.security("PREDUSDT", "", ta.rsi(close, rsi_val))
+AUGUR_RSI = request.security("REPUSDT", "", ta.rsi(close, rsi_val))
+prediction_markets = (AUGUR_RSI) / 1
+
+// CEX Tokens
+BNB_RSI = request.security("BNBUSDT", "", ta.rsi(close, rsi_val))
+BGB_RSI = request.security("BGBUSDT", "", ta.rsi(close, rsi_val))
+cex_tokens = (BNB_RSI  + BGB_RSI) / 3
+
+// DEX Tokens
+DYDX_RSI = request.security("DYDXUSDT", "", ta.rsi(close, rsi_val))
+HYPE_RSI = request.security("HYPEUSDT", "", ta.rsi(close, rsi_val))
+dex_tokens = (UNI_RSI + SUSHI_RSI + DYDX_RSI + HYPE_RSI) / 4
+
+// SocialFi Tokens
+FRIEND_RSI = request.security("FRIENDUSDT", "", ta.rsi(close, rsi_val))
+LIKE_RSI = request.security("LIKEUSDT", "", ta.rsi(close, rsi_val))
+socialfi = (FRIEND_RSI + LIKE_RSI) / 2
+
+// Oracle Tokens
+LINK_RSI = request.security("LINKUSDT", "", ta.rsi(close, rsi_val))
+BAND_RSI = request.security("BANDUSDT", "", ta.rsi(close, rsi_val))
+oracle_tokens = (LINK_RSI + BAND_RSI) / 2
+
+// Rollup Tokens
+MATIC_RSI = request.security("MATICUSDT", "", ta.rsi(close, rsi_val))
+ARB_RSI = request.security("ARBUSDT", "", ta.rsi(close, rsi_val))
+rollup_tokens = (MATIC_RSI + ARB_RSI) / 2
+
+// Data Availability Tokens
+DATA_RSI = request.security("DATAUSDT", "", ta.rsi(close, rsi_val))
+data_availability = (DATA_RSI + STORJ_RSI) / 2
+
+// DID Tokens
+ID_RSI = request.security("IDUSDT", "", ta.rsi(close, rsi_val))
+SELF_RSI = request.security("SELFUSDT", "", ta.rsi(close, rsi_val))
+did_tokens = (ID_RSI + SELF_RSI) / 2
+
+// Analytics Tokens
+COOKIE_RSI = request.security("COOKIEUSDT", "", ta.rsi(close, rsi_val))
+//NANSEN_RSI = request.security("NANSENUSDT", "", ta.rsi(close, rsi_val))
+analytics_tokens = (COOKIE_RSI ) / 1
+
+// AI Agent Tokens
+AIFUN_RSI = request.security("AIFUNUSDT", "", ta.rsi(close, rsi_val))
+//DEXCHECK_RSI = request.security("DEXCHECKUSDT", "", ta.rsi(close, rsi_val))
+ai_agents = (AIFUN_RSI ) / 1
+
+// Cross-Chain Tokens
+DOT_RSI = request.security("DOTUSDT", "", ta.rsi(close, rsi_val))
+ATOM_RSI = request.security("ATOMUSDT", "", ta.rsi(close, rsi_val))
+crosschain = (DOT_RSI + ATOM_RSI + LINK_RSI) / 3
+
+
+ai_sma = ta.sma(ai_data, 3)
+meme_sma = ta.sma(meme_coins, 3)
+rwa_sma = ta.sma(rwa, 3)
+defi_sma = ta.sma(old_defi, 3)
+prediction_sma = ta.sma(prediction_markets, 3)
+cex_sma = ta.sma(cex_tokens, 3)
+dex_sma = ta.sma(dex_tokens, 3)
+socialfi_sma = ta.sma(socialfi, 3)
+oracle_sma = ta.sma(oracle_tokens, 3)
+rollup_sma = ta.sma(rollup_tokens, 3)
+data_availability_sma = ta.sma(data_availability, 3)
+did_sma = ta.sma(did_tokens, 3)
+analytics_sma = ta.sma(analytics_tokens, 3)
+ai_agent_sma = ta.sma(ai_agents, 3)
+crosschain_sma = ta.sma(crosschain, 3)
+
+
+
+plot(ai_sma, color=color.red, title="AI", linewidth=line_val)
+plot(meme_sma, color=color.green, title="Meme", linewidth=line_val)
+plot(rwa_sma, color=color.purple, title="RWA", linewidth=line_val)
+plot(defi_sma, color=color.yellow, title="Defi", linewidth=line_val)
+plot(prediction_sma, color=color.white, title="Prediction", linewidth=line_val)
+plot(cex_sma, color=color.orange, title="CEX", linewidth=line_val)
+plot(dex_sma, color=color.blue, title="DEX", linewidth=line_val)
+
+plot(socialfi_sma, color=color.purple, title="SocialFi", linewidth=line_val)
+plot(oracle_sma, color=color.aqua, title="Oracle", linewidth=line_val)
+plot(rollup_sma, color=color.lime, title="Rollup", linewidth=line_val)
+plot(data_availability_sma, color=color.maroon, title="Data Availability", linewidth=line_val)
+plot(did_sma, color=color.teal, title="DID", linewidth=line_val)
+plot(analytics_sma, color=color.lime, title="Analytics", linewidth=line_val)
+plot(ai_agent_sma, color=color.gray, title="AI Agent", linewidth=line_val)
+plot(crosschain_sma, color=color.navy, title="Cross-Chain", linewidth=line_val)
+
+labels_on = input(true, title="Show Labels")
+
+var label lab1 = na
+var label lab2 = na
+var label lab3 = na
+var label lab4 = na
+var label lab5 = na
+var label lab6 = na
+var label lab7 = na
+var label lab8 = na
+var label lab9 = na
+var label lab10 = na
+var label lab11 = na
+var label lab12 = na
+var label lab13 = na
+var label lab14 = na
+var label lab15 = na
+
+if barstate.islast and labels_on
+    label.delete(lab1)
+    lab1 := label.new(x=bar_index + offset_val, y=ai_sma, text="AI", style=label.style_label_left, color=color.red, textcolor=color.white)
+    label.delete(lab2)
+    lab2 := label.new(x=bar_index + offset_val, y=meme_sma, text="Meme", style=label.style_label_left, color=color.green, textcolor=color.white)
+    label.delete(lab3)
+    lab3 := label.new(x=bar_index + offset_val, y=rwa_sma, text="RWA", style=label.style_label_left, color=color.purple, textcolor=color.white)
+    label.delete(lab4)
+    lab4 := label.new(x=bar_index + offset_val, y=defi_sma, text="Defi", style=label.style_label_left, color=color.yellow, textcolor=color.white)
+    label.delete(lab5)
+    lab5 := label.new(x=bar_index + offset_val, y=prediction_sma, text="Prediction", style=label.style_label_left, color=color.white, textcolor=color.white)
+    label.delete(lab6)
+    lab6 := label.new(x=bar_index + offset_val, y=cex_sma, text="CEX", style=label.style_label_left, color=color.orange, textcolor=color.white)
+    label.delete(lab7)
+    lab7 := label.new(x=bar_index + offset_val, y=dex_sma, text="DEX", style=label.style_label_left, color=color.blue, textcolor=color.white)
+    label.delete(lab8)
+    lab8 := label.new(x=bar_index + offset_val, y=socialfi_sma, text="SocialFi", style=label.style_label_left, color=color.purple, textcolor=color.white)
+    label.delete(lab9)
+    lab9 := label.new(x=bar_index + offset_val, y=oracle_sma, text="Oracle", style=label.style_label_left, color=color.aqua, textcolor=color.white)
+    label.delete(lab10)
+    lab10 := label.new(x=bar_index + offset_val, y=rollup_sma, text="Rollup", style=label.style_label_left, color=color.lime, textcolor=color.white)
+    label.delete(lab11)
+    lab11 := label.new(x=bar_index + offset_val, y=data_availability_sma, text="Data Availability", style=label.style_label_left, color=color.maroon, textcolor=color.white)
+    label.delete(lab12)
+    lab12 := label.new(x=bar_index + offset_val, y=did_sma, text="DID", style=label.style_label_left, color=color.teal, textcolor=color.white)
+    label.delete(lab13)
+    lab13 := label.new(x=bar_index + offset_val, y=analytics_sma, text="Analytics", style=label.style_label_left, color=color.lime, textcolor=color.white)
+    label.delete(lab14)
+    lab14 := label.new(x=bar_index + offset_val, y=ai_agent_sma, text="AI Agent", style=label.style_label_left, color=color.gray, textcolor=color.white)
+    label.delete(lab15)
+    lab15 := label.new(x=bar_index + offset_val, y=crosschain_sma, text="Cross-Chain", style=label.style_label_left, color=color.navy, textcolor=color.white)

@@ -4,11 +4,11 @@ import threading
 import requests
 from orderbook_display import OrderbookDisplay, run_display
 
-# --- Paramètres stratégiques ---
+# --- Strategy parameters ---
 symbol = "BTCUSDT"
-min_volume_btc = 5  # Volume minimum en BTC pour considérer un niveau important
-tick_threshold = 20  # Nombre de ticks pour considérer "à l'approche"
-update_interval = 30  # Intervalle de mise à jour en secondes
+min_volume_btc = 5  # Minimum volume in BTC to consider a level significant
+tick_threshold = 20  # Number of ticks to consider "approaching"
+update_interval = 30  # Update interval in seconds
 
 # --- Trading settings ---
 ORDER_AMOUNT = 0.001  # Amount in BTC per trade
@@ -17,7 +17,7 @@ SLIPPAGE = 0.0001  # Expected slippage 0.01%
 TAKE_PROFIT_ROWS = 5  # Number of rows to place take profit from entry
 MIN_PROFIT_TICKS = 2  # Minimum number of ticks for take profit
 
-# --- Suivi d'état ---
+# --- State tracking ---
 display = OrderbookDisplay()
 last_price = None
 orderbook_data = {'bids': [], 'asks': []}
@@ -50,11 +50,11 @@ def process_orderbook(is_full_update=False):
     global last_price, orderbook_data, new_orderbook_data
     if last_price is None or not orderbook_data.get('bids') or not orderbook_data.get('asks'):
         return
-    
-    # Préparation des niveaux d'orderbook pour l'affichage
+
+    # Prepare orderbook levels for display
     orderbook_levels = []
-    
-    # Analyse des bids
+
+    # Analyze bids
     for price_str, volume_str in orderbook_data['bids']:
         price = float(price_str)
         volume = float(volume_str)
@@ -63,7 +63,7 @@ def process_orderbook(is_full_update=False):
         else:
             volume = 0.05
             orderbook_levels.append((price, volume, False))
-        
+
         for order in [o for o in display.orders if o['status'] == 'ACTIVE'and o['side'] == 'BUY'] :
                     if last_price >= order['take_profit']:
                         profit = (last_price - order['price']) * order['size']
@@ -76,8 +76,8 @@ def process_orderbook(is_full_update=False):
             display.add_logs(f"Placing BUY order at {last_price} (big bid level at {price}, volume: {volume}, TP: {take_profit})")
             display.add_order(last_price, ORDER_AMOUNT, 'BUY', take_profit, price)
             level_trades.append(price)
-    
-    # Analyse des asks
+
+    # Analyze asks
     for price_str, volume_str in orderbook_data['asks']:
         price = float(price_str)
         volume = float(volume_str)
@@ -94,15 +94,15 @@ def process_orderbook(is_full_update=False):
                         profit_after_fees = profit - (2 * EXCHANGE_FEE * order['size'] * last_price)  # Fee for entry and exit
                         display.close_order(order['id'], last_price, profit_after_fees)
                         display.add_logs(f"Taking profit on SELL order #{order['id']} at {last_price} (profit: {profit_after_fees:.4f} USDT)")
-            
+
 
         if volume >= min_volume_btc and price not in level_trades and last_price >= price-display.tick_size:
             take_profit = abs(last_price - (display.tick_size * (volume/20)))
             display.add_logs(f"Placing SELL order at {last_price} (big ask level at {price}, volume: {volume}, TP: {take_profit})")
             display.add_order(last_price, ORDER_AMOUNT, 'SELL', take_profit, price)
             level_trades.append(price)
-    
-    # Mise à jour de l'affichage
+
+    # Update the display
     display.add_logs(f"Last price: {last_price}")
     #display.add_logs(f"Orderbook levels: {orderbook_levels}")
     display.update_orderbook(orderbook_levels, last_price, new_orderbook_data)
@@ -114,9 +114,9 @@ def fetch_orderbook():
     i = 0
     orderbook_url = f"https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=1000"
     ticker_url = f"https://fapi.binance.com/fapi/v1/ticker/price?symbol={symbol}"
-    
+
     while True:
-        # Mise à jour du prix chaque seconde
+        # Update the price every second
         try:
             response = requests.get(ticker_url)
             if response.status_code == 200:
@@ -124,9 +124,9 @@ def fetch_orderbook():
                 last_price = float(data['price'])
                 process_orderbook(is_full_update=False)
         except Exception as e:
-            print(f"Erreur ticker: {str(e)}, {ticker_url}")
+            print(f"Ticker error: {str(e)}, {ticker_url}")
 
-        # Mise à jour complète de l'orderbook toutes les 30 secondes
+        # Full orderbook update every 30 seconds
         if i == 0:
             try:
                 response = requests.get(orderbook_url)
@@ -138,16 +138,16 @@ def fetch_orderbook():
                     level_trades = []
                     process_orderbook(is_full_update=True)
                 else:
-                    print(f"Erreur API orderbook: {response.status_code}")
+                    print(f"Orderbook API error: {response.status_code}")
             except Exception as e:
-                print(f"Erreur orderbook: {str(e)}")
-        
+                print(f"Orderbook error: {str(e)}")
+
         time.sleep(0.5)
         i = 0 if i == 60 else i + 1
 
 if __name__ == "__main__":
-    # Démarrage du polling dans un thread
+    # Start polling in a thread
     threading.Thread(target=fetch_orderbook, daemon=True).start()
-    
-    # Démarrage de l'interface TUI
+
+    # Start the TUI
     run_display(display)

@@ -1,0 +1,102 @@
+//@version=5
+indicator(title="Global Economic Trends: Relative Strength", shorttitle = "GET", overlay=false, precision=0)
+
+// Input Parameters
+line_val = input(2, title='Line Width')
+offset_val = input(5, title='Label Offset')
+
+// North America
+DXY_RSI = request.security("FX:USDOLLAR", "", ta.rsi(close, 14))
+SPX_RSI = request.security("CME_MINI:ES1!", "", ta.rsi(close, 14)) // S&P 500 ETF
+NASDAQ_RSI = request.security("NASDAQ:IXIC", "", ta.rsi(close, 14)) // Nasdaq Composite
+NA_avg_rsi = (DXY_RSI + SPX_RSI + NASDAQ_RSI) / 3
+
+// Europe
+EURO_RSI = request.security("FX:EURUSD", "", ta.rsi(close, 14))
+DAX_RSI = request.security("XETR:DAX", "", ta.rsi(close, 14)) // Germany DAX
+EU_avg_rsi = (EURO_RSI + DAX_RSI ) / 2
+
+// Asia
+NIKKEI_RSI = request.security("TVC:NI225", "", ta.rsi(close, 14)) // Nikkei 225
+HSI_RSI = request.security("TVC:HSI", "", ta.rsi(close, 14)) // Hang Seng
+SHCOMP_RSI = request.security("SSE:000001", "", ta.rsi(close, 14)) // Shanghai Composite
+ASIA_avg_rsi = (NIKKEI_RSI + HSI_RSI + SHCOMP_RSI) / 3
+
+// Russia
+
+RTS_RSI = request.security("MOEX:RTSI", "", ta.rsi(close, 14)) // RTS Index
+MICEX_RSI = request.security("MOEX:MICEXINDEXCF", "", ta.rsi(close, 14)) // MICEX Index
+RUS_avg_rsi = (RTS_RSI + MICEX_RSI) / 2
+
+// Saudi Arabia
+TASI_RSI = request.security("TADAWUL:TASI", "", ta.rsi(close, 14)) // Tadawul All Share Index
+OIL_RSI = request.security("TVC:USOIL", "", ta.rsi(close, 14)) // Crude Oil
+SA_avg_rsi = (TASI_RSI + OIL_RSI ) / 2
+
+// Africa
+JSE_RSI = request.security("JSE:J200", "", ta.rsi(close, 14)) // South Africa Top 40
+EGX_RSI = request.security("EGX:EGX30", "", ta.rsi(close, 14)) // EGX 30
+AFR_avg_rsi = (JSE_RSI + EGX_RSI) / 2
+
+// South America
+IBOV_RSI = request.security("BMFBOVESPA:IBOV", "", ta.rsi(close, 14)) // Bovespa Index
+MERVAL_RSI = request.security("BCBA:IMV", "", ta.rsi(close, 14)) // MERVAL Index
+SAM_avg_rsi = (IBOV_RSI + MERVAL_RSI) / 2
+
+// Singapore
+STI_RSI = request.security("TVC:STI", "", ta.rsi(close, 14)) // Straits Times Index
+SG_avg_rsi = (STI_RSI ) / 1
+
+// Simple Moving Averages for each group using average RSI
+NA_sma = ta.sma(NA_avg_rsi, 3)
+EU_sma = ta.sma(EU_avg_rsi, 3)
+ASIA_sma = ta.sma(ASIA_avg_rsi, 3)
+RUS_sma = ta.sma(RUS_avg_rsi, 3)
+SA_sma = ta.sma(SA_avg_rsi, 3)
+AFR_sma = ta.sma(AFR_avg_rsi, 3)
+SAM_sma = ta.sma(SAM_avg_rsi, 3)
+SG_sma = ta.sma(SG_avg_rsi, 3)
+
+// Plotting the SMAs
+plot(NA_sma, color=color.yellow, title="North America", linewidth=line_val)
+plot(EU_sma, color=color.blue, title="Europe", linewidth=line_val)
+plot(ASIA_sma, color=color.red, title="Asia", linewidth=line_val)
+plot(RUS_sma, color=color.green, title="Russia", linewidth=line_val)
+plot(SA_sma, color=color.purple, title="Saudi Arabia", linewidth=line_val)
+plot(AFR_sma, color=color.aqua, title="Africa", linewidth=line_val)
+plot(SAM_sma, color=color.orange, title="South America", linewidth=line_val)
+plot(SG_sma, color=color.navy, title="Singapore", linewidth=line_val)
+
+// Labels
+labels_on = input(true, title="Show Labels")
+
+var label lab1 = na
+var label lab2 = na
+var label lab3 = na
+var label lab4 = na
+var label lab5 = na
+var label lab6 = na
+var label lab7 = na
+var label lab8 = na
+
+if barstate.islast and labels_on
+    label.delete(lab1)
+    lab1 := label.new(x=bar_index + offset_val, y=NA_sma, text="North America", style=label.style_label_left, color=color.yellow, textcolor=color.black)
+    label.delete(lab2)
+    lab2 := label.new(x=bar_index + offset_val, y=EU_sma, text="Europe", style=label.style_label_left, color=color.blue, textcolor=color.white)
+    label.delete(lab3)
+    lab3 := label.new(x=bar_index + offset_val, y=ASIA_sma, text="Asia", style=label.style_label_left, color=color.red, textcolor=color.white)
+    label.delete(lab4)
+    lab4 := label.new(x=bar_index + offset_val, y=RUS_sma, text="Russia", style=label.style_label_left, color=color.green, textcolor=color.white)
+    label.delete(lab5)
+    lab5 := label.new(x=bar_index + offset_val, y=SA_sma, text="Saudi Arabia", style=label.style_label_left, color=color.purple, textcolor=color.white)
+    label.delete(lab6)
+    lab6 := label.new(x=bar_index + offset_val, y=AFR_sma, text="Africa", style=label.style_label_left, color=color.aqua, textcolor=color.white)
+    label.delete(lab7)
+    lab7 := label.new(x=bar_index + offset_val, y=SAM_sma, text="South America", style=label.style_label_left, color=color.orange, textcolor=color.white)
+    label.delete(lab8)
+    lab8 := label.new(x=bar_index + offset_val, y=SG_sma, text="Singapore", style=label.style_label_left, color=color.navy, textcolor=color.white)
+
+// RSI Overbought/Oversold Levels
+plot(70, color=color.white, title="70", linewidth=line_val)
+plot(30, color=color.white, title="30", linewidth=line_val)

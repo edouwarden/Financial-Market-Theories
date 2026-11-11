@@ -144,7 +144,7 @@ ma(matype, src, length) =>
     => src
 
 // Wave Trend calculation (Lt Blue Wave & Blue Wave)
-ap = hlc3 
+ap = hlc3
 esa = ta.ema(ap, n1)
 d = ta.ema(math.abs(ap - esa), n1)
 ci = (ap - esa) / (0.015 * d)
@@ -196,7 +196,7 @@ cvd = ta.cum(longshort_delta)        // Cumulative Volume (OI) Delta
 
 // --- Momentum of flows (using net positions like inspiration) ---
 longs_mom = ta.roc(net_longs, len2)  // Net longs can go negative
-shorts_mom = -ta.roc(net_shorts, len2) // Net shorts can go negative 
+shorts_mom = -ta.roc(net_shorts, len2) // Net shorts can go negative
 flow_mom = ta.roc(longshort_delta, len2)
 flow_mom_pos = flow_mom<0 ? -flow_mom : flow_mom
 
@@ -246,13 +246,13 @@ delta4 = scripts.GetDelta(totalUpVolume4_adj, totalDnVolume4_adj)
 delta5 = scripts.GetDelta(totalUpVolume5, totalDnVolume5)
 
 // Aggregate total volumes and max volumes
-totalUpVolumeAgg = nz(totalUpVolume0) + nz(totalUpVolume1) + nz(totalUpVolume2) + 
+totalUpVolumeAgg = nz(totalUpVolume0) + nz(totalUpVolume1) + nz(totalUpVolume2) +
          nz(totalUpVolume3_adj) + nz(totalUpVolume4_adj) + nz(totalUpVolume5)
-totalDnVolumeAgg = nz(totalDnVolume0) + nz(totalDnVolume1) + nz(totalDnVolume2) + 
+totalDnVolumeAgg = nz(totalDnVolume0) + nz(totalDnVolume1) + nz(totalDnVolume2) +
          nz(totalDnVolume3_adj) + nz(totalDnVolume4_adj) + nz(totalDnVolume5)
-maxUpVolumeAgg = math.max(nz(maxUpVolume0), math.max(nz(maxUpVolume1), math.max(nz(maxUpVolume2), 
+maxUpVolumeAgg = math.max(nz(maxUpVolume0), math.max(nz(maxUpVolume1), math.max(nz(maxUpVolume2),
          math.max(nz(maxUpVolume3_adj), math.max(nz(maxUpVolume4_adj), nz(maxUpVolume5))))))
-maxDnVolumeAgg = math.max(nz(maxDnVolume0), math.max(nz(maxDnVolume1), math.max(nz(maxDnVolume2), 
+maxDnVolumeAgg = math.max(nz(maxDnVolume0), math.max(nz(maxDnVolume1), math.max(nz(maxDnVolume2),
          math.max(nz(maxDnVolume3_adj), math.max(nz(maxDnVolume4_adj), nz(maxDnVolume5))))))
 
 // Calculate aggregated delta
@@ -279,83 +279,83 @@ if cvd_mom < -7
 
 pos_cvd_mom = cvd_mom < 0? -cvd_mom : cvd_mom
 //===============================
-// NORMALISATION POUR OVERLAY
+// NORMALIZATION FOR OVERLAY
 //===============================
-// Paramètres de la zone d'affichage au-dessus du prix
-zoom_method = input.string("ATR", "Méthode de zone", options=["ATR", "Percentage"], group="Overlay Display")
-zone_start_pct = input.float(0.5, "Zone début (%)", minval=0, maxval=10, step=0.1, group="Overlay Display") / 100
-zone_height_pct = input.float(2.0, "Zone hauteur (%)", minval=0.1, maxval=10, step=0.1, group="Overlay Display") / 100
-atr_multiplier_start = input.float(0.5, "ATR Début (x)", minval=0, maxval=5, step=0.1, group="Overlay Display")
-atr_multiplier_height = input.float(2.0, "ATR Hauteur (x)", minval=0.1, maxval=5, step=0.1, group="Overlay Display")
+// Display zone parameters above the price
+zoom_method = input.string("ATR", "Zone method", options=["ATR", "Percentage"], group="Overlay Display")
+zone_start_pct = input.float(0.5, "Zone start (%)", minval=0, maxval=10, step=0.1, group="Overlay Display") / 100
+zone_height_pct = input.float(2.0, "Zone height (%)", minval=0.1, maxval=10, step=0.1, group="Overlay Display") / 100
+atr_multiplier_start = input.float(0.5, "ATR Start (x)", minval=0, maxval=5, step=0.1, group="Overlay Display")
+atr_multiplier_height = input.float(2.0, "ATR Height (x)", minval=0.1, maxval=5, step=0.1, group="Overlay Display")
 atr_length = input.int(14, "ATR Length", minval=1, group="Overlay Display")
-normalize_length = input.int(100, "Période de normalisation", minval=10, group="Overlay Display")
+normalize_length = input.int(100, "Normalization period", minval=10, group="Overlay Display")
 
-// Calculer la zone d'affichage
+// Compute the display zone
 atr_value = ta.atr(atr_length)
-zone_start = zoom_method == "ATR" ? 
-             close + (atr_value * atr_multiplier_start) : 
+zone_start = zoom_method == "ATR" ?
+             close + (atr_value * atr_multiplier_start) :
              close * (1 + zone_start_pct)
-             
-zone_height = zoom_method == "ATR" ? 
-              atr_value * atr_multiplier_height : 
+
+zone_height = zoom_method == "ATR" ?
+              atr_value * atr_multiplier_height :
               close * zone_height_pct
 
-// Fonction de normalisation entre 0 et 1
+// Normalization function between 0 and 1
 normalize(series float src, int len) =>
     highest = ta.highest(src, len)
     lowest = ta.lowest(src, len)
     ranger = highest - lowest
     ranger == 0 ? 0.5 : (src - lowest) / ranger
 
-// Normaliser les momentum
+// Normalize the momentum series
 price_mom_norm = normalize(price_mom, normalize_length)
 oi_mom_norm = normalize(oi_mom2, normalize_length)
 
-// Mapper dans la zone au-dessus du prix
+// Map into the zone above the price
 price_mom_mapped = zone_start + (price_mom_norm * zone_height)
 oi_mom_mapped = zone_start + (oi_mom_norm * zone_height)
 
-// Lignes de référence de la zone
+// Zone reference lines
 zone_top = zone_start + zone_height
 zone_mid = zone_start + (zone_height / 2)
 
 //===============================
 // PLOTS OVERLAY
 //===============================
-// Afficher la zone de référence
-show_zone_lines = input.bool(true, "Afficher lignes de zone", group="Overlay Display")
-plot(show_zone_lines ? zone_start : na, "Zone Bas", color=color.new(color.gray, 70), linewidth=1, style=plot.style_line)
-plot(show_zone_lines ? zone_mid : na, "Zone Milieu", color=color.new(color.gray, 80), linewidth=1, style=plot.style_line)
-plot(show_zone_lines ? zone_top : na, "Zone Haut", color=color.new(color.gray, 70), linewidth=1, style=plot.style_line)
+// Show the reference zone
+show_zone_lines = input.bool(true, "Show zone lines", group="Overlay Display")
+plot(show_zone_lines ? zone_start : na, "Zone Bottom", color=color.new(color.gray, 70), linewidth=1, style=plot.style_line)
+plot(show_zone_lines ? zone_mid : na, "Zone Middle", color=color.new(color.gray, 80), linewidth=1, style=plot.style_line)
+plot(show_zone_lines ? zone_top : na, "Zone Top", color=color.new(color.gray, 70), linewidth=1, style=plot.style_line)
 
-// Plots principaux des momentum
-plot(show_price_mom ? price_mom_mapped : na, "Price Momentum", 
+// Main momentum plots
+plot(show_price_mom ? price_mom_mapped : na, "Price Momentum",
      color=price_col, linewidth=2, style=plot.style_line)
-     
-plot(show_oi_mom ? oi_mom_mapped : na, "OI Momentum", 
+
+plot(show_oi_mom ? oi_mom_mapped : na, "OI Momentum",
      color=oi_col, linewidth=2, style=plot.style_line)
 
-// Remplissage entre milieu et momentum
-fill_momentum = input.bool(true, "Remplir momentum depuis milieu", group="Overlay Display")
-fill_transparency = input.int(85, "Transparence remplissage", minval=0, maxval=100, group="Overlay Display")
+// Fill between middle and momentum
+fill_momentum = input.bool(true, "Fill momentum from middle", group="Overlay Display")
+fill_transparency = input.int(85, "Fill transparency", minval=0, maxval=100, group="Overlay Display")
 
-// Remplir Price Momentum depuis le milieu
+// Fill Price Momentum from the middle
 p_price = plot(fill_momentum and show_price_mom ? price_mom_mapped : na, display=display.none)
 p_mid_price = plot(fill_momentum and show_price_mom ? zone_mid : na, display=display.none)
 fill(p_price, p_mid_price, color=color.new(price_col, fill_transparency), title="Price Mom Fill")
 
-// Remplir OI Momentum depuis le milieu
+// Fill OI Momentum from the middle
 p_oi = plot(fill_momentum and show_oi_mom ? oi_mom_mapped : na, display=display.none)
 p_mid_oi = plot(fill_momentum and show_oi_mom ? zone_mid : na, display=display.none)
 fill(p_oi, p_mid_oi, color=color.new(oi_col, fill_transparency), title="OI Mom Fill")
 
 // Labels
 if display_label_price_mom and show_price_mom and barstate.islast
-    label.new(bar_index, price_mom_mapped, 'P', 
-              size=size.tiny, color=price_col, textcolor=color.white, 
+    label.new(bar_index, price_mom_mapped, 'P',
+              size=size.tiny, color=price_col, textcolor=color.white,
               style=label.style_label_left)
-              
+
 if display_label_oi_mom and show_oi_mom and barstate.islast
-    label.new(bar_index, oi_mom_mapped, 'OI', 
-              size=size.tiny, color=oi_col, textcolor=color.white, 
+    label.new(bar_index, oi_mom_mapped, 'OI',
+              size=size.tiny, color=oi_col, textcolor=color.white,
               style=label.style_label_left)

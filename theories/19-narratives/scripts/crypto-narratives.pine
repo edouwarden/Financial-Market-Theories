@@ -1,0 +1,177 @@
+//@version=5
+indicator(title="Crypto Narratives: Relative Strength", shorttitle = "CN", overlay=false, precision=0)
+
+rsi_val = input(14, title='RSI')
+line_val = input(2, title='Line Width')
+offset_val = input(5, title='Label Offset')
+
+// Bitcoin and Ethereum
+BTC_RSI = request.security("INDEX:BTCUSD", "", ta.rsi(close, rsi_val))
+ETH_RSI = request.security("COINBASE:ETHUSD", "", ta.rsi(close, rsi_val))
+
+// AI Tokens
+ARC_RSI = request.security("KUCOIN:ARCUSDT", "", ta.rsi(close, rsi_val))
+AIXBT_RSI = request.security("BITGET:AIXBTUSDT", "", ta.rsi(close, rsi_val))
+AI16Z_RSI = request.security("GATEIO:AI16ZUSDT", "", ta.rsi(close, rsi_val))
+COOKIE_RSI = request.security("BYBIT:COOKIEUSDT", "", ta.rsi(close, rsi_val))
+ZEREBRO_RSI = request.security("CRYPTO:ZEREBROUSD", "", ta.rsi(close, rsi_val))
+VIRTUAL_RSI = request.security("CRYPTO:VIRTUALUSD", "", ta.rsi(close, rsi_val))
+
+// Fee Switch Tokens
+AAVE_RSI = request.security("CRYPTO:AAVEUSD", "", ta.rsi(close, rsi_val))
+UNI_RSI = request.security("CRYPTO:UNIUSD", "", ta.rsi(close, rsi_val))
+ZERO_RSI = request.security("PYTH:ZEROUSD", "", ta.rsi(close, rsi_val))
+
+// Naming Services
+ENS_RSI = request.security("COINBASE:ENSUSD", "", ta.rsi(close, rsi_val))
+FIDA_RSI = request.security("CRYPTO:FIDAUSD", "", ta.rsi(close, rsi_val))
+
+// DAGS
+DAG_RSI = request.security("CRYPTO:DAGUSD", "", ta.rsi(close, rsi_val))
+HBAR_RSI = request.security("CRYPTO:HBARUSD", "", ta.rsi(close, rsi_val))
+IOTA_RSI = request.security("CRYPTO:IOTAUSD", "", ta.rsi(close, rsi_val))
+KAS_RSI = request.security("CRYPTO:KASUSD", "", ta.rsi(close, rsi_val))
+
+// Data Availability
+AR_RSI = request.security("CRYPTO:ARUSD", "", ta.rsi(close, rsi_val))
+FIL_RSI = request.security("CRYPTO:FILUSD", "", ta.rsi(close, rsi_val))
+
+// Oracle Tokens
+PYTH_RSI = request.security("CRYPTO:PYTHUSD", "", ta.rsi(close, rsi_val))
+
+// DEX Tokens
+AERO_RSI = request.security("COINBASE:AEROUSD", "", ta.rsi(close, rsi_val))
+CAKE_RSI = request.security("CRYPTO:CAKEUSD", "", ta.rsi(close, rsi_val))
+HFT_RSI = request.security("CRYPTO:HFTUSD", "", ta.rsi(close, rsi_val))
+METAL_RSI = request.security("MEXC:METALUSDT", "", ta.rsi(close, rsi_val))
+
+// Gaming Tokens
+AXS_RSI = request.security("CRYPTO:AXSUSD", "", ta.rsi(close, rsi_val))
+GALA_RSI = request.security("CRYPTO:GALAUSD", "", ta.rsi(close, rsi_val))
+MANA_RSI = request.security("CRYPTO:MANAUSD", "", ta.rsi(close, rsi_val))
+SAND_RSI = request.security("COINBASE:SANDUSD", "", ta.rsi(close, rsi_val))
+
+// Decentralized Identifier (DID)
+WLD_RSI = request.security("PYTH:WLDUSD", "", ta.rsi(close, rsi_val))
+TALENT_RSI = request.security("MEXC:TALENTUSDT", "", ta.rsi(close, rsi_val))
+
+// Analytics Tokens
+AIKEK_RSI = request.security("UNISWAP:AIKEKWETH_7B9761.USD", "", ta.rsi(close, rsi_val))
+COOKIE2_RSI = request.security("CRYPTO:COOKIE2USD", "", ta.rsi(close, rsi_val))
+GRT_RSI = request.security("BITSTAMP:GRTUSD", "", ta.rsi(close, rsi_val))
+
+// CEX Tokens
+BGB_RSI = request.security("CRYPTO:BGBUSD", "", ta.rsi(close, rsi_val))
+BNB_RSI = request.security("CRYPTO:BNBUSD", "", ta.rsi(close, rsi_val))
+
+// SocialFi Tokens
+GAL_RSI = request.security("CRYPTO:GALUSD", "", ta.rsi(close, rsi_val))
+HIVE_RSI = request.security("CRYPTO:HIVEUSD", "", ta.rsi(close, rsi_val))
+
+// RWAs & DeFi
+AAVE_USDT_RSI = request.security("BINANCE:AAVEUSDT", "", ta.rsi(close, rsi_val))
+ONDO_USDT_RSI = request.security("KUCOIN:ONDOUSDT", "", ta.rsi(close, rsi_val))
+PENDLE_USDT_RSI = request.security("OKX:PENDLEUSDT", "", ta.rsi(close, rsi_val))
+
+// Average RSI for each narrative
+avg_ai_rsi = (ARC_RSI + AIXBT_RSI + AI16Z_RSI + COOKIE_RSI + ZEREBRO_RSI + VIRTUAL_RSI) / 6
+avg_feeswitch_rsi = (AAVE_RSI + UNI_RSI + ZERO_RSI) / 3
+avg_naming_rsi = (ENS_RSI + FIDA_RSI) / 2
+avg_dags_rsi = (DAG_RSI + HBAR_RSI + IOTA_RSI + KAS_RSI) / 4
+avg_data_rsi = (AR_RSI + FIL_RSI) / 2
+avg_oracle_rsi = PYTH_RSI
+avg_dex_rsi = (AERO_RSI + CAKE_RSI + HFT_RSI + METAL_RSI) / 4
+avg_gaming_rsi = (AXS_RSI + GALA_RSI + MANA_RSI + SAND_RSI) / 4
+avg_did_rsi = (WLD_RSI + TALENT_RSI) / 2
+avg_analytics_rsi = (AIKEK_RSI + COOKIE2_RSI + GRT_RSI) / 3
+avg_cex_rsi = (BGB_RSI + BNB_RSI) / 2
+avg_socialfi_rsi = (GAL_RSI + HIVE_RSI) / 2
+avg_rwa_defi_rsi = (AAVE_USDT_RSI + ONDO_USDT_RSI + PENDLE_USDT_RSI) / 3
+
+// Simple Moving Averages for each group using average RSI
+btcsma = ta.sma(BTC_RSI, 3)
+ethsma = ta.sma(ETH_RSI, 3)
+aisma = ta.sma(avg_ai_rsi, 3)
+feeswitch_sma = ta.sma(avg_feeswitch_rsi, 3)
+naming_sma = ta.sma(avg_naming_rsi, 3)
+dags_sma = ta.sma(avg_dags_rsi, 3)
+data_sma = ta.sma(avg_data_rsi, 3)
+oracle_sma = ta.sma(avg_oracle_rsi, 3)
+dex_sma = ta.sma(avg_dex_rsi, 3)
+gaming_sma = ta.sma(avg_gaming_rsi, 3)
+did_sma = ta.sma(avg_did_rsi, 3)
+analytics_sma = ta.sma(avg_analytics_rsi, 3)
+cex_sma = ta.sma(avg_cex_rsi, 3)
+socialfi_sma = ta.sma(avg_socialfi_rsi, 3)
+rwa_defi_sma = ta.sma(avg_rwa_defi_rsi, 3)
+
+// Plotting the SMAs
+plot(btcsma, color=color.yellow, title="BTC", linewidth=line_val)
+plot(ethsma, color=color.white, title="ETH", linewidth=line_val)
+plot(aisma, color=color.red, title="AI Tokens", linewidth=line_val)
+plot(feeswitch_sma, color=color.green, title="Fee Switch", linewidth=line_val)
+plot(naming_sma, color=color.purple, title="Naming Services", linewidth=line_val)
+plot(dags_sma, color=color.yellow, title="DAGs", linewidth=line_val)
+plot(data_sma, color=color.aqua, title="Data Availability", linewidth=line_val)
+plot(oracle_sma, color=color.maroon, title="Oracle", linewidth=line_val)
+plot(dex_sma, color=color.blue, title="DEX", linewidth=line_val)
+plot(gaming_sma, color=color.teal, title="Gaming", linewidth=line_val)
+plot(did_sma, color=color.navy, title="DID", linewidth=line_val)
+plot(analytics_sma, color=color.gray, title="Analytics", linewidth=line_val)
+plot(cex_sma, color=color.orange, title="CEX", linewidth=line_val)
+plot(socialfi_sma, color=color.lime, title="SocialFi", linewidth=line_val)
+plot(rwa_defi_sma, color=color.white, title="RWAs & DeFi", linewidth=line_val)
+
+
+labels_on = input(true, title="Show Labels")
+
+var label lab1 = na
+var label lab2 = na
+var label lab3 = na
+var label lab4 = na
+var label lab5 = na
+var label lab6 = na
+var label lab7 = na
+var label lab8 = na
+var label lab9 = na
+var label lab10 = na
+var label lab11 = na
+var label lab12 = na
+var label lab13 = na
+var label lab14 = na
+var label lab15 = na
+
+if barstate.islast and labels_on
+    label.delete(lab1)
+    lab1 := label.new(x=bar_index + offset_val, y=btcsma, text="BTC", style=label.style_label_left, color=color.yellow, textcolor=color.black)
+    label.delete(lab2)
+    lab2 := label.new(x=bar_index + offset_val, y=ethsma, text="ETH", style=label.style_label_left, color=color.white, textcolor=color.black)
+    label.delete(lab3)
+    lab3 := label.new(x=bar_index + offset_val, y=aisma, text="AI Tokens", style=label.style_label_left, color=color.red, textcolor=color.white)
+    label.delete(lab4)
+    lab4 := label.new(x=bar_index + offset_val, y=feeswitch_sma, text="Fee Switch", style=label.style_label_left, color=color.green, textcolor=color.white)
+    label.delete(lab5)
+    lab5 := label.new(x=bar_index + offset_val, y=naming_sma, text="Naming Services", style=label.style_label_left, color=color.purple, textcolor=color.white)
+    label.delete(lab6)
+    lab6 := label.new(x=bar_index + offset_val, y=dags_sma, text="DAGs", style=label.style_label_left, color=color.orange, textcolor=color.white)
+    label.delete(lab7)
+    lab7 := label.new(x=bar_index + offset_val, y=data_sma, text="Data Availability", style=label.style_label_left, color=color.aqua, textcolor=color.white)
+    label.delete(lab8)
+    lab8 := label.new(x=bar_index + offset_val, y=oracle_sma, text="Oracle", style=label.style_label_left, color=color.maroon, textcolor=color.white)
+    label.delete(lab9)
+    lab9 := label.new(x=bar_index + offset_val, y=dex_sma, text="DEX", style=label.style_label_left, color=color.blue, textcolor=color.white)
+    label.delete(lab10)
+    lab10 := label.new(x=bar_index + offset_val, y=gaming_sma, text="Gaming", style=label.style_label_left, color=color.teal, textcolor=color.white)
+    label.delete(lab11)
+    lab11 := label.new(x=bar_index + offset_val, y=did_sma, text="DID", style=label.style_label_left, color=color.navy, textcolor=color.white)
+    label.delete(lab12)
+    lab12 := label.new(x=bar_index + offset_val, y=analytics_sma, text="Analytics", style=label.style_label_left, color=color.gray, textcolor=color.white)
+    label.delete(lab13)
+    lab13 := label.new(x=bar_index + offset_val, y=cex_sma, text="CEX", style=label.style_label_left, color=color.orange, textcolor=color.white)
+    label.delete(lab14)
+    lab14 := label.new(x=bar_index + offset_val, y=socialfi_sma, text="SocialFi", style=label.style_label_left, color=color.lime, textcolor=color.white)
+    label.delete(lab15)
+    lab15 := label.new(x=bar_index + offset_val, y=rwa_defi_sma, text="RWAs & DeFi", style=label.style_label_left, color=color.white, textcolor=color.black)
+
+plot(70, color=color.white, title="70", linewidth=line_val)
+plot(30, color=color.white, title="30", linewidth=line_val)

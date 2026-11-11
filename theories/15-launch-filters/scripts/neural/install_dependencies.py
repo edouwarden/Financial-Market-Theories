@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script d'installation automatique des dépendances pour l'optimiseur de filtres
+Automatic dependency installation script for the filter optimizer
 """
 
 import subprocess
@@ -8,7 +8,7 @@ import sys
 import os
 
 def install_package(package):
-    """Installe un package avec pip"""
+    """Installs a package with pip"""
     try:
         subprocess.check_call([sys.executable, "-m", "pip", "install", package])
         return True
@@ -16,57 +16,55 @@ def install_package(package):
         return False
 
 def main():
-    print("🔧 Installation des dépendances pour l'optimiseur de filtres")
+    print("🔧 Installing dependencies for the filter optimizer")
     print("=" * 60)
-    
-    # Liste des packages requis
+
+    # List of required packages
     packages = [
         "tensorflow>=2.10.0",
-        "numpy>=1.21.0", 
+        "numpy>=1.21.0",
         "pandas>=1.3.0",
         "scikit-learn>=1.0.0",
         "matplotlib>=3.5.0",
         "seaborn>=0.11.0",
         "glob2>=0.7"
     ]
-    
-    print("📦 Packages à installer:")
+
+    print("📦 Packages to install:")
     for package in packages:
         print(f"   - {package}")
-    
-    print("\n🚀 Début de l'installation...")
-    
+
+    print("\n🚀 Starting installation...")
+
     success_count = 0
     failed_packages = []
-    
+
     for package in packages:
-        print(f"\n📥 Installation de {package}...")
+        print(f"\n📥 Installing {package}...")
         if install_package(package):
-            print(f"✅ {package} installé avec succès")
+            print(f"✅ {package} installed successfully")
             success_count += 1
         else:
-            print(f"❌ Échec de l'installation de {package}")
+            print(f"❌ Failed to install {package}")
             failed_packages.append(package)
-    
+
     print("\n" + "=" * 60)
-    print("📊 Résumé de l'installation:")
-    print(f"✅ Packages installés avec succès: {success_count}/{len(packages)}")
-    
+    print("📊 Installation summary:")
+    print(f"✅ Packages installed successfully: {success_count}/{len(packages)}")
+
     if failed_packages:
-        print(f"❌ Packages en échec: {len(failed_packages)}")
-        print("Packages qui ont échoué:")
+        print(f"❌ Failed packages: {len(failed_packages)}")
+        print("Packages that failed:")
         for package in failed_packages:
             print(f"   - {package}")
         print("\n💡 Suggestions:")
-        print("   - Vérifiez votre connexion internet")
-        print("   - Mettez à jour pip: python -m pip install --upgrade pip")
-        print("   - Essayez d'installer manuellement les packages échoués")
+        print("   - Check your internet connection")
+        print("   - Update pip: python -m pip install --upgrade pip")
+        print("   - Try installing the failed packages manually")
     else:
-        print("🎉 Toutes les dépendances ont été installées avec succès!")
-        print("\n🚀 Vous pouvez maintenant lancer l'optimiseur:")
+        print("🎉 All dependencies were installed successfully!")
+        print("\n🚀 You can now launch the optimizer:")
         print("   python run_optimizer.py")
 
 if __name__ == "__main__":
     main()
-
-
